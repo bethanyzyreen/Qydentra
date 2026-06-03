@@ -6,16 +6,18 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
     role ENUM('patient','admin','dentist','receptionist') DEFAULT 'patient',
+    profile_photo VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     patient_id INT,
-    service VARCHAR(100),
+    service_type VARCHAR(100),
+    service_desc VARCHAR(150) DEFAULT NULL,
     appointment_date DATE,
     appointment_time VARCHAR(50),
-    status ENUM('Pending','Approved','Completed','Cancelled') DEFAULT 'Pending',
+    status ENUM('Pending','Approved','In Progress','Completed','Cancelled') DEFAULT 'Pending',
     queue_number INT DEFAULT NULL,
     notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -32,3 +34,15 @@ CREATE TABLE notifications (
 
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+/* =============== RECEPTIONIST ACCOUNT =============== */
+-- Email:    receptionist@qydentra.com
+-- Password: qydentra.recep
+INSERT INTO users (full_name, email, password, role)
+VALUES (
+    'Clinic Receptionist',
+    'receptionist@qydentra.com',
+    '$2y$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Z8Y5qz9sQnFZpFhZfQG9e',
+    'receptionist'
+);
+

@@ -22,10 +22,12 @@ if(mysqli_num_rows($result) > 0){
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
+        $_SESSION['name'] = $user['full_name'];
         $_SESSION['full_name'] = $user['full_name'];
 
         if($user['role'] == 'patient'){
             header("Location: ../patient/dashboard.php");
+            exit();
         }
 
         elseif($user['role'] == 'admin'){
@@ -37,7 +39,8 @@ if(mysqli_num_rows($result) > 0){
         }
 
         elseif($user['role'] == 'receptionist'){
-            echo "Receptionist dashboard soon.";
+            header("Location: ../receptionist/dashboard.php");
+            exit();
         }
 
     } else {

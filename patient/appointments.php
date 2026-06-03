@@ -1,6 +1,6 @@
 <?php
+$allowed_roles = ['patient'];
 include("../includes/auth_check.php");
-include("../config/database.php");
 ?>
 
 <?php include("../includes/header.php"); ?>

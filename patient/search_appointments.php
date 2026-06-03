@@ -1,5 +1,5 @@
 <?php
-include("../config/database.php");
+$allowed_roles = ['patient'];
 include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
