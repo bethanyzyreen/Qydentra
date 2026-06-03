@@ -41,7 +41,7 @@ Here's your dental care overview.
 <div class="profile-box hover-glow"
 onclick="window.location.href='/qydentra/patient/profile.php'">
 
-<?php if(!empty($user['profile_photo'] ?? '')){ ?>
+<?php if(!empty($user['profile_photo'])){ ?>
 
 <div class="profile-photo">
     <img src="../uploads/profiles/<?php echo $user['profile_photo']; ?>">
