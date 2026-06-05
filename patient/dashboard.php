@@ -1,6 +1,6 @@
 <?php
+$allowed_roles = ['patient'];
 include("../includes/auth_check.php");
-include("../config/database.php");
 
 $user_id = $_SESSION['user_id'];
 
@@ -83,7 +83,7 @@ $nextAppointment = mysqli_fetch_assoc($appointmentQuery);
 <!-- UPCOMING -->
 
 <div class="card hover-glow"
-onclick="window.location.href='/qydentra/patient/appointments.php'">
+onclick="window.location.href='appointments.php'">
 
 <div class="card-top">
 
@@ -120,7 +120,7 @@ You have <?php echo $upcomingCount; ?> pending or approved appointment<?php echo
 <!-- QUEUE -->
 
 <div class="card hover-glow"
-onclick="window.location.href='/qydentra/patient/queue.php'">
+onclick="window.location.href='queue.php'">
 
 <div class="card-top">
 
@@ -155,7 +155,7 @@ Current active queue position for today's appointment.
 <!-- NOTIFICATIONS -->
 
 <div class="card hover-glow"
-onclick="window.location.href='/qydentra/patient/notifications.php'">
+onclick="window.location.href='notifications.php'">
 
 <div class="card-top">
 
@@ -186,7 +186,7 @@ You currently have <?php echo $notifCount; ?> notification<?php echo ($notifCoun
 <!-- COMPLETED -->
 
 <div class="card hover-glow"
-onclick="window.location.href='/qydentra/patient/appointments.php'">
+onclick="window.location.href='appointments.php'">
 
 <div class="card-top">
 
@@ -361,7 +361,7 @@ Track your latest dental appointments and appointment statuses.
 </div>
 
 <button class="table-btn"
-onclick="window.location.href='/qydentra/patient/book_appointment.php'">
+onclick="window.location.href='book_appointment.php'">
 
 <i class="fa-solid fa-calendar-plus"></i>
 
@@ -504,7 +504,7 @@ elseif(str_contains($service,"extraction")){
 
 <td>
 
-<div class="status-pill <?php echo strtolower($row['status']); ?>">
+<div class="status-pill <?php echo strtolower(str_replace(" ", "-", $row["status"])); ?>">
 
 <?php echo ucfirst($row['status']); ?>
 

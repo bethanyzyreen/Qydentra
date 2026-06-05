@@ -1,5 +1,5 @@
 <?php
-include("../config/database.php");
+$allowed_roles = ['patient'];
 include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
@@ -141,7 +141,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
             echo "
             <a
-                href='cancel_appointment.php?id={$row['id']}'
+                href='cancel_appointment.php?id={$row['appointment_id']}'
                 class='cancel-btn'
                 onclick='return confirm(\"Cancel this appointment?\")'
             >

@@ -1,7 +1,6 @@
 <?php
-
-session_start();
-include("../config/database.php");
+$allowed_roles = ['patient'];
+include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
 
@@ -9,7 +8,7 @@ $current_password = $_POST['current_password'];
 $new_password = $_POST['new_password'];
 $confirm_password = $_POST['confirm_password'];
 
-$sql = "SELECT password FROM users WHERE id='$user_id'";
+$sql = "SELECT password FROM users WHERE user_id='$user_id'";
 $result = mysqli_query($conn,$sql);
 
 $user = mysqli_fetch_assoc($result);
@@ -31,7 +30,7 @@ $newHash = password_hash($new_password,PASSWORD_DEFAULT);
 mysqli_query($conn,"
 UPDATE users
 SET password='$newHash'
-WHERE id='$user_id'
+WHERE user_id='$user_id'
 ");
 
 header("Location: profile.php");

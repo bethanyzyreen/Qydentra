@@ -1,5 +1,11 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Count unread receptionist notifications for badge
+$sidebar_user_id = $_SESSION['user_id'] ?? 0;
+$unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM receptionist_notifications WHERE receptionist_id = '$sidebar_user_id' AND status = 'Unread'");
+$unread_row = mysqli_fetch_assoc($unread_res);
+$unread_count = (int)$unread_row['cnt'];
 ?>
 
 <div class="sidebar">
@@ -53,6 +59,9 @@ class="<?php echo ($current_page == 'patient_records.php') ? 'active' : ''; ?>">
 class="<?php echo ($current_page == 'notifications.php') ? 'active' : ''; ?>">
 <i class="fa-solid fa-bell"></i>
 <span>Notifications</span>
+<?php if ($unread_count > 0): ?>
+<span class="notif-badge"><?php echo $unread_count; ?></span>
+<?php endif; ?>
 </a>
 
 </div>

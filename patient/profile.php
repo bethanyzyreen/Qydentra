@@ -1,14 +1,14 @@
 <?php
+$allowed_roles = ['patient'];
 include("../includes/auth_check.php");
-include("../config/database.php");
 
 $user_id = $_SESSION['user_id'];
 
-$sql = "SELECT * FROM users WHERE id='$user_id'";
+$sql = "SELECT * FROM users WHERE user_id='$user_id'";
 $result = mysqli_query($conn,$sql);
 
 $user = mysqli_fetch_assoc($result);
-?>
+?> 
 
 <?php include("../includes/header.php"); ?>
 
@@ -20,21 +20,32 @@ $user = mysqli_fetch_assoc($result);
 
 <?php include("../includes/topbar.php"); ?>
 
-<?php if(isset($_GET['success'])){ ?>
-
-<div class="success-message">
-    Profile updated successfully.
+<?php
+$success_msgs = [
+    'photo'        => 'Profile photo updated successfully.',
+    '1'            => 'Profile updated successfully.',
+    'true'         => 'Profile updated successfully.',
+    'password'     => 'Password changed successfully.',
+];
+$error_msgs = [
+    'invalid_type' => 'Invalid file type. Please upload JPG, PNG, or WEBP.',
+    'too_large'    => 'File is too large. Maximum size is 5MB.',
+    'upload_failed'=> 'Upload failed. Please try again.',
+    'no_file'      => 'No file was selected.',
+    '1'            => 'Something went wrong. Please try again.',
+];
+if(isset($_GET['success'])): $sk = $_GET['success']; ?>
+<div class="pat-alert pat-alert-success">
+    <i class="fa-solid fa-circle-check"></i>
+    <?php echo htmlspecialchars($success_msgs[$sk] ?? 'Action completed.'); ?>
 </div>
-
-<?php } ?>
-
-<?php if(isset($_GET['error'])){ ?>
-
-<div class="error-message">
-    Something went wrong.
+<?php endif; ?>
+<?php if(isset($_GET['error'])): $ek = $_GET['error']; ?>
+<div class="pat-alert pat-alert-error">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    <?php echo htmlspecialchars($error_msgs[$ek] ?? 'Something went wrong.'); ?>
 </div>
-
-<?php } ?>
+<?php endif; ?>
 
 <div class="table-container hover-glow">
 
@@ -59,25 +70,36 @@ $user = mysqli_fetch_assoc($result);
                 enctype="multipart/form-data"
                 id="photoForm">
 
-                <div class="profile-avatar">
+                <!-- Outer shell keeps position:relative so camera btn is NOT clipped -->
+                <div class="profile-avatar-shell">
 
-                    <?php if(!empty($user['profile_photo'])){ ?>
+                    <div class="profile-avatar">
 
-                        <img
-                            src="../uploads/profile/<?php echo $user['profile_photo']; ?>"
-                            class="profile-avatar-img">
+                        <?php if(!empty($user['profile_photo'])){ ?>
 
-                    <?php } else { ?>
+                            <img
+                                src="../uploads/profile/<?php echo $user['profile_photo']; ?>"
+                                class="profile-avatar-img"
+                                onerror="this.style.display='none';document.getElementById('profile-initial-span').style.display='flex'">
+                            <span id="profile-initial-span" class="profile-initial" style="display:none;">
+                                <?php echo strtoupper(substr($user['full_name'] ?? 'U', 0, 1)); ?>
+                            </span>
 
-                        <span class="profile-initial">
-                            <?php echo strtoupper(substr($user['full_name'] ?? 'U', 0, 1)); ?>
-                        </span>
+                        <?php } else { ?>
 
-                    <?php } ?>
+                            <span id="profile-initial-span" class="profile-initial">
+                                <?php echo strtoupper(substr($user['full_name'] ?? 'U', 0, 1)); ?>
+                            </span>
 
+                        <?php } ?>
+
+                    </div>
+
+                    <!-- Camera button sits on the SHELL (not inside overflow:hidden avatar) -->
                     <label
                         for="profilePhoto"
-                        class="avatar-camera-btn">
+                        class="avatar-camera-btn"
+                        title="Change profile photo">
 
                         <i class="fa-solid fa-camera"></i>
 
@@ -114,7 +136,7 @@ $user = mysqli_fetch_assoc($result);
 
                 <div class="profile-info-item">
                     <strong>User ID</strong>
-                    <p>#<?php echo $user['id']; ?></p>
+                    <p>#<?php echo $user['user_id']; ?></p>
                 </div>
 
                 <div class="profile-info-item">

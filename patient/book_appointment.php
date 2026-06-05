@@ -1,6 +1,6 @@
 <?php
+$allowed_roles = ['patient'];
 include("../includes/auth_check.php");
-include("../config/database.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -46,9 +46,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mysqli_query($conn, $sql)) {
 
+        // Notify the patient
         $notif = "Appointment request submitted successfully.";
-
         mysqli_query($conn, "INSERT INTO notifications (user_id, message) VALUES ('$patient_id', '$notif')");
+
+        // Get patient's full name for the receptionist notification
+        $patient_res = mysqli_query($conn, "SELECT full_name FROM users WHERE user_id = '$patient_id'");
+        $patient_row = mysqli_fetch_assoc($patient_res);
+        $patient_name = mysqli_real_escape_string($conn, $patient_row['full_name']);
+
+        // Format date and time for display
+        $formatted_date = date("F d, Y", strtotime($date));
+        $formatted_time = date("g:i A", strtotime($time));
+
+        // Notify all receptionists via receptionist_notifications table
+        $recep_title = "New Appointment Booked";
+        $recep_msg   = "$patient_name booked a $service appointment on $formatted_date at $formatted_time.";
+        $recep_title_esc = mysqli_real_escape_string($conn, $recep_title);
+        $recep_msg_esc   = mysqli_real_escape_string($conn, $recep_msg);
+
+        $recep_result = mysqli_query($conn, "SELECT user_id FROM users WHERE role = 'receptionist'");
+        while ($recep_row = mysqli_fetch_assoc($recep_result)) {
+            $recep_id = $recep_row['user_id'];
+            mysqli_query($conn, "INSERT INTO receptionist_notifications
+                (receptionist_id, title, message, type, status)
+                VALUES ('$recep_id', '$recep_title_esc', '$recep_msg_esc', 'Appointment', 'Unread')");
+        }
 
         header("Location: appointments.php");
         exit();

@@ -1,7 +1,6 @@
 <?php
-
-session_start();
-include("../config/database.php");
+$allowed_roles = ['patient'];
+include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
 
@@ -15,7 +14,7 @@ SET
 full_name='$full_name',
 email='$email',
 phone='$phone'
-WHERE id='$user_id'
+WHERE user_id='$user_id'
 ";
 
 if(mysqli_query($conn,$sql)){

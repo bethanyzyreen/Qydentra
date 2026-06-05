@@ -28,6 +28,9 @@ Qydentra
 Dental Appointment & Queue System
 </p>
 
+<?php if(isset($_SESSION["error"])): ?>
+<div class="alert-error"><?php echo $_SESSION["error"]; unset($_SESSION["error"]); ?></div>
+<?php endif; ?>
 <form action="login_process.php" method="POST">
 
 <div class="input-group">

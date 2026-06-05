@@ -1,3 +1,4 @@
+<?php if(session_status()===PHP_SESSION_NONE) session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,6 +27,12 @@ Qydentra
 Create your dental care account
 </p>
 
+<?php if(isset($_SESSION["error"])): ?>
+<div class="alert-error"><?php echo $_SESSION["error"]; unset($_SESSION["error"]); ?></div>
+<?php endif; ?>
+<?php if(isset($_SESSION["success"])): ?>
+<div class="alert-success-msg"><?php echo $_SESSION["success"]; unset($_SESSION["success"]); ?></div>
+<?php endif; ?>
 <form action="register_process.php" method="POST">
 
 <div class="input-group">

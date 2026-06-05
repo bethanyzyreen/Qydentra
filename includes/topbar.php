@@ -5,66 +5,51 @@ $hour = date("H");
 
 if($hour >= 5 && $hour < 12){
     $greeting = "Good Morning";
-}
-elseif($hour >= 12 && $hour < 18){
+}elseif($hour >= 12 && $hour < 18){
     $greeting = "Good Afternoon";
-}
-else{
+}else{
     $greeting = "Good Evening";
 }
 
 $name = $_SESSION['name'] ?? 'User';
+$initial = strtoupper(substr($name, 0, 1));
+$hasPhoto = !empty($_SESSION['profile_photo'] ?? '');
+$topbar_pat_id = $_SESSION['user_id'] ?? 0;
+$topbar_pat_unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM notifications WHERE user_id='$topbar_pat_id' AND is_read=0");
+$topbar_pat_unread = (int)mysqli_fetch_assoc($topbar_pat_unread_res)['cnt'];
 ?>
 
 <div class="topbar">
 
 <div class="topbar-left">
-
 <h1 class="greeting-title">
-
-<span class="greeting-text">
-<?php echo $greeting; ?>,
-</span>
-
-<span class="user-name">
-<?php echo $name; ?>
-</span>
-
+<span class="greeting-text"><?php echo $greeting; ?>,</span>
+<span class="user-name"><?php echo htmlspecialchars($name); ?></span>
 </h1>
-
-<p>
-Here's your dental care overview.
-</p>
-
+<p>Here's your dental care overview.</p>
 </div>
 
-<div class="profile-box hover-glow"
-onclick="window.location.href='/qydentra/patient/profile.php'">
+<div class="topbar-right-group">
+<div class="profile-box hover-glow" onclick="window.location.href='profile.php'">
 
-<?php if(!empty($user['profile_photo'])){ ?>
+<div class="topbar-avatar">
+    <!-- Always show initial as base -->
+    <span class="topbar-avatar-initial"><?php echo $initial; ?></span>
 
-<div class="profile-photo">
-    <img src="../uploads/profiles/<?php echo $user['profile_photo']; ?>">
+    <?php if($hasPhoto): ?>
+        <!-- Only overlay with uploaded photo if patient has one -->
+        <img src="../uploads/profile/<?php echo htmlspecialchars($_SESSION['profile_photo'] ?? ''); ?>"
+             alt="Profile"
+             onload="this.style.display='block'"
+             onerror="this.style.display='none'">
+    <?php endif; ?>
+    <!-- No fallback to profile.jpg for patients — initial letter is the default -->
 </div>
-
-<?php } else { ?>
-
-<div class="profile-circle">
-    <?php echo strtoupper(substr($name,0,1)); ?>
-</div>
-
-<?php } ?>
 
 <div>
-
-<h4>
-<?php echo $name; ?>
-</h4>
-
-<p class="profile-role">
-Patient
-</p>
-
+    <h4><?php echo htmlspecialchars($name); ?></h4>
+    <p class="profile-role">Patient</p>
+</div>
 </div>
 
 </div>
