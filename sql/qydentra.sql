@@ -59,9 +59,6 @@ CREATE TABLE patient_notifications (
 );
 
 -- ============================================================
--- receptionist_notifications
---   appointment_id: links back to the triggering appointment
--- ============================================================
 CREATE TABLE receptionist_notifications (
     receptionist_notification_id INT AUTO_INCREMENT PRIMARY KEY,
     receptionist_id INT NOT NULL,
@@ -77,16 +74,10 @@ CREATE TABLE receptionist_notifications (
 );
 
 /* =============== RECEPTIONIST ACCOUNT =============== */
--- Email:    receptionist@qydentra.com
--- Password: qydentra.recep
 -- Email:    receptionist@qydentraa.com
 -- Password: qydentra.receptionist
 INSERT INTO staffs (full_name, email, password, role)
 VALUES 
-    ('Clinic Receptionist',
-    'receptionist@qydentra.com',
-    '$2y$10$c.Fw4tw5BnrUUShQlIIVn.QPJKhXdyxzziWgHFpcMH3MthWzGgHba',
-    'receptionist'),
     ('Clinic Receptionist',
     'receptionist@qydentraa.com',
     '$2y$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Z8Y5qz9sQnFZpFhZfQG9e',
@@ -119,10 +110,6 @@ VALUES (
     'dentist'
 );
 
--- ============================================================
--- MIGRATION: run these ALTER statements on an existing database
--- instead of dropping and recreating it.
--- ============================================================
 -- ALTER TABLE patient_notifications
 --     ADD COLUMN title VARCHAR(100) DEFAULT NULL AFTER patient_id,
 --     ADD COLUMN type ENUM('Appointment','Queue','System') DEFAULT 'Appointment' AFTER title,
