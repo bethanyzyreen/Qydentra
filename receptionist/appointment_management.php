@@ -16,7 +16,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'cancel'){
     $fmt_time     = date("g:i A",  strtotime($getAppt['appointment_time']));
 
     // Get receptionist's name
-    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staff WHERE staff_id='{$_SESSION['user_id']}'"));
+    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staffs WHERE staff_id='{$_SESSION['user_id']}'"));
     $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name'] ?? '');
 
     // Notify patient
@@ -27,7 +27,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'cancel'){
     // Notify all receptionists (including self, for record)
     $r_title = mysqli_real_escape_string($conn, "Appointment Cancelled");
     $r_msg   = mysqli_real_escape_string($conn, notification_receptionist_appointment_cancelled($patient_name_esc, $service, $fmt_date, $fmt_time));
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
     while($rrow = mysqli_fetch_assoc($rr)){
         $rid = $rrow['user_id'];
         mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");

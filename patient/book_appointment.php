@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $recep_title_esc = mysqli_real_escape_string($conn, $recep_title);
         $recep_msg_esc   = mysqli_real_escape_string($conn, $recep_msg);
 
-        $recep_result = mysqli_query($conn, "SELECT staff_id AS user_id FROM staff WHERE role = 'receptionist'");
+        $recep_result = mysqli_query($conn, "SELECT staff_id AS user_id FROM staffs WHERE role = 'receptionist'");
         while ($recep_row = mysqli_fetch_assoc($recep_result)) {
             $recep_id = $recep_row['user_id'];
             mysqli_query($conn, "INSERT INTO receptionist_notifications

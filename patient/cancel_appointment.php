@@ -34,7 +34,7 @@ if($apptRow){
     $r_title = mysqli_real_escape_string($conn, "Appointment Cancelled by Patient");
     $r_msg   = mysqli_real_escape_string($conn,
         notification_receptionist_appointment_cancelled_by_patient($patient_name, $service, $fmt_date, $fmt_time));
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
     while($rrow = mysqli_fetch_assoc($rr)){
         $rid = $rrow['user_id'];
         mysqli_query($conn,"INSERT INTO receptionist_notifications

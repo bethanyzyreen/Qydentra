@@ -51,7 +51,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
     // Notify all receptionists
     $r_title = "Appointment Approved";
     $r_msg   = notification_receptionist_appointment_approved($patient_name_esc, $service, $date, $time);
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
     while($rrow = mysqli_fetch_assoc($rr)){
         $rid = $rrow['user_id'];
         mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
@@ -83,7 +83,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     $fmt_time         = date("g:i A",  strtotime($time));
 
     // Get receptionist's name
-    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staff WHERE staff_id='{$_SESSION['user_id']}'"));
+    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staffs WHERE staff_id='{$_SESSION['user_id']}'"));
     $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name'] ?? '');
 
     // Notify patient
@@ -94,7 +94,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     // Notify all receptionists
     $r_title = mysqli_real_escape_string($conn, "Appointment Rescheduled");
     $r_msg   = mysqli_real_escape_string($conn, notification_receptionist_appointment_rescheduled($patient_name_esc, $service, $date, $time));
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
     while($rrow = mysqli_fetch_assoc($rr)){
         $rid = $rrow['user_id'];
         mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");

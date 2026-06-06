@@ -12,7 +12,7 @@ CREATE TABLE patients (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE staff (
+CREATE TABLE staffs (
     staff_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -57,16 +57,22 @@ CREATE TABLE receptionist_notifications (
     status ENUM('Unread','Read') DEFAULT 'Unread',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (receptionist_id) REFERENCES staff(staff_id)
+    FOREIGN KEY (receptionist_id) REFERENCES staffs(staff_id)
 );
 
 /* =============== RECEPTIONIST ACCOUNT =============== */
 -- Email:    receptionist@qydentra.com
 -- Password: qydentra.recep
-INSERT INTO staff (full_name, email, password, role)
-VALUES (
-    'Clinic Receptionist',
+-- Email:    receptionist@qydentraa.com
+-- Password: qydentra.receptionist
+INSERT INTO staffs (full_name, email, password, role)
+VALUES 
+    ('Clinic Receptionist',
     'receptionist@qydentra.com',
+    '$2y$10$c.Fw4tw5BnrUUShQlIIVn.QPJKhXdyxzziWgHFpcMH3MthWzGgHba',
+    'receptionist'),
+    ('Clinic Receptionist',
+    'receptionist@qydentraa.com',
     '$2y$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Z8Y5qz9sQnFZpFhZfQG9e',
     'receptionist'
 );
@@ -76,7 +82,7 @@ VALUES (
 -- Email:    admin@qydentra.com
 -- Password: qydentra.admin
 -- ============================================
-INSERT INTO staff (full_name, email, password, role)
+INSERT INTO staffs (full_name, email, password, role)
 VALUES (
     'Clinic Admin',
     'admin@qydentra.com',
@@ -89,7 +95,7 @@ VALUES (
 -- Email:    dentist@qydentra.com
 -- Password: qydentra.dentist
 -- ============================================
-INSERT INTO staff (full_name, email, password, role)
+INSERT INTO staffs (full_name, email, password, role)
 VALUES (
     'Clinic Dentist',
     'dentist@qydentra.com',

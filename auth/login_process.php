@@ -35,8 +35,8 @@ if(mysqli_num_rows($result) > 0){
     }
 }
 
-// Check staff table
-$sql    = "SELECT staff_id AS user_id, full_name, password, role, profile_photo FROM staff WHERE email='$email'";
+// Check staffs table
+$sql    = "SELECT staff_id AS user_id, full_name, password, role, profile_photo FROM staffs WHERE email='$email'";
 $result = mysqli_query($conn, $sql);
 
 if(mysqli_num_rows($result) > 0){
