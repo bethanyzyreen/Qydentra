@@ -13,6 +13,9 @@ if(!isset($conn)){
 // Load shared notification formatting helpers
 require_once(__DIR__ . "/notification_templates.php");
 
+// Load notification INSERT wrappers (with error logging)
+require_once(__DIR__ . "/notify_helper.php");
+
 // Redirect to login if not authenticated
 if(!isset($_SESSION['user_id'])){
     header("Location: ../auth/login.php");

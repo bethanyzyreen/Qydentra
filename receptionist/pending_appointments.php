@@ -39,23 +39,25 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
     $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
         "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
     ));
-    $pid = $getAppt['patient_id'];
-    $patient_name_esc = mysqli_real_escape_string($conn, $getAppt['patient_name']);
-    $service = mysqli_real_escape_string($conn, $getAppt['service_type']);
+    $pid          = (int)$getAppt['patient_id'];
+    $patient_name = $getAppt['patient_name'];
+    $service      = $getAppt['service_type'];
 
     // Notify patient
-    $pat_msg = notification_patient_appointment_approved($patient_name_esc, $service, $date, $time);
-    $pat_msg_esc = mysqli_real_escape_string($conn, $pat_msg);
-    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$pid', '$pat_msg_esc')");
+    notify_patient(
+        $conn, $pid,
+        'Appointment Approved',
+        notification_patient_appointment_approved($patient_name, $service, $date, $time),
+        'Appointment', $id
+    );
 
     // Notify all receptionists
-    $r_title = "Appointment Approved";
-    $r_msg   = notification_receptionist_appointment_approved($patient_name_esc, $service, $date, $time);
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
-    while($rrow = mysqli_fetch_assoc($rr)){
-        $rid = $rrow['user_id'];
-        mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
-    }
+    notify_receptionists(
+        $conn,
+        'Appointment Approved',
+        notification_receptionist_appointment_approved($patient_name, $service, $date, $time),
+        'Appointment', $id
+    );
 
     header("Location: pending_appointments.php?success=approved");
     exit();
@@ -76,29 +78,25 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
         "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
     ));
-    $pid              = $getAppt['patient_id'];
-    $patient_name_esc = mysqli_real_escape_string($conn, $getAppt['patient_name']);
-    $service          = mysqli_real_escape_string($conn, $getAppt['service_type']);
-    $fmt_date         = date("F d, Y", strtotime($date));
-    $fmt_time         = date("g:i A",  strtotime($time));
-
-    // Get receptionist's name
-    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staffs WHERE staff_id='{$_SESSION['user_id']}'"));
-    $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name'] ?? '');
+    $pid          = (int)$getAppt['patient_id'];
+    $patient_name = $getAppt['patient_name'];
+    $service      = $getAppt['service_type'];
 
     // Notify patient
-    $pat_msg = notification_patient_appointment_rescheduled($patient_name_esc, $service, $date, $time);
-    $pat_msg_esc = mysqli_real_escape_string($conn, $pat_msg);
-    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$pid', '$pat_msg_esc')");
+    notify_patient(
+        $conn, $pid,
+        'Appointment Rescheduled',
+        notification_patient_appointment_rescheduled($patient_name, $service, $date, $time),
+        'Appointment', $id
+    );
 
     // Notify all receptionists
-    $r_title = mysqli_real_escape_string($conn, "Appointment Rescheduled");
-    $r_msg   = mysqli_real_escape_string($conn, notification_receptionist_appointment_rescheduled($patient_name_esc, $service, $date, $time));
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
-    while($rrow = mysqli_fetch_assoc($rr)){
-        $rid = $rrow['user_id'];
-        mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
-    }
+    notify_receptionists(
+        $conn,
+        'Appointment Rescheduled',
+        notification_receptionist_appointment_rescheduled($patient_name, $service, $date, $time),
+        'Appointment', $id
+    );
 
     header("Location: pending_appointments.php?success=rescheduled");
     exit();

@@ -2,23 +2,32 @@
 $allowed_roles = ['patient'];
 include("../includes/auth_check.php");
 
-$user_id = $_SESSION['user_id'];
+$user_id = (int)$_SESSION['user_id'];
 
 /* ================= MARK SINGLE AS READ ================= */
 if(isset($_POST['mark_read']) && !empty($_POST['notif_id'])){
     $notif_id = (int)$_POST['notif_id'];
-    mysqli_query($conn,"
+    $ok = mysqli_query($conn,"
         UPDATE patient_notifications
-        SET is_read=1
-        WHERE notification_id='$notif_id' AND patient_id='$user_id'
+        SET is_read = 1
+        WHERE notification_id = $notif_id
+          AND patient_id = $user_id
+          AND is_read = 0
     ");
+    if(!$ok) error_log('[Qydentra] mark_read failed: ' . mysqli_error($conn));
     header("Location: patient_notifications.php");
     exit();
 }
 
 /* ================= MARK ALL AS READ ================= */
 if(isset($_POST['mark_all_read'])){
-    mysqli_query($conn,"UPDATE patient_notifications SET is_read=1 WHERE patient_id='$user_id' AND is_read=0");
+    $ok = mysqli_query($conn,"
+        UPDATE patient_notifications
+        SET is_read = 1
+        WHERE patient_id = $user_id
+          AND is_read = 0
+    ");
+    if(!$ok) error_log('[Qydentra] mark_all_read failed: ' . mysqli_error($conn));
     header("Location: patient_notifications.php");
     exit();
 }
@@ -43,7 +52,8 @@ if(isset($_POST['mark_all_read'])){
         </div>
         <?php
         $unread_check = mysqli_fetch_assoc(mysqli_query($conn,
-            "SELECT COUNT(*) AS cnt FROM patient_notifications WHERE patient_id='$user_id' AND is_read=0"
+            "SELECT COUNT(*) AS cnt FROM patient_notifications
+             WHERE patient_id = $user_id AND is_read = 0"
         ));
         if((int)$unread_check['cnt'] > 0):
         ?>
@@ -58,36 +68,49 @@ if(isset($_POST['mark_all_read'])){
     <div class="notification-wrapper">
 
         <?php
-        $sql = "SELECT * FROM patient_notifications
-                WHERE patient_id='$user_id'
-                ORDER BY created_at DESC";
-        $result = mysqli_query($conn, $sql);
+        $result = mysqli_query($conn,
+            "SELECT * FROM patient_notifications
+             WHERE patient_id = $user_id
+             ORDER BY created_at DESC"
+        );
 
         if(mysqli_num_rows($result) > 0):
             while($row = mysqli_fetch_assoc($result)):
-                $isUnread = ($row['is_read'] == 0);
+                $isUnread = ((int)$row['is_read'] === 0);
                 $notif_id = (int)$row['notification_id'];
+                $type     = $row['type'] ?? 'Appointment';
+                $typeIcon = match($type) {
+                    'Queue'  => 'fa-list-ol',
+                    'System' => 'fa-gear',
+                    default  => 'fa-calendar-check',
+                };
         ?>
 
         <div class="notification-card <?php echo $isUnread ? 'unread' : ''; ?>">
 
-            <!-- LEFT: icon -->
             <div class="notification-icon">
                 <i class="fa-solid <?php echo $isUnread ? 'fa-bell' : 'fa-circle-check'; ?>"></i>
             </div>
 
-            <!-- CENTER: message -->
             <div class="notification-content">
+                <?php if(!empty($row['title'])): ?>
+                <strong><?php echo htmlspecialchars($row['title']); ?></strong>
+                <?php endif; ?>
                 <p><?php echo htmlspecialchars($row['message']); ?></p>
                 <small>
                     <i class="fa-regular fa-clock"></i>
                     <?php echo date("F d, Y • g:i A", strtotime($row['created_at'])); ?>
+                    &nbsp;·&nbsp;
+                    <span class="notif-type-badge">
+                        <i class="fa-solid <?php echo $typeIcon; ?>"></i>
+                        <?php echo htmlspecialchars($type); ?>
+                    </span>
                 </small>
             </div>
 
-            <!-- RIGHT: badge + button -->
             <div class="notification-actions">
                 <?php if($isUnread): ?>
+                    <div class="notification-dot"></div>
                     <form method="POST" style="margin:0;">
                         <input type="hidden" name="notif_id" value="<?php echo $notif_id; ?>">
                         <button type="submit" name="mark_read" class="mark-read-btn">

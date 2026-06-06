@@ -3,7 +3,7 @@ $allowed_roles = ['patient'];
 include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
-$id = (int)($_GET['id'] ?? 0);
+$id      = (int)($_GET['id'] ?? 0);
 
 // Get appointment + patient name before cancelling
 $apptRow = mysqli_fetch_assoc(mysqli_query($conn,
@@ -17,30 +17,37 @@ $apptRow = mysqli_fetch_assoc(mysqli_query($conn,
 if($apptRow){
     mysqli_query($conn,"
         UPDATE appointments SET status='Cancelled'
-        WHERE appointment_id='$id' AND patient_id='$user_id' AND status IN ('Pending','Approved')
+        WHERE appointment_id='$id' AND patient_id='$user_id'
+        AND status IN ('Pending','Approved')
     ");
 
-    $service      = mysqli_real_escape_string($conn, $apptRow['service_type']);
-    $fmt_date     = date("F d, Y", strtotime($apptRow['appointment_date']));
-    $fmt_time     = date("g:i A",  strtotime($apptRow['appointment_time']));
-    $patient_name = mysqli_real_escape_string($conn, $apptRow['patient_name']);
+    $service      = $apptRow['service_type'];
+    $patient_name = $apptRow['patient_name'];
 
     // Notify patient (self)
-    $pat_msg = mysqli_real_escape_string($conn,
-        "You cancelled your $service appointment on $fmt_date at $fmt_time.");
-    mysqli_query($conn,"INSERT INTO patient_notifications(patient_id,message) VALUES('$user_id','$pat_msg')");
+    notify_patient(
+        $conn, (int)$user_id,
+        'Appointment Cancelled',
+        notification_patient_appointment_cancelled(
+            $patient_name, $service,
+            $apptRow['appointment_date'],
+            $apptRow['appointment_time']
+        ),
+        'Appointment', $id
+    );
 
     // Notify all receptionists
-    $r_title = mysqli_real_escape_string($conn, "Appointment Cancelled by Patient");
-    $r_msg   = mysqli_real_escape_string($conn,
-        notification_receptionist_appointment_cancelled_by_patient($patient_name, $service, $fmt_date, $fmt_time));
-    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staffs WHERE role='receptionist'");
-    while($rrow = mysqli_fetch_assoc($rr)){
-        $rid = $rrow['user_id'];
-        mysqli_query($conn,"INSERT INTO receptionist_notifications
-            (receptionist_id, title, message, type, status)
-            VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
-    }
+    $fmt_date = date("F d, Y", strtotime($apptRow['appointment_date']));
+    $fmt_time = date("g:i A",  strtotime($apptRow['appointment_time']));
+
+    notify_receptionists(
+        $conn,
+        'Appointment Cancelled by Patient',
+        notification_receptionist_appointment_cancelled_by_patient(
+            $patient_name, $service, $fmt_date, $fmt_time
+        ),
+        'Appointment', $id
+    );
 }
 
 header("Location: appointments.php");

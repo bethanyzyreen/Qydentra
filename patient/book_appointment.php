@@ -46,30 +46,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mysqli_query($conn, $sql)) {
 
-        // Notify the patient
-        $patient_name = mysqli_real_escape_string($conn, $_SESSION['full_name'] ?? '');
+        // Get new appointment_id for FK links
+        $new_appt_id = (int)mysqli_insert_id($conn);
+
+        // Resolve patient name
+        $patient_name = $_SESSION['full_name'] ?? '';
         if(empty($patient_name)){
-            $patient_res = mysqli_query($conn, "SELECT full_name FROM patients WHERE patient_id = '$patient_id'");
-            $patient_row = mysqli_fetch_assoc($patient_res);
-            $patient_name = mysqli_real_escape_string($conn, $patient_row['full_name']);
+            $prow = mysqli_fetch_assoc(mysqli_query($conn,
+                "SELECT full_name FROM patients WHERE patient_id = '$patient_id'"));
+            $patient_name = $prow['full_name'] ?? '';
         }
-        $notif = notification_patient_request_submitted($patient_name);
-        $notif_esc = mysqli_real_escape_string($conn, $notif);
-        mysqli_query($conn, "INSERT INTO patient_notifications (patient_id, message) VALUES ('$patient_id', '$notif_esc')");
 
-        // Notify all receptionists via receptionist_notifications table
-        $recep_title = "New Appointment Booked";
-        $recep_msg   = notification_receptionist_new_appointment_booked($patient_name, $service, $date, $time);
-        $recep_title_esc = mysqli_real_escape_string($conn, $recep_title);
-        $recep_msg_esc   = mysqli_real_escape_string($conn, $recep_msg);
+        // Notify the patient
+        notify_patient(
+            $conn, (int)$patient_id,
+            'Appointment Request Submitted',
+            notification_patient_request_submitted($patient_name),
+            'Appointment', $new_appt_id
+        );
 
-        $recep_result = mysqli_query($conn, "SELECT staff_id AS user_id FROM staffs WHERE role = 'receptionist'");
-        while ($recep_row = mysqli_fetch_assoc($recep_result)) {
-            $recep_id = $recep_row['user_id'];
-            mysqli_query($conn, "INSERT INTO receptionist_notifications
-                (receptionist_id, title, message, type, status)
-                VALUES ('$recep_id', '$recep_title_esc', '$recep_msg_esc', 'Appointment', 'Unread')");
-        }
+        // Notify all receptionists
+        notify_receptionists(
+            $conn,
+            'New Appointment Booked',
+            notification_receptionist_new_appointment_booked($patient_name, $service, $date, $time),
+            'Appointment', $new_appt_id
+        );
 
         header("Location: appointments.php");
         exit();
