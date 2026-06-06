@@ -201,7 +201,7 @@ Review Pending
 </td>
 
 <td>
-<a href="appointment_management.php?id=<?php echo $row['appointment_id']; ?>" class="action-btn-sm">
+<a href="appointment_management.php?id=<?php echo $row['appointment_id']; ?>" class="action-btn-sm edit">
 <i class="fa-solid fa-eye"></i>
 </a>
 </td>

@@ -10,22 +10,19 @@ $confirm_password = $_POST['confirm_password'];
 
 $sql = "SELECT password FROM patients WHERE patient_id='$user_id'";
 $result = mysqli_query($conn,$sql);
-
 $user = mysqli_fetch_assoc($result);
 
 if(!password_verify($current_password,$user['password'])){
-
-    die("Current password is incorrect.");
-
+    header("Location: profile.php?error=wrong_password");
+    exit();
 }
 
 if($new_password != $confirm_password){
-
-    die("Passwords do not match.");
-
+    header("Location: profile.php?error=password_mismatch");
+    exit();
 }
 
-$newHash = password_hash($new_password,PASSWORD_DEFAULT);
+$newHash = password_hash($new_password, PASSWORD_DEFAULT);
 
 mysqli_query($conn,"
 UPDATE patients
@@ -33,6 +30,6 @@ SET password='$newHash'
 WHERE patient_id='$user_id'
 ");
 
-header("Location: profile.php");
-
+header("Location: profile.php?success=password");
+exit();
 ?>

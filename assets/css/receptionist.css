@@ -42,10 +42,11 @@ font-weight:600;
 
 .action-group{
 display:flex;
-flex-direction:column;
-gap:6px;
-align-items:stretch;
-width:140px;
+flex-direction:row;
+gap:8px;
+align-items:center;
+justify-content:center;
+width:auto;
 }
 
 /* APPROVE BUTTON */
@@ -107,12 +108,15 @@ align-items:center;
 justify-content:center;
 width:34px;
 height:34px;
+min-width:34px;
+min-height:34px;
 border:none;
 border-radius:10px;
 cursor:pointer;
 transition:.25s;
 text-decoration:none;
 font-size:14px;
+flex-shrink:0;
 }
 
 .action-btn-sm.edit{
@@ -449,13 +453,15 @@ margin-left:0;
 
 .action-group {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: stretch;
-    width: 140px;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    width: auto;
 }
 
-form[style*="display:flex"] {
+form[style*="display:inline"] {
+    display: inline-flex !important;
     align-items: center;
 }
 

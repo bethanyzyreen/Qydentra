@@ -4,11 +4,11 @@ date_default_timezone_set('Asia/Manila');
 $hour = date("H");
 
 if($hour >= 5 && $hour < 12){
-    $greeting = "Good Day";
+    $greeting = "Good Morning";
 }elseif($hour >= 12 && $hour < 18){
-    $greeting = "Good Day";
+    $greeting = "Good Afternoon";
 }else{
-    $greeting = "Good Day";
+    $greeting = "Good Evening";
 }
 
 $name = $_SESSION['name'] ?? 'User';

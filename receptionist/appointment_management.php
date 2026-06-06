@@ -16,8 +16,8 @@ if(isset($_POST['action']) && $_POST['action'] == 'cancel'){
     $fmt_time     = date("g:i A",  strtotime($getAppt['appointment_time']));
 
     // Get receptionist's name
-    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM patients WHERE patient_id='{$_SESSION['user_id']}'"));
-    $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name']);
+    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staff WHERE staff_id='{$_SESSION['user_id']}'"));
+    $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name'] ?? '');
 
     // Notify patient
     $pat_msg = notification_patient_appointment_cancelled($patient_name_esc, $service, $fmt_date, $fmt_time);
@@ -75,6 +75,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'reassign'){
 
 $statusFilter = isset($_GET['status']) ? mysqli_real_escape_string($conn, $_GET['status']) : 'all';
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, trim($_GET['search'])) : '';
+$patientFilter = isset($_GET['patient_id']) ? (int)$_GET['patient_id'] : 0;
 
 $where = "WHERE 1=1";
 if($statusFilter !== 'all'){
@@ -82,6 +83,9 @@ if($statusFilter !== 'all'){
 }
 if(!empty($search)){
     $where .= " AND (u.full_name LIKE '%$search%' OR u.email LIKE '%$search%' OR a.service_type LIKE '%$search%')";
+}
+if($patientFilter > 0){
+    $where .= " AND a.patient_id='$patientFilter'";
 }
 
 $appointments = mysqli_query($conn,"

@@ -52,7 +52,7 @@ include("../includes/auth_check.php");
 
         <div class="queue-info">
             <i class="fa-solid fa-tooth"></i>
-            <span><?php echo $row['service']; ?></span>
+            <span><?php echo htmlspecialchars($row['service_type'] ?? '—'); ?></span>
         </div>
 
         <div class="queue-info">

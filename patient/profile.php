@@ -28,12 +28,13 @@ $success_msgs = [
     'password'     => 'Password changed successfully.',
 ];
 $error_msgs = [
-    'invalid_type' => 'Invalid file type. Please upload JPG, PNG, or WEBP.',
-    'too_large'    => 'File is too large. Maximum size is 5MB.',
-    'upload_failed'=> 'Upload failed. Please try again.',
-    'no_file'      => 'No file was selected. Please choose an image.',
-    'upload_failed'=> 'Upload failed. Please check folder permissions or try again.',
-    '1'            => 'Something went wrong. Please try again.',
+    'invalid_type'     => 'Invalid file type. Please upload JPG, PNG, or WEBP.',
+    'too_large'        => 'File is too large. Maximum size is 5MB.',
+    'upload_failed'    => 'Upload failed. Please check folder permissions or try again.',
+    'no_file'          => 'No file was selected. Please choose an image.',
+    'wrong_password'   => 'Current password is incorrect.',
+    'password_mismatch'=> 'New passwords do not match.',
+    '1'                => 'Something went wrong. Please try again.',
 ];
 if(isset($_GET['success'])): $sk = $_GET['success']; ?>
 <div class="pat-alert pat-alert-success">

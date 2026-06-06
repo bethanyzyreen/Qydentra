@@ -9,11 +9,11 @@ $topbar_unread = (int)mysqli_fetch_assoc($topbar_unread_res)['cnt'];
 $hour = date("H");
 
 if($hour >= 5 && $hour < 12){
-    $greeting = "Good Day";
+    $greeting = "Good Morning";
 }elseif($hour >= 12 && $hour < 18){
-    $greeting = "Good Day";
+    $greeting = "Good Afternoon";
 }else{
-    $greeting = "Good Day";
+    $greeting = "Good Evening";
 }
 
 $name = $_SESSION['name'] ?? 'Receptionist';

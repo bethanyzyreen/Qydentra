@@ -18,15 +18,12 @@ WHERE patient_id='$user_id'
 ";
 
 if(mysqli_query($conn,$sql)){
-
     $_SESSION['full_name'] = $full_name;
-
-    header("Location: profile.php");
-
-}else{
-
-    echo "Profile update failed.";
-
+    $_SESSION['name'] = $full_name;
+    header("Location: profile.php?success=1");
+    exit();
+} else {
+    header("Location: profile.php?error=1");
+    exit();
 }
-
 ?>

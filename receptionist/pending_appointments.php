@@ -83,8 +83,8 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     $fmt_time         = date("g:i A",  strtotime($time));
 
     // Get receptionist's name
-    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM patients WHERE patient_id='{$_SESSION['user_id']}'"));
-    $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name']);
+    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM staff WHERE staff_id='{$_SESSION['user_id']}'"));
+    $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name'] ?? '');
 
     // Notify patient
     $pat_msg = notification_patient_appointment_rescheduled($patient_name_esc, $service, $date, $time);
