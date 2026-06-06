@@ -1,3 +1,4 @@
+CREATE DATABASE qydentra;
 USE qydentra;
 
 CREATE TABLE patients (
@@ -68,4 +69,30 @@ VALUES (
     'receptionist@qydentra.com',
     '$2y$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Z8Y5qz9sQnFZpFhZfQG9e',
     'receptionist'
+);
+
+-- ============================================
+-- ADMIN ACCOUNT
+-- Email:    admin@qydentra.com
+-- Password: qydentra.admin
+-- ============================================
+INSERT INTO staff (full_name, email, password, role)
+VALUES (
+    'Clinic Admin',
+    'admin@qydentra.com',
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    'admin'
+);
+
+-- ============================================
+-- DENTIST ACCOUNT
+-- Email:    dentist@qydentra.com
+-- Password: qydentra.dentist
+-- ============================================
+INSERT INTO staff (full_name, email, password, role)
+VALUES (
+    'Clinic Dentist',
+    'dentist@qydentra.com',
+    '$2y$10$TKh8H1.PFetR5450ygyxGO5RPyvAZQFrRDaxOCi7FBtX3A/6MdI2.',
+    'dentist'
 );
