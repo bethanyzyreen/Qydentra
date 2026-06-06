@@ -1,0 +1,1266 @@
+/* ================= RECEPTIONIST EXTRA STYLES ================= */
+
+/* ALERT SUCCESS */
+
+.alert-success{
+display:flex;
+align-items:center;
+gap:12px;
+
+padding:14px 20px;
+margin-bottom:20px;
+margin-left:320px;
+
+background:rgba(34,197,94,0.10);
+border:1px solid rgba(34,197,94,0.25);
+border-radius:14px;
+
+color:#22c55e;
+font-size:14px;
+font-weight:500;
+}
+
+.alert-success i{
+font-size:16px;
+}
+
+/* BADGE COUNT */
+
+.badge-count{
+display:inline-flex;
+align-items:center;
+padding:6px 14px;
+border-radius:20px;
+background:rgba(245,158,11,0.12);
+border:1px solid rgba(245,158,11,0.25);
+color:#f59e0b;
+font-size:13px;
+font-weight:600;
+}
+
+/* ACTION GROUP */
+
+.action-group{
+display:flex;
+gap:8px;
+align-items:center;
+flex-wrap:wrap;
+}
+
+/* APPROVE BUTTON */
+
+.approve-btn{
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:8px 14px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(22,163,74,0.10));
+border:1px solid rgba(34,197,94,0.25);
+color:#22c55e;
+font-size:12px;
+font-weight:600;
+cursor:pointer;
+transition:.25s ease;
+}
+
+.approve-btn:hover{
+background:rgba(34,197,94,0.20);
+box-shadow:0 0 14px rgba(34,197,94,0.20);
+transform:translateY(-1px);
+}
+
+/* RESCHEDULE BUTTON */
+
+.reschedule-btn{
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:8px 14px;
+border:1px solid rgba(245,158,11,0.25);
+border-radius:12px;
+background:rgba(245,158,11,0.08);
+color:#f59e0b;
+font-size:12px;
+font-weight:600;
+cursor:pointer;
+transition:.25s ease;
+}
+
+.reschedule-btn:hover{
+background:rgba(245,158,11,0.16);
+box-shadow:0 0 14px rgba(245,158,11,0.18);
+transform:translateY(-1px);
+}
+
+/* SMALL ACTION BUTTONS */
+
+.action-btn-sm{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:34px;
+height:34px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+transition:.25s;
+text-decoration:none;
+font-size:14px;
+}
+
+.action-btn-sm.edit{
+background:rgba(96,165,250,0.10);
+border:1px solid rgba(96,165,250,0.20);
+color:#60a5fa;
+}
+
+.action-btn-sm.edit:hover{
+background:rgba(96,165,250,0.20);
+box-shadow:0 0 12px rgba(96,165,250,0.20);
+}
+
+.action-btn-sm.cancel-sm{
+background:rgba(239,68,68,0.10);
+border:1px solid rgba(239,68,68,0.20);
+color:#ef4444;
+}
+
+.action-btn-sm.cancel-sm:hover{
+background:rgba(239,68,68,0.18);
+box-shadow:0 0 12px rgba(239,68,68,0.18);
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay{
+position:fixed;
+inset:0;
+background:rgba(3,7,18,0.80);
+backdrop-filter:blur(10px);
+z-index:9999;
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:.3s ease;
+}
+
+.modal-overlay.active{
+opacity:1;
+pointer-events:all;
+}
+
+.modal-card{
+width:100%;
+max-width:480px;
+margin:20px;
+
+background:linear-gradient(
+160deg,
+rgba(10,18,35,0.98),
+rgba(8,12,24,0.98)
+);
+
+border:1px solid rgba(96,165,250,0.15);
+border-radius:24px;
+
+padding:28px;
+
+box-shadow:
+0 0 60px rgba(0,0,0,0.6),
+0 0 30px rgba(96,165,250,0.08);
+
+transform:translateY(20px);
+transition:.35s cubic-bezier(.16,1,.3,1);
+}
+
+.modal-overlay.active .modal-card{
+transform:translateY(0);
+}
+
+.modal-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:6px;
+}
+
+.modal-header h3{
+font-size:17px;
+font-weight:700;
+color:#f8fafc;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.modal-header h3 i{
+color:#60a5fa;
+}
+
+.modal-close{
+width:32px;
+height:32px;
+border:none;
+border-radius:8px;
+background:rgba(255,255,255,0.06);
+color:#94a3b8;
+font-size:14px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:.2s;
+}
+
+.modal-close:hover{
+background:rgba(239,68,68,0.12);
+color:#ef4444;
+}
+
+/* FORM INSIDE MODAL */
+
+.modal-card .form-group{
+display:flex;
+flex-direction:column;
+gap:8px;
+margin-bottom:16px;
+}
+
+.modal-card .form-group label{
+font-size:13px;
+font-weight:500;
+color:#d1d5db;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.modal-card .form-group label i{
+color:#60a5fa;
+}
+
+.modal-card .form-group input{
+padding:12px 16px;
+border-radius:12px;
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.08);
+color:white;
+font-size:14px;
+outline:none;
+transition:.25s;
+color-scheme:dark;
+}
+
+.modal-card .form-group input:focus{
+border-color:rgba(96,165,250,0.35);
+box-shadow:0 0 12px rgba(96,165,250,0.12);
+}
+
+.modal-card .form-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+/* ================= QUEUE STATUS BUTTONS ================= */
+
+.queue-status-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+padding:10px 14px;
+border-radius:12px;
+border:1px solid transparent;
+font-size:12px;
+font-weight:600;
+white-space:nowrap;
+cursor:pointer;
+transition:.25s;
+min-width:fit-content;
+}
+
+.queue-status-btn.waiting{
+background:rgba(245,158,11,0.10);
+border-color:rgba(245,158,11,0.25);
+color:#f59e0b;
+}
+
+.queue-status-btn.waiting:hover:not(:disabled){
+background:rgba(245,158,11,0.20);
+}
+
+.queue-status-btn.inprogress{
+background:rgba(96,165,250,0.10);
+border-color:rgba(96,165,250,0.25);
+color:#60a5fa;
+}
+
+.queue-status-btn.inprogress:hover:not(:disabled){
+background:rgba(96,165,250,0.20);
+}
+
+.queue-status-btn.completed{
+background:rgba(34,197,94,0.10);
+border-color:rgba(34,197,94,0.25);
+color:#22c55e;
+}
+
+.queue-status-btn.completed:hover:not(:disabled){
+background:rgba(34,197,94,0.20);
+}
+
+.queue-status-btn:disabled{
+opacity:0.35;
+cursor:not-allowed;
+}
+
+/* ================= QUEUE NUMBER BADGE ================= */
+
+.queue-number-badge{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:50px;
+height:50px;
+padding:0;
+border-radius:14px;
+background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(37,99,235,0.10));
+border:1px solid rgba(96,165,250,0.25);
+color:#60a5fa;
+font-size:15px;
+font-weight:700;
+letter-spacing:.5px;
+}
+
+/* ================= QUEUE CARD ITEM (walk-in sidebar) ================= */
+
+.queue-card-item{
+display:flex;
+align-items:center;
+gap:14px;
+padding:14px 16px;
+border-radius:14px;
+background:rgba(255,255,255,0.03);
+border:1px solid rgba(255,255,255,0.06);
+margin-bottom:10px;
+transition:.2s;
+}
+
+.queue-card-item:hover{
+border-color:rgba(96,165,250,0.15);
+background:rgba(96,165,250,0.04);
+}
+
+.queue-card-info{
+flex:1;
+}
+
+.queue-card-info h4{
+font-size:14px;
+font-weight:600;
+color:#f1f5f9;
+margin-bottom:2px;
+}
+
+.queue-card-info p{
+font-size:12px;
+color:#64748b;
+}
+
+/* ================= STATUS PILL - IN PROGRESS ================= */
+
+.status-pill.in.progress,
+.status-pill.in-progress{
+background:rgba(96,165,250,0.12);
+border:1px solid rgba(96,165,250,0.25);
+color:#60a5fa;
+}
+
+/* ================= EMPTY STATE ================= */
+
+.empty-state{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:60px 20px;
+gap:14px;
+text-align:center;
+}
+
+.empty-state i{
+font-size:48px;
+color:#1e293b;
+}
+
+.empty-state h3{
+font-size:18px;
+font-weight:600;
+color:#334155;
+}
+
+.empty-state p{
+font-size:14px;
+color:#475569;
+}
+
+/* ================= RESPONSIVE FIX FOR ALERT ================= */
+
+@media(max-width:1100px){
+.alert-success{
+margin-left:0;
+}
+}
+
+/* ================= QUEUE STATUS BUTTONS ENHANCEMENT ================= */
+
+.queue-status-btn {
+    white-space: nowrap !important;
+    flex: 0 1 auto;
+    transition: all 0.25s ease;
+}
+
+.queue-status-btn i {
+    font-size: 13px;
+}
+
+.queue-status-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.queue-status-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ================= ACTION GROUP RESPONSIVE ================= */
+
+.action-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 40px;
+}
+
+form[style*="display:flex"] {
+    align-items: center;
+}
+
+/* ================= FILTER BUTTONS RESPONSIVE ================= */
+
+.appointments-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 44px;
+}
+
+/* ================= RESPONSIVE ADJUSTMENTS ================= */
+
+@media (max-width: 1200px) {
+    .queue-status-btn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 992px) {
+    .appointments-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-bar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .queue-status-btn {
+        padding: 7px 10px;
+        font-size: 10px;
+        min-width: auto;
+    }
+
+    .queue-status-btn i {
+        font-size: 12px;
+    }
+
+    /* Hide icon on mobile for space */
+    @media (max-width: 480px) {
+        .queue-status-btn i {
+            display: none;
+        }
+    }
+}
+
+
+/* ================= QUEUE MANAGEMENT FIXES ================= */
+
+/* Queue filter toolbar */
+.queue-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.queue-filter-form {
+    width: 100%;
+}
+
+.queue-filter-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    color: #94a3b8;
+    font-size: 14px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.queue-date-input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(96,165,250,0.2);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    color-scheme: dark;
+    outline: none;
+    transition: 0.25s;
+}
+
+.queue-date-input:focus {
+    border-color: rgba(96,165,250,0.4);
+    box-shadow: 0 0 10px rgba(96,165,250,0.15);
+}
+
+/* Queue action form buttons */
+.queue-action-form {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+/* Fix queue status buttons - prevent oval shape, fix text overlap */
+.queue-status-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    padding: 7px 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid transparent !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    transition: all 0.25s !important;
+    min-width: auto !important;
+    flex-shrink: 0 !important;
+    line-height: 1 !important;
+}
+
+.queue-status-btn span {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.queue-status-btn i {
+    font-size: 11px !important;
+    flex-shrink: 0;
+}
+
+.queue-status-btn.active-status {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ================= APPOINTMENT MANAGEMENT TOOLBAR FIX ================= */
+
+.appt-toolbar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+}
+
+.appt-search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.appt-toolbar-wrap .filter-bar {
+    margin-bottom: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ================= STATUS PILL IN-PROGRESS FIX ================= */
+
+/* Fix "in-progress" class (PHP now outputs this with hyphen) */
+.status-pill.in-progress {
+    background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.25);
+    color: #60a5fa;
+}
+
+/* Also keep old class just in case */
+.status-pill.in.progress,
+.status-pill[class*="in progress"] {
+    background: rgba(96,165,250,0.12);
+    border: 1px solid rgba(96,165,250,0.25);
+    color: #60a5fa;
+}
+
+/* Fix status-pill shape - prevent oval on short text */
+.status-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6px 14px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    min-width: 90px !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+}
+
+/* ================= QUEUE NUMBER BADGE FIX ================= */
+
+/* Ensure queue number badge stays circular */
+.queue-number-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    border-radius: 12px !important;
+    padding: 0 !important;
+    flex-shrink: 0;
+}
+
+/* ================= PROFILE CIRCLE IMG FIX ================= */
+
+.profile-circle-img {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #60A5FA, #3B82F6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 14px rgba(96,165,250,0.2);
+    flex-shrink: 0;
+}
+
+.profile-circle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
+.profile-initial-small {
+    position: absolute;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    display: none;
+}
+
+.profile-circle-img.show-initial img {
+    display: none;
+}
+
+.profile-circle-img.show-initial .profile-initial-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================= TABLE RESPONSIVE FIXES ================= */
+
+@media (max-width: 1200px) {
+    .queue-status-btn span {
+        display: none;
+    }
+    .queue-status-btn {
+        padding: 8px 10px !important;
+    }
+    .queue-status-btn i {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .appt-toolbar-wrap {
+        flex-direction: column;
+    }
+    .queue-filter-left {
+        flex-wrap: wrap;
+    }
+}
+
+/* ===============================================================
+   COMPREHENSIVE LAYOUT & UI FIXES v3
+   =============================================================== */
+
+/* ── 1. TABLE: switch to auto layout so columns size to content ── */
+table {
+    table-layout: auto !important;
+    width: 100% !important;
+}
+
+table th,
+table td {
+    width: auto !important;
+}
+
+/* ── 2. PATIENT CELL (name + id) ── */
+.patient-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+}
+
+.patient-avatar {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #60A5FA, #3B82F6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    flex-shrink: 0;
+}
+
+.patient-info h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f8fafc;
+    white-space: nowrap;
+    margin-bottom: 2px;
+}
+
+.patient-info p {
+    font-size: 12px;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+/* ── 3. EMAIL CELL: prevent wrapping ── */
+.email-cell {
+    white-space: nowrap;
+    font-size: 13px;
+    color: #d1d5db;
+}
+
+/* ── 4. VISITS COUNT BADGE ── */
+.visits-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(96,165,250,0.10);
+    border: 1px solid rgba(96,165,250,0.20);
+    color: #60a5fa;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ── 5. SERVICE-INFO: fix overlap ── */
+.service-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+}
+
+.service-info > div:last-child {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.service-info h4 {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #f8fafc !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin-bottom: 2px !important;
+}
+
+.service-info p {
+    font-size: 12px !important;
+    color: #9ca3af !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 180px !important;
+}
+
+.service-icon {
+    flex-shrink: 0 !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+}
+
+/* ── 6. TOPBAR AVATAR: small circle with initial letter ── */
+.topbar-avatar {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: linear-gradient(135deg, #60A5FA, #3B82F6) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 0 14px rgba(96,165,250,0.25) !important;
+    position: relative !important;
+}
+
+.topbar-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 2 !important;
+}
+
+.topbar-avatar-initial {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    position: relative !important;
+    z-index: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* ── 7. PROFILE CIRCLE IMG: remove old broken class ── */
+.profile-circle-img {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+}
+
+.profile-circle-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+    display: block !important;
+}
+
+/* ── 8. APPOINTMENT MANAGEMENT: toolbar layout ── */
+.appt-toolbar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+}
+
+.appt-toolbar-wrap .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 12px;
+    margin-bottom: 0;
+}
+
+.appt-search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ── 9. QUEUE MANAGEMENT: toolbar layout ── */
+.queue-filter-form {
+    width: 100%;
+}
+
+.queue-filter-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.queue-date-input {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(96,165,250,0.2);
+    color: white;
+    padding: 9px 13px;
+    border-radius: 12px;
+    font-size: 14px;
+    color-scheme: dark;
+    outline: none;
+    height: 42px;
+}
+
+/* ── 10. QUEUE STATUS BUTTONS: fixed sizing, no oval ── */
+.queue-action-form {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.queue-status-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    padding: 7px 11px !important;
+    border-radius: 10px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+    min-width: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    flex-shrink: 0 !important;
+    line-height: 1.2 !important;
+    border: 1px solid transparent !important;
+}
+
+.queue-status-btn i {
+    font-size: 11px !important;
+    flex-shrink: 0 !important;
+}
+
+.queue-status-btn span {
+    white-space: nowrap;
+}
+
+.queue-status-btn.waiting {
+    background: rgba(245,158,11,0.10) !important;
+    border-color: rgba(245,158,11,0.25) !important;
+    color: #f59e0b !important;
+}
+.queue-status-btn.waiting:hover:not(:disabled) {
+    background: rgba(245,158,11,0.20) !important;
+}
+.queue-status-btn.inprogress {
+    background: rgba(96,165,250,0.10) !important;
+    border-color: rgba(96,165,250,0.25) !important;
+    color: #60a5fa !important;
+}
+.queue-status-btn.inprogress:hover:not(:disabled) {
+    background: rgba(96,165,250,0.20) !important;
+}
+.queue-status-btn.completed {
+    background: rgba(34,197,94,0.10) !important;
+    border-color: rgba(34,197,94,0.25) !important;
+    color: #22c55e !important;
+}
+.queue-status-btn.completed:hover:not(:disabled) {
+    background: rgba(34,197,94,0.20) !important;
+}
+
+.queue-status-btn.active-status,
+.queue-status-btn:disabled {
+    opacity: 0.35 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* ── 11. STATUS PILL: fixed shape ── */
+.status-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 5px 12px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 80px !important;
+    line-height: 1.4 !important;
+}
+
+.status-pill.in-progress {
+    background: rgba(96,165,250,0.12) !important;
+    border: 1px solid rgba(96,165,250,0.25) !important;
+    color: #60a5fa !important;
+}
+
+/* ── 12. QUEUE NUMBER BADGE: square not oval ── */
+.queue-number-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* ── 13. QUEUE-PILL in patient records: standalone badge ── */
+.queue-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 5px 12px !important;
+    border-radius: 20px !important;
+    white-space: nowrap !important;
+    position: static !important;
+}
+
+/* ── 14. TABLE CELL PADDING: tighten for dense tables ── */
+table td {
+    padding: 18px 16px !important;
+    vertical-align: middle !important;
+}
+
+table th {
+    padding: 0 16px 16px !important;
+}
+
+/* ── 15. RESPONSIVE ── */
+@media (max-width: 1200px) {
+    .queue-status-btn span { display: none; }
+    .queue-status-btn { padding: 8px 10px !important; }
+    .service-info p { max-width: 140px !important; }
+}
+@media (max-width: 900px) {
+    table { font-size: 13px; }
+    .queue-action-form { flex-wrap: wrap; gap: 4px; }
+    .appt-toolbar-wrap { padding: 10px; }
+}
+
+/* ===============================================================
+   TOPBAR PROFILE STYLES - UNIFIED
+   =============================================================== */
+
+/* Profile-box text: controlled sizing, no overlap */
+.profile-box h4 {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #f1f5f9 !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+}
+
+.profile-box .profile-role {
+    font-size: 12px !important;
+    color: #9ca3af !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+}
+
+/* Profile-box inner text container spacing */
+.profile-box > div:last-child {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+    line-height: 1 !important;
+}
+
+/* Profile-box overall: correct gap and padding */
+.profile-box {
+    gap: 12px !important;
+    padding: 10px 16px !important;
+    align-items: center !important;
+}
+
+/* ── TABLE SPACING: balanced, not too tight or too wide ── */
+table td {
+    padding: 16px 18px !important;
+    vertical-align: middle !important;
+}
+
+table th {
+    padding: 0 18px 16px !important;
+    vertical-align: middle !important;
+}
+
+/* First column (patient info) left-aligned */
+table td:first-child,
+table th:first-child {
+    text-align: left !important;
+}
+
+/* All other columns centered */
+table td:not(:first-child),
+table th:not(:first-child) {
+    text-align: center !important;
+}
+
+/* Action column always right-aligns content inside */
+table td:last-child {
+    text-align: center !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SMALL IMAGE SIZING - 50x50 for compact layouts
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Small avatar images - exactly 50x50 */
+.avatar-small,
+.profile-avatar-sm,
+.patient-avatar-sm {
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important;
+    min-height: 50px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+}
+
+/* Small service icons - 40x40 */
+.icon-small,
+.service-icon-sm {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 8px !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Image container for small avatars */
+.avatar-container-sm {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    background: linear-gradient(135deg, #60A5FA, #3B82F6);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.avatar-container-sm img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   PROFILE AND AVATAR CONSISTENCY FIXES
+   ═════════════════════════════════════════════════════════════════ */
+
+/* Ensure all profile images are properly sized */
+.profile-img,
+.patient-img,
+.user-profile-img {
+    object-fit: cover !important;
+    border-radius: 50% !important;
+}
+
+/* Small badge with image */
+.badge-img-sm {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+}
+
+/* List item avatar (30x30) */
+.list-avatar-sm {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+}
