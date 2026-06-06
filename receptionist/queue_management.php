@@ -15,7 +15,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'update_status'){
     $getPatient = mysqli_fetch_assoc(mysqli_query($conn,"SELECT patient_id FROM appointments WHERE appointment_id='$id'"));
     $pid = $getPatient['patient_id'];
     $msg = "Your queue status has been updated to: $status.";
-    mysqli_query($conn,"INSERT INTO notifications (user_id, message) VALUES ('$pid', '$msg')");
+    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$pid', '$msg')");
 
     header("Location: queue_management.php");
     exit();
@@ -33,7 +33,7 @@ if(!empty($search)){
 $queueList = mysqli_query($conn,"
 SELECT a.*, u.full_name AS patient_name
 FROM appointments a
-JOIN users u ON a.patient_id = u.user_id
+JOIN patients u ON a.patient_id = u.patient_id
 WHERE a.appointment_date = '$safeDate'
 AND a.status IN ('Approved','In Progress','Completed','Waiting')
 $searchWhere

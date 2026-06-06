@@ -13,7 +13,7 @@ if(isset($_POST['mark_read']) && !empty($_POST['notif_id'])){
         WHERE receptionist_notification_id='$notif_id'
         AND receptionist_id='$user_id'
     ");
-    header("Location: notifications.php");
+    header("Location: receptionist_notifications.php");
     exit();
 }
 
@@ -24,7 +24,7 @@ if(isset($_POST['mark_all_read'])){
         SET status='Read'
         WHERE receptionist_id='$user_id' AND status='Unread'
     ");
-    header("Location: notifications.php");
+    header("Location: receptionist_notifications.php");
     exit();
 }
 ?>
@@ -96,7 +96,6 @@ if(mysqli_num_rows($result) > 0){
 
 <div class="notification-actions">
 <?php if($row['status'] == 'Unread'): ?>
-<div class="notification-dot"></div>
 <form method="POST" style="margin:0;">
 <input type="hidden" name="notif_id" value="<?php echo $notif_id; ?>">
 <button type="submit" name="mark_read" class="mark-read-btn">

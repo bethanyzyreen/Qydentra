@@ -5,7 +5,6 @@ if(session_status() === PHP_SESSION_NONE){
 }
 require_once(__DIR__ . "/../config/database.php");
 
-// Sanitize inputs
 $name     = mysqli_real_escape_string($conn, trim($_POST['full_name'] ?? ''));
 $email    = mysqli_real_escape_string($conn, trim($_POST['email'] ?? ''));
 $password = password_hash($_POST['password'] ?? '', PASSWORD_DEFAULT);
@@ -16,15 +15,15 @@ if(empty($name) || empty($email)){
     exit();
 }
 
-// Check if email already exists
-$check = mysqli_query($conn, "SELECT user_id FROM users WHERE email='$email'");
+// Check if email already exists in patients table
+$check = mysqli_query($conn, "SELECT patient_id FROM patients WHERE email='$email'");
 if(mysqli_num_rows($check) > 0){
     $_SESSION['error'] = "Email is already registered.";
     header("Location: register.php");
     exit();
 }
 
-$sql = "INSERT INTO users(full_name, email, password, role)
+$sql = "INSERT INTO patients(full_name, email, password, role)
         VALUES('$name', '$email', '$password', 'patient')";
 
 if(mysqli_query($conn, $sql)){

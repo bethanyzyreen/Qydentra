@@ -34,8 +34,8 @@ $completedCount = mysqli_fetch_assoc($completedQuery)['total'];
 
 $notifQuery = mysqli_query($conn,"
 SELECT COUNT(*) AS total
-FROM notifications
-WHERE user_id='$user_id'
+FROM patient_notifications
+WHERE patient_id='$user_id'
 AND is_read = 0
 ");
 
@@ -155,7 +155,7 @@ Current active queue position for today's appointment.
 <!-- NOTIFICATIONS -->
 
 <div class="card hover-glow"
-onclick="window.location.href='notifications.php'">
+onclick="window.location.href='patient_notifications.php'">
 
 <div class="card-top">
 

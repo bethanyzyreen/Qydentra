@@ -42,16 +42,18 @@ font-weight:600;
 
 .action-group{
 display:flex;
-gap:8px;
-align-items:center;
-flex-wrap:wrap;
+flex-direction:column;
+gap:6px;
+align-items:stretch;
+width:140px;
 }
 
 /* APPROVE BUTTON */
 
 .approve-btn{
-display:inline-flex;
+display:flex;
 align-items:center;
+justify-content:center;
 gap:6px;
 padding:8px 14px;
 border:none;
@@ -63,6 +65,7 @@ font-size:12px;
 font-weight:600;
 cursor:pointer;
 transition:.25s ease;
+width:100%;
 }
 
 .approve-btn:hover{
@@ -74,8 +77,9 @@ transform:translateY(-1px);
 /* RESCHEDULE BUTTON */
 
 .reschedule-btn{
-display:inline-flex;
+display:flex;
 align-items:center;
+justify-content:center;
 gap:6px;
 padding:8px 14px;
 border:1px solid rgba(245,158,11,0.25);
@@ -86,6 +90,7 @@ font-size:12px;
 font-weight:600;
 cursor:pointer;
 transition:.25s ease;
+width:100%;
 }
 
 .reschedule-btn:hover{
@@ -444,10 +449,10 @@ margin-left:0;
 
 .action-group {
     display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-    min-height: 40px;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+    width: 140px;
 }
 
 form[style*="display:flex"] {
@@ -1310,9 +1315,6 @@ table td:last-child {
     text-decoration: none;
     transition: background 0.2s;
 }
-.topbar-bell-wrap:hover {
-    background: rgba(255,255,255,0.13);
-}
 .topbar-bell {
     font-size: 1.1rem;
     color: #e2e8f0;
@@ -1321,7 +1323,7 @@ table td:last-child {
     position: absolute;
     top: -4px;
     right: -4px;
-    background: #e53e3e;
+    background: #2563EB;
     color: #fff;
     font-size: 0.65rem;
     font-weight: 700;
@@ -1332,7 +1334,6 @@ table td:last-child {
     align-items: center;
     justify-content: center;
     padding: 0 4px;
-    border: 2px solid #0f172a;
 }
 
 /* ===== NOTIFICATION CARD ACTIONS ===== */
@@ -1425,7 +1426,7 @@ table td:last-child {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #e53e3e;
+    background: #2563EB;
     color: #fff;
     font-size: 0.7rem;
     font-weight: 700;

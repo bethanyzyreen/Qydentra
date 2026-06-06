@@ -55,13 +55,10 @@ class="<?php echo ($current_page == 'patient_records.php') ? 'active' : ''; ?>">
 <span>Patient Records</span>
 </a>
 
-<a href="notifications.php"
-class="<?php echo ($current_page == 'notifications.php') ? 'active' : ''; ?>">
+<a href="receptionist_notifications.php"
+class="<?php echo ($current_page == 'receptionist_notifications.php') ? 'active' : ''; ?>">
 <i class="fa-solid fa-bell"></i>
 <span>Notifications</span>
-<?php if ($unread_count > 0): ?>
-<span class="notif-badge"><?php echo $unread_count; ?></span>
-<?php endif; ?>
 </a>
 
 </div>

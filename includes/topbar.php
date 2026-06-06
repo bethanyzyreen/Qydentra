@@ -4,18 +4,18 @@ date_default_timezone_set('Asia/Manila');
 $hour = date("H");
 
 if($hour >= 5 && $hour < 12){
-    $greeting = "Good Morning";
+    $greeting = "Good Day";
 }elseif($hour >= 12 && $hour < 18){
-    $greeting = "Good Afternoon";
+    $greeting = "Good Day";
 }else{
-    $greeting = "Good Evening";
+    $greeting = "Good Day";
 }
 
 $name = $_SESSION['name'] ?? 'User';
 $initial = strtoupper(substr($name, 0, 1));
 $hasPhoto = !empty($_SESSION['profile_photo'] ?? '');
 $topbar_pat_id = $_SESSION['user_id'] ?? 0;
-$topbar_pat_unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM notifications WHERE user_id='$topbar_pat_id' AND is_read=0");
+$topbar_pat_unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM patient_notifications WHERE patient_id='$topbar_pat_id' AND is_read=0");
 $topbar_pat_unread = (int)mysqli_fetch_assoc($topbar_pat_unread_res)['cnt'];
 ?>
 
@@ -38,7 +38,7 @@ $topbar_pat_unread = (int)mysqli_fetch_assoc($topbar_pat_unread_res)['cnt'];
 
     <?php if($hasPhoto): ?>
         <!-- Only overlay with uploaded photo if patient has one -->
-        <img src="../uploads/profile/<?php echo htmlspecialchars($_SESSION['profile_photo'] ?? ''); ?>"
+        <img src="/uploads/profile/<?php echo htmlspecialchars($_SESSION['profile_photo'] ?? ''); ?>"
              alt="Profile"
              onload="this.style.display='block'"
              onerror="this.style.display='none'">

@@ -4,7 +4,7 @@ include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
 
-$sql = "SELECT * FROM users WHERE user_id='$user_id'";
+$sql = "SELECT * FROM patients WHERE patient_id='$user_id'";
 $result = mysqli_query($conn,$sql);
 
 $user = mysqli_fetch_assoc($result);
@@ -31,7 +31,8 @@ $error_msgs = [
     'invalid_type' => 'Invalid file type. Please upload JPG, PNG, or WEBP.',
     'too_large'    => 'File is too large. Maximum size is 5MB.',
     'upload_failed'=> 'Upload failed. Please try again.',
-    'no_file'      => 'No file was selected.',
+    'no_file'      => 'No file was selected. Please choose an image.',
+    'upload_failed'=> 'Upload failed. Please check folder permissions or try again.',
     '1'            => 'Something went wrong. Please try again.',
 ];
 if(isset($_GET['success'])): $sk = $_GET['success']; ?>
@@ -78,7 +79,7 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
                         <?php if(!empty($user['profile_photo'])){ ?>
 
                             <img
-                                src="../uploads/profile/<?php echo $user['profile_photo']; ?>"
+                                src="/uploads/profile/<?php echo htmlspecialchars($user['profile_photo']); ?>"
                                 class="profile-avatar-img"
                                 onerror="this.style.display='none';document.getElementById('profile-initial-span').style.display='flex'">
                             <span id="profile-initial-span" class="profile-initial" style="display:none;">
@@ -136,7 +137,7 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
 
                 <div class="profile-info-item">
                     <strong>User ID</strong>
-                    <p>#<?php echo $user['user_id']; ?></p>
+                    <p>#<?php echo $user['patient_id']; ?></p>
                 </div>
 
                 <div class="profile-info-item">
@@ -189,8 +190,8 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
 
                 <input
                 type="text"
-                name="phone"
-                value="<?php echo $user['phone'] ?? ''; ?>"
+                name="phone_number"
+                value="<?php echo $user['phone_number'] ?? ''; ?>"
                 placeholder="09XXXXXXXXX"
                 >
 

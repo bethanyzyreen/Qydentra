@@ -35,7 +35,7 @@ $completedTodayCount = mysqli_fetch_assoc($completedToday)['total'];
 $recentQuery = mysqli_query($conn,"
 SELECT a.*, u.full_name AS patient_name
 FROM appointments a
-JOIN users u ON a.patient_id = u.user_id
+JOIN patients u ON a.patient_id = u.patient_id
 ORDER BY a.created_at DESC
 LIMIT 7
 ");

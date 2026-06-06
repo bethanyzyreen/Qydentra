@@ -9,16 +9,26 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
     $date = mysqli_real_escape_string($conn, $_POST['appointment_date']);
     $time = mysqli_real_escape_string($conn, $_POST['appointment_time']);
 
-    // Ensure queue is unique for the target date
+    // Strictly enforce unique queue number per day — reject if already taken by another non-cancelled appointment
     $existing = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT COUNT(*) AS cnt FROM appointments WHERE appointment_date='$date' AND queue_number='$queue' AND appointment_id != '$id'"
+        "SELECT COUNT(*) AS cnt FROM appointments
+         WHERE appointment_date='$date'
+         AND queue_number='$queue'
+         AND appointment_id != '$id'
+         AND status NOT IN ('Cancelled')"
     ));
     if((int)$existing['cnt'] > 0){
-        $qRow = mysqli_fetch_assoc(mysqli_query($conn,
-            "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q FROM appointments WHERE appointment_date='$date'"
+        $nextAvail = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
+             FROM appointments
+             WHERE appointment_date='$date'
+             AND status NOT IN ('Cancelled')"
         ));
-        $queue = (int)$qRow['next_q'];
+        $suggested = (int)$nextAvail['next_q'];
+        header("Location: pending_appointments.php?error=queue_taken&queue=$queue&suggested=$suggested&date=$date");
+        exit();
     }
+
     mysqli_query($conn,"
     UPDATE appointments
     SET status='Approved', queue_number='$queue',
@@ -26,11 +36,26 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
     WHERE appointment_id='$id'
     ");
 
+    $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
+        "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
+    ));
+    $pid = $getAppt['patient_id'];
+    $patient_name_esc = mysqli_real_escape_string($conn, $getAppt['patient_name']);
+    $service = mysqli_real_escape_string($conn, $getAppt['service_type']);
+
     // Notify patient
-    $getPatient = mysqli_fetch_assoc(mysqli_query($conn,"SELECT patient_id FROM appointments WHERE appointment_id='$id'"));
-    $pid = $getPatient['patient_id'];
-    $msg = "Your appointment has been approved. Queue #$queue on ".date("F d, Y", strtotime($date))." at ".date("g:i A", strtotime($time)).".";
-    mysqli_query($conn,"INSERT INTO notifications (user_id, message) VALUES ('$pid', '$msg')");
+    $pat_msg = notification_patient_appointment_approved($patient_name_esc, $service, $date, $time);
+    $pat_msg_esc = mysqli_real_escape_string($conn, $pat_msg);
+    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$pid', '$pat_msg_esc')");
+
+    // Notify all receptionists
+    $r_title = "Appointment Approved";
+    $r_msg   = notification_receptionist_appointment_approved($patient_name_esc, $service, $date, $time);
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
+    while($rrow = mysqli_fetch_assoc($rr)){
+        $rid = $rrow['user_id'];
+        mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
+    }
 
     header("Location: pending_appointments.php?success=approved");
     exit();
@@ -49,7 +74,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     ");
 
     $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN users u ON a.patient_id = u.user_id WHERE a.appointment_id='$id'"
+        "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
     ));
     $pid              = $getAppt['patient_id'];
     $patient_name_esc = mysqli_real_escape_string($conn, $getAppt['patient_name']);
@@ -58,17 +83,18 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     $fmt_time         = date("g:i A",  strtotime($time));
 
     // Get receptionist's name
-    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM users WHERE user_id='{$_SESSION['user_id']}'"));
+    $recep_self = mysqli_fetch_assoc(mysqli_query($conn,"SELECT full_name FROM patients WHERE patient_id='{$_SESSION['user_id']}'"));
     $recep_name = mysqli_real_escape_string($conn, $recep_self['full_name']);
 
     // Notify patient
-    $pat_msg = mysqli_real_escape_string($conn, "Receptionist $recep_name rescheduled your $service appointment to $fmt_date at $fmt_time.");
-    mysqli_query($conn,"INSERT INTO notifications (user_id, message) VALUES ('$pid', '$pat_msg')");
+    $pat_msg = notification_patient_appointment_rescheduled($patient_name_esc, $service, $date, $time);
+    $pat_msg_esc = mysqli_real_escape_string($conn, $pat_msg);
+    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$pid', '$pat_msg_esc')");
 
     // Notify all receptionists
     $r_title = mysqli_real_escape_string($conn, "Appointment Rescheduled");
-    $r_msg   = mysqli_real_escape_string($conn, "Receptionist $recep_name rescheduled the $service appointment for $patient_name_esc to $fmt_date at $fmt_time.");
-    $rr = mysqli_query($conn,"SELECT user_id FROM users WHERE role='receptionist'");
+    $r_msg   = mysqli_real_escape_string($conn, notification_receptionist_appointment_rescheduled($patient_name_esc, $service, $date, $time));
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
     while($rrow = mysqli_fetch_assoc($rr)){
         $rid = $rrow['user_id'];
         mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
@@ -81,7 +107,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
 $pendingList = mysqli_query($conn,"
 SELECT a.*, u.full_name AS patient_name, u.email AS patient_email
 FROM appointments a
-JOIN users u ON a.patient_id = u.user_id
+JOIN patients u ON a.patient_id = u.patient_id
 WHERE a.status = 'Pending'
 ORDER BY a.appointment_date ASC, a.appointment_time ASC
 ");
@@ -106,6 +132,27 @@ WHERE appointment_date = CURDATE()
 <div class="alert-success">
 <i class="fa-solid fa-circle-check"></i>
 <?php echo $_GET['success'] == 'approved' ? 'Appointment approved successfully.' : 'Appointment rescheduled successfully.'; ?>
+</div>
+<?php endif; ?>
+
+<?php if(isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
+<div class="alert-error" style="
+    background:rgba(239,68,68,0.10);
+    border:1px solid rgba(239,68,68,0.30);
+    border-radius:14px;
+    padding:14px 20px;
+    margin-bottom:20px;
+    color:#f87171;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    font-weight:500;
+">
+<i class="fa-solid fa-triangle-exclamation"></i>
+Queue #<?php echo (int)$_GET['queue']; ?> is already taken on <?php echo date('F d, Y', strtotime($_GET['date'])); ?>.
+Next available queue number is<strong style="color:#fca5a5;">#<?php echo (int)$_GET['suggested'];?></strong>.
+Please re-approve with the correct queue number.
 </div>
 <?php endif; ?>
 
@@ -168,7 +215,7 @@ WHERE appointment_date = CURDATE()
 
 <td><?php echo !empty($row['notes']) ? htmlspecialchars(substr($row['notes'],0,40)).'...' : '—'; ?></td>
 
-<td>
+<td style="width:150px;white-space:nowrap;">
 <div class="action-group">
 
 <!-- APPROVE BUTTON (triggers modal) -->

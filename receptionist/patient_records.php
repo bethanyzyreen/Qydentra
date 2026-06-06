@@ -15,11 +15,11 @@ SELECT u.*,
     SUM(CASE WHEN a.status='Completed' THEN 1 ELSE 0 END) AS completed,
     SUM(CASE WHEN a.status='Pending' THEN 1 ELSE 0 END) AS pending,
     MAX(a.appointment_date) AS last_visit
-FROM users u
-LEFT JOIN appointments a ON a.patient_id = u.user_id
+FROM patients u
+LEFT JOIN appointments a ON a.patient_id = u.patient_id
 WHERE u.role='patient'
 $whereSearch
-GROUP BY u.user_id
+GROUP BY u.patient_id
 ORDER BY u.full_name ASC
 ");
 ?>
@@ -87,7 +87,7 @@ class="search-box" style="width:320px;">
 </div>
 <div class="patient-info">
 <h4><?php echo htmlspecialchars($row['full_name']); ?></h4>
-<p>ID #<?php echo $row['user_id']; ?></p>
+<p>ID #<?php echo $row['patient_id']; ?></p>
 </div>
 </div>
 </td>
@@ -118,7 +118,7 @@ class="search-box" style="width:320px;">
 onclick="openPatientModal(
     '<?php echo addslashes($row['full_name']); ?>',
     '<?php echo addslashes($row['email']); ?>',
-    <?php echo (int)$row['user_id']; ?>,
+    <?php echo (int)$row['patient_id']; ?>,
     <?php echo (int)$row['total_appointments']; ?>,
     <?php echo (int)$row['completed']; ?>,
     <?php echo (int)$row['pending']; ?>

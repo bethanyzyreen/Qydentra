@@ -57,8 +57,8 @@ Queue Status
 
 </a>
 
-<a href="notifications.php"
-class="<?php echo ($current_page == 'notifications.php') ? 'active' : ''; ?>">
+<a href="patient_notifications.php"
+class="<?php echo ($current_page == 'patient_notifications.php') ? 'active' : ''; ?>">
 
 <i class="fa-solid fa-bell"></i>
 

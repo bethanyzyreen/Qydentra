@@ -16,7 +16,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])){
     $notes = mysqli_real_escape_string($conn, $_POST['notes']);
 
     // Check if patient already exists
-    $checkUser = mysqli_fetch_assoc(mysqli_query($conn,"SELECT user_id FROM users WHERE email='$email'"));
+    $checkUser = mysqli_fetch_assoc(mysqli_query($conn,"SELECT patient_id AS user_id FROM patients WHERE email='$email'"));
 
     if($checkUser){
         $patient_id = $checkUser['user_id'];
@@ -24,17 +24,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])){
         // Create new patient user
         $tempPass = password_hash('walkin'.rand(1000,9999), PASSWORD_DEFAULT);
         mysqli_query($conn,"
-        INSERT INTO users (full_name, email, password, role)
+        INSERT INTO patients (full_name, email, password, role)
         VALUES ('$full_name', '$email', '$tempPass', 'patient')
         ");
         $patient_id = mysqli_insert_id($conn);
     }
 
-    // Get next queue number for that date
+    // Get next queue number for that date (excluding cancelled appointments)
     $nextQueueResult = mysqli_fetch_assoc(mysqli_query($conn,"
     SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
     FROM appointments
     WHERE appointment_date='$date'
+    AND status NOT IN ('Cancelled')
     "));
     $queueNumber = $nextQueueResult['next_q'];
 
@@ -47,8 +48,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])){
     ");
 
     // Notify patient
-    $msg = "Walk-in appointment registered. Service: $service on ".date("F d, Y",strtotime($date))." at ".date("g:i A",strtotime($time)).". Queue #$queueNumber.";
-    mysqli_query($conn,"INSERT INTO notifications (user_id, message) VALUES ('$patient_id', '$msg')");
+    $patient_message = notification_patient_walkin_recorded($full_name, $service, $date, $time);
+    $patient_message_esc = mysqli_real_escape_string($conn, $patient_message);
+    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$patient_id', '$patient_message_esc')");
+
+    // Notify receptionists of the walk-in registration
+    $r_title = "Walk-in Appointment Recorded";
+    $r_msg = notification_receptionist_walkin_recorded($full_name, $service, $date, $time);
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
+    while($rrow = mysqli_fetch_assoc($rr)){
+        $rid = $rrow['user_id'];
+        mysqli_query($conn,"INSERT INTO receptionist_notifications (receptionist_id,title,message,type,status) VALUES ('$rid','$r_title','$r_msg','Appointment','Unread')");
+    }
 
     $success = "Walk-in registered successfully! Queue #$queueNumber assigned.";
 }
@@ -57,7 +68,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])){
 $todayWalkins = mysqli_query($conn,"
 SELECT a.*, u.full_name AS patient_name
 FROM appointments a
-JOIN users u ON a.patient_id = u.user_id
+JOIN patients u ON a.patient_id = u.patient_id
 WHERE a.appointment_date = CURDATE()
 AND a.status IN ('Approved','In Progress','Completed')
 ORDER BY a.queue_number ASC

@@ -9,11 +9,11 @@ $topbar_unread = (int)mysqli_fetch_assoc($topbar_unread_res)['cnt'];
 $hour = date("H");
 
 if($hour >= 5 && $hour < 12){
-    $greeting = "Good Morning";
+    $greeting = "Good Day";
 }elseif($hour >= 12 && $hour < 18){
-    $greeting = "Good Afternoon";
+    $greeting = "Good Day";
 }else{
-    $greeting = "Good Evening";
+    $greeting = "Good Day";
 }
 
 $name = $_SESSION['name'] ?? 'Receptionist';
@@ -30,7 +30,7 @@ $initial = strtoupper(substr($name, 0, 1));
 </div>
 
 <div class="topbar-right-group">
-<a href="notifications.php" class="topbar-bell-wrap">
+<a href="receptionist_notifications.php" class="topbar-bell-wrap">
     <i class="fa-solid fa-bell topbar-bell"></i>
     <?php if($topbar_unread > 0): ?>
     <span class="topbar-notif-badge"><?php echo $topbar_unread; ?></span>
@@ -40,7 +40,7 @@ $initial = strtoupper(substr($name, 0, 1));
 
 <div class="topbar-avatar">
     <span class="topbar-avatar-initial"><?php echo $initial; ?></span>
-    <img src="../assets/img/profile.jpg"
+    <img src="../assets/img/receptionist.png"
          alt="Profile"
          onload="this.style.display='block'"
          onerror="this.style.display='none'">

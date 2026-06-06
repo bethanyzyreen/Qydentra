@@ -4,17 +4,17 @@ include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
 
-$full_name = $_POST['full_name'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
+$full_name = mysqli_real_escape_string($conn, $_POST['full_name']);
+$email = mysqli_real_escape_string($conn, $_POST['email']);
+$phone_number = mysqli_real_escape_string($conn, $_POST['phone_number'] ?? $_POST['phone'] ?? '');
 
 $sql = "
-UPDATE users
+UPDATE patients
 SET
 full_name='$full_name',
 email='$email',
-phone='$phone'
-WHERE user_id='$user_id'
+phone_number='$phone_number'
+WHERE patient_id='$user_id'
 ";
 
 if(mysqli_query($conn,$sql)){

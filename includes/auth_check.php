@@ -10,6 +10,9 @@ if(!isset($conn)){
     require_once(__DIR__ . "/../config/database.php");
 }
 
+// Load shared notification formatting helpers
+require_once(__DIR__ . "/notification_templates.php");
+
 // Redirect to login if not authenticated
 if(!isset($_SESSION['user_id'])){
     header("Location: ../auth/login.php");

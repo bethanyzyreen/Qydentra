@@ -9,7 +9,7 @@ $id = (int)($_GET['id'] ?? 0);
 $apptRow = mysqli_fetch_assoc(mysqli_query($conn,
     "SELECT a.*, u.full_name AS patient_name
      FROM appointments a
-     JOIN users u ON a.patient_id = u.user_id
+     JOIN patients u ON a.patient_id = u.patient_id
      WHERE a.appointment_id='$id' AND a.patient_id='$user_id'
      AND a.status IN ('Pending','Approved')"
 ));
@@ -28,13 +28,13 @@ if($apptRow){
     // Notify patient (self)
     $pat_msg = mysqli_real_escape_string($conn,
         "You cancelled your $service appointment on $fmt_date at $fmt_time.");
-    mysqli_query($conn,"INSERT INTO notifications(user_id,message) VALUES('$user_id','$pat_msg')");
+    mysqli_query($conn,"INSERT INTO patient_notifications(patient_id,message) VALUES('$user_id','$pat_msg')");
 
     // Notify all receptionists
     $r_title = mysqli_real_escape_string($conn, "Appointment Cancelled by Patient");
     $r_msg   = mysqli_real_escape_string($conn,
-        "Patient $patient_name cancelled their $service appointment on $fmt_date at $fmt_time.");
-    $rr = mysqli_query($conn,"SELECT user_id FROM users WHERE role='receptionist'");
+        notification_receptionist_appointment_cancelled_by_patient($patient_name, $service, $fmt_date, $fmt_time));
+    $rr = mysqli_query($conn,"SELECT staff_id AS user_id FROM staff WHERE role='receptionist'");
     while($rrow = mysqli_fetch_assoc($rr)){
         $rid = $rrow['user_id'];
         mysqli_query($conn,"INSERT INTO receptionist_notifications

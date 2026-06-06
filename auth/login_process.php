@@ -14,25 +14,40 @@ if(empty($email) || empty($password)){
     exit();
 }
 
-$sql    = "SELECT user_id, full_name, password, role, profile_photo FROM users WHERE email='$email'";
+// Check patients table first
+$sql    = "SELECT patient_id AS user_id, full_name, password, role, profile_photo FROM patients WHERE email='$email'";
 $result = mysqli_query($conn, $sql);
 
 if(mysqli_num_rows($result) > 0){
-
     $user = mysqli_fetch_assoc($result);
-
     if(password_verify($password, $user['password'])){
-
         $_SESSION['user_id']       = $user['user_id'];
         $_SESSION['role']          = $user['role'];
         $_SESSION['name']          = $user['full_name'];
         $_SESSION['full_name']     = $user['full_name'];
         $_SESSION['profile_photo'] = $user['profile_photo'] ?? '';
+        header("Location: ../patient/dashboard.php");
+        exit();
+    } else {
+        $_SESSION['error'] = "Incorrect password.";
+        header("Location: login.php");
+        exit();
+    }
+}
 
-        if($user['role'] === 'patient'){
-            header("Location: ../patient/dashboard.php");
-            exit();
-        } elseif($user['role'] === 'receptionist'){
+// Check staff table
+$sql    = "SELECT staff_id AS user_id, full_name, password, role, profile_photo FROM staff WHERE email='$email'";
+$result = mysqli_query($conn, $sql);
+
+if(mysqli_num_rows($result) > 0){
+    $user = mysqli_fetch_assoc($result);
+    if(password_verify($password, $user['password'])){
+        $_SESSION['user_id']       = $user['user_id'];
+        $_SESSION['role']          = $user['role'];
+        $_SESSION['name']          = $user['full_name'];
+        $_SESSION['full_name']     = $user['full_name'];
+        $_SESSION['profile_photo'] = $user['profile_photo'] ?? '';
+        if($user['role'] === 'receptionist'){
             header("Location: ../receptionist/dashboard.php");
             exit();
         } else {
@@ -40,16 +55,14 @@ if(mysqli_num_rows($result) > 0){
             header("Location: login.php");
             exit();
         }
-
     } else {
         $_SESSION['error'] = "Incorrect password.";
         header("Location: login.php");
         exit();
     }
-
-} else {
-    $_SESSION['error'] = "No account found with that email.";
-    header("Location: login.php");
-    exit();
 }
+
+$_SESSION['error'] = "No account found with that email.";
+header("Location: login.php");
+exit();
 ?>

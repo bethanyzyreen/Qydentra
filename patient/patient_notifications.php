@@ -12,14 +12,14 @@ if(isset($_POST['mark_read']) && !empty($_POST['notif_id'])){
         SET is_read=1
         WHERE notification_id='$notif_id' AND patient_id='$user_id'
     ");
-    header("Location: notifications.php");
+    header("Location: patient_notifications.php");
     exit();
 }
 
 /* ================= MARK ALL AS READ ================= */
 if(isset($_POST['mark_all_read'])){
     mysqli_query($conn,"UPDATE patient_notifications SET is_read=1 WHERE patient_id='$user_id' AND is_read=0");
-    header("Location: notifications.php");
+    header("Location: patient_notifications.php");
     exit();
 }
 ?>
@@ -88,7 +88,6 @@ if(isset($_POST['mark_all_read'])){
             <!-- RIGHT: badge + button -->
             <div class="notification-actions">
                 <?php if($isUnread): ?>
-                    <div class="notification-dot"></div>
                     <form method="POST" style="margin:0;">
                         <input type="hidden" name="notif_id" value="<?php echo $notif_id; ?>">
                         <button type="submit" name="mark_read" class="mark-read-btn">
