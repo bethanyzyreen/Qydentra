@@ -69,7 +69,6 @@ CREATE TABLE IF NOT EXISTS staffs (
     password      VARCHAR(255) NOT NULL,
     role          VARCHAR(50)  NOT NULL,   -- 'receptionist' | 'dentist' | 'admin'
     profile_photo TEXT,
-    phone_number  VARCHAR(20),
     created_at    TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
 
