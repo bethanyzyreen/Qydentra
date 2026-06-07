@@ -22,4 +22,9 @@
 | Dentist      | dentist@qydentra.com           | qydentra.dentist        |
 
 
-We can remove the separate patient_notification table in database because notifications can be stored and updated directly in the receptionist, dentist, and admin tables. The notification sidebar will remain the same. The only change is that patient_notification.php will connect to the respective role tables (receptionist, dentist, admin) to fetch and update their notifications. Currently, patient notifications are already connected to the receptionist table.
+We can remove the separate patient_notification table in database because notifications 
+can be stored and updated directly in the receptionist, dentist, and admin tables. The 
+notification sidebar will remain the same. The only change is that patient_notification.php 
+will connect to the respective role tables (receptionist, dentist, admin) to fetch and update 
+their notifications. Currently, patient notifications are already connected to the receptionist 
+table.
