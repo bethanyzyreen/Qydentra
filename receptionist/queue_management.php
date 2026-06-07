@@ -3,46 +3,50 @@ $allowed_roles = ['receptionist'];
 include("../includes/auth_check.php");
 
 /* ================= UPDATE QUEUE STATUS ================= */
-if(isset($_POST['action']) && $_POST['action'] == 'update_status'){
-    $id = (int)$_POST['appointment_id'];
+if (isset($_POST['action']) && $_POST['action'] == 'update_status') {
+    $id     = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
     $status = mysqli_real_escape_string($conn, $_POST['queue_status']);
 
-    // Map queue status to appointment status
-    $apptStatus = $status;
-    mysqli_query($conn,"UPDATE appointments SET status='$apptStatus' WHERE appointment_id='$id'");
+    mysqli_query($conn, "UPDATE appointments SET status='$status' WHERE appointment_id='$id'");
 
-    // Notify patient
-    $getPatient = mysqli_fetch_assoc(mysqli_query($conn,"SELECT patient_id FROM appointments WHERE appointment_id='$id'"));
-    $pid = $getPatient['patient_id'];
+    $getPatient = mysqli_fetch_assoc(mysqli_query($conn,
+        "SELECT patient_id FROM appointments WHERE appointment_id='$id'"
+    ));
+    $pid = $getPatient['patient_id'];  // VARCHAR e.g. PT001
+    $pid_esc = mysqli_real_escape_string($conn, $pid);
+
     $msg = "Your queue status has been updated to: $status.";
-    mysqli_query($conn,"INSERT INTO patient_notifications (patient_id, message) VALUES ('$pid', '$msg')");
+    mysqli_query($conn,
+        "INSERT INTO patient_notifications (patient_id, title, type, message, is_read)
+         VALUES ('$pid_esc', 'Queue Update', 'Queue', '$msg', 0)"
+    );
 
     header("Location: queue_management.php");
     exit();
 }
 
 $dateFilter = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
-$safeDate = mysqli_real_escape_string($conn, $dateFilter);
-$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, trim($_GET['search'])) : '';
+$safeDate   = mysqli_real_escape_string($conn, $dateFilter);
+$search     = isset($_GET['search']) ? mysqli_real_escape_string($conn, trim($_GET['search'])) : '';
 
 $searchWhere = '';
-if(!empty($search)){
+if (!empty($search)) {
     $searchWhere = " AND (u.full_name LIKE '%$search%' OR a.service_type LIKE '%$search%')";
 }
 
-$queueList = mysqli_query($conn,"
-SELECT a.*, u.full_name AS patient_name
-FROM appointments a
-JOIN patients u ON a.patient_id = u.patient_id
-WHERE a.appointment_date = '$safeDate'
-AND a.status IN ('Approved','In Progress','Completed','Waiting')
-$searchWhere
-ORDER BY a.queue_number ASC
-");
+$queueList = mysqli_query($conn,
+    "SELECT a.*, u.full_name AS patient_name
+     FROM appointments a
+     JOIN patients u ON a.patient_id = u.patient_id
+     WHERE a.appointment_date = '$safeDate'
+     AND a.status IN ('Approved','In Progress','Completed','Waiting')
+     $searchWhere
+     ORDER BY a.queue_number ASC"
+);
 
-$waitingCount = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) AS c FROM appointments WHERE appointment_date='$safeDate' AND status='Approved'"))['c'];
-$inProgressCount = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) AS c FROM appointments WHERE appointment_date='$safeDate' AND status='In Progress'"))['c'];
-$completedCount = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) AS c FROM appointments WHERE appointment_date='$safeDate' AND status='Completed'"))['c'];
+$waitingCount   = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM appointments WHERE appointment_date='$safeDate' AND status='Approved'"))['c'];
+$inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM appointments WHERE appointment_date='$safeDate' AND status='In Progress'"))['c'];
+$completedCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM appointments WHERE appointment_date='$safeDate' AND status='Completed'"))['c'];
 ?>
 
 <?php include("../includes/receptionist_header.php"); ?>
@@ -63,7 +67,7 @@ $completedCount = mysqli_fetch_assoc(mysqli_query($conn,"SELECT COUNT(*) AS c FR
     <input type="date" name="date" value="<?php echo $dateFilter; ?>" class="queue-date-input">
     <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search patient or service..." class="search-box" style="width:240px;">
     <button type="submit" class="table-btn"><i class="fa-solid fa-magnifying-glass"></i> Filter</button>
-    <?php if(!empty($search)): ?>
+    <?php if (!empty($search)): ?>
     <a href="?date=<?php echo $dateFilter; ?>" class="table-btn" style="background:rgba(255,255,255,0.05);text-decoration:none;">
       <i class="fa-solid fa-xmark"></i> Clear
     </a>
@@ -121,7 +125,7 @@ Walk-in
 </button>
 </div>
 
-<?php if(mysqli_num_rows($queueList) > 0): ?>
+<?php if (mysqli_num_rows($queueList) > 0): ?>
 
 <table>
 <thead>
@@ -136,13 +140,13 @@ Walk-in
 </thead>
 <tbody>
 
-<?php while($row = mysqli_fetch_assoc($queueList)): ?>
+<?php while ($row = mysqli_fetch_assoc($queueList)): ?>
 
 <tr>
 
 <td>
 <div class="queue-number-badge">
-<?php echo !empty($row['queue_number']) ? '#'.$row['queue_number'] : '—'; ?>
+<?php echo !empty($row['queue_number']) ? '#' . $row['queue_number'] : '—'; ?>
 </div>
 </td>
 
@@ -153,12 +157,12 @@ Walk-in
 </div>
 <div>
 <h4><?php echo htmlspecialchars($row['patient_name']); ?></h4>
-<p><?php echo !empty($row['notes']) ? htmlspecialchars(substr($row['notes'],0,30)) : 'No notes'; ?></p>
+<p><?php echo !empty($row['notes']) ? htmlspecialchars(substr($row['notes'], 0, 30)) : 'No notes'; ?></p>
 </div>
 </div>
 </td>
 
-<td><?php echo htmlspecialchars($row['service_type'] ?? $row['service'] ?? '—'); ?></td>
+<td><?php echo htmlspecialchars($row['service_type'] ?? '—'); ?></td>
 
 <td>
 <div class="table-date">
@@ -176,27 +180,27 @@ Walk-in
 <td>
 <form method="POST" class="queue-action-form">
 <input type="hidden" name="action" value="update_status">
-<input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
-<input type="hidden" name="queue_status" id="qs_<?php echo $row['appointment_id']; ?>" value="">
+<input type="hidden" name="appointment_id" value="<?php echo htmlspecialchars($row['appointment_id']); ?>">
+<input type="hidden" name="queue_status" id="qs_<?php echo htmlspecialchars($row['appointment_id']); ?>" value="">
 
 <button type="button"
 class="queue-status-btn waiting <?php echo $row['status']=='Approved'?'active-status':''; ?>"
 <?php echo $row['status']=='Approved'?'disabled':''; ?>
-onclick="submitQueueStatus(<?php echo $row['appointment_id']; ?>, 'Approved', this)">
+onclick="submitQueueStatus('<?php echo addslashes($row['appointment_id']); ?>', 'Approved', this)">
 <i class="fa-solid fa-hourglass-half"></i><span>Waiting</span>
 </button>
 
 <button type="button"
 class="queue-status-btn inprogress <?php echo $row['status']=='In Progress'?'active-status':''; ?>"
 <?php echo $row['status']=='In Progress'?'disabled':''; ?>
-onclick="submitQueueStatus(<?php echo $row['appointment_id']; ?>, 'In Progress', this)">
+onclick="submitQueueStatus('<?php echo addslashes($row['appointment_id']); ?>', 'In Progress', this)">
 <i class="fa-solid fa-user-doctor"></i><span>In Progress</span>
 </button>
 
 <button type="button"
 class="queue-status-btn completed <?php echo $row['status']=='Completed'?'active-status':''; ?>"
 <?php echo $row['status']=='Completed'?'disabled':''; ?>
-onclick="submitQueueStatus(<?php echo $row['appointment_id']; ?>, 'Completed', this)">
+onclick="submitQueueStatus('<?php echo addslashes($row['appointment_id']); ?>', 'Completed', this)">
 <i class="fa-solid fa-check"></i><span>Completed</span>
 </button>
 

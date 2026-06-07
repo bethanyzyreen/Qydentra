@@ -16,6 +16,9 @@ require_once(__DIR__ . "/notification_templates.php");
 // Load notification INSERT wrappers (with error logging)
 require_once(__DIR__ . "/notify_helper.php");
 
+// Load ID prefix formatter  — fmt_id('PT', $id) → "PT001"
+require_once(__DIR__ . "/id_format.php");
+
 // Redirect to login if not authenticated
 if(!isset($_SESSION['user_id'])){
     header("Location: ../auth/login.php");

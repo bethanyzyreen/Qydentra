@@ -3,13 +3,13 @@ $allowed_roles = ['receptionist'];
 include("../includes/auth_check.php");
 
 /* ================= APPROVE ACTION ================= */
-if(isset($_POST['action']) && $_POST['action'] == 'approve'){
-    $id = (int)$_POST['appointment_id'];
+if (isset($_POST['action']) && $_POST['action'] == 'approve') {
+    $id    = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
     $queue = (int)$_POST['queue_number'];
-    $date = mysqli_real_escape_string($conn, $_POST['appointment_date']);
-    $time = mysqli_real_escape_string($conn, $_POST['appointment_time']);
+    $date  = mysqli_real_escape_string($conn, $_POST['appointment_date']);
+    $time  = mysqli_real_escape_string($conn, $_POST['appointment_time']);
 
-    // Strictly enforce unique queue number per day — reject if already taken by another non-cancelled appointment
+    // Enforce unique queue per day
     $existing = mysqli_fetch_assoc(mysqli_query($conn,
         "SELECT COUNT(*) AS cnt FROM appointments
          WHERE appointment_date='$date'
@@ -17,7 +17,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
          AND appointment_id != '$id'
          AND status NOT IN ('Cancelled')"
     ));
-    if((int)$existing['cnt'] > 0){
+    if ((int)$existing['cnt'] > 0) {
         $nextAvail = mysqli_fetch_assoc(mysqli_query($conn,
             "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
              FROM appointments
@@ -29,21 +29,22 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
         exit();
     }
 
-    mysqli_query($conn,"
-    UPDATE appointments
-    SET status='Approved', queue_number='$queue',
-        appointment_date='$date', appointment_time='$time'
-    WHERE appointment_id='$id'
-    ");
+    mysqli_query($conn,
+        "UPDATE appointments
+         SET status='Approved', queue_number='$queue',
+             appointment_date='$date', appointment_time='$time'
+         WHERE appointment_id='$id'"
+    );
 
     $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
+        "SELECT a.*, u.full_name AS patient_name
+         FROM appointments a JOIN patients u ON a.patient_id = u.patient_id
+         WHERE a.appointment_id='$id'"
     ));
-    $pid          = (int)$getAppt['patient_id'];
+    $pid          = $getAppt['patient_id'];  // VARCHAR
     $patient_name = $getAppt['patient_name'];
     $service      = $getAppt['service_type'];
 
-    // Notify patient
     notify_patient(
         $conn, $pid,
         'Appointment Approved',
@@ -51,7 +52,6 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
         'Appointment', $id
     );
 
-    // Notify all receptionists
     notify_receptionists(
         $conn,
         'Appointment Approved',
@@ -64,25 +64,26 @@ if(isset($_POST['action']) && $_POST['action'] == 'approve'){
 }
 
 /* ================= RESCHEDULE ACTION ================= */
-if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
-    $id = (int)$_POST['appointment_id'];
+if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
+    $id   = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
     $date = mysqli_real_escape_string($conn, $_POST['new_date']);
     $time = mysqli_real_escape_string($conn, $_POST['new_time']);
 
-    mysqli_query($conn,"
-    UPDATE appointments
-    SET appointment_date='$date', appointment_time='$time', status='Pending'
-    WHERE appointment_id='$id'
-    ");
+    mysqli_query($conn,
+        "UPDATE appointments
+         SET appointment_date='$date', appointment_time='$time', status='Pending'
+         WHERE appointment_id='$id'"
+    );
 
     $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
+        "SELECT a.*, u.full_name AS patient_name
+         FROM appointments a JOIN patients u ON a.patient_id = u.patient_id
+         WHERE a.appointment_id='$id'"
     ));
-    $pid          = (int)$getAppt['patient_id'];
+    $pid          = $getAppt['patient_id'];  // VARCHAR
     $patient_name = $getAppt['patient_name'];
     $service      = $getAppt['service_type'];
 
-    // Notify patient
     notify_patient(
         $conn, $pid,
         'Appointment Rescheduled',
@@ -90,7 +91,6 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
         'Appointment', $id
     );
 
-    // Notify all receptionists
     notify_receptionists(
         $conn,
         'Appointment Rescheduled',
@@ -102,18 +102,18 @@ if(isset($_POST['action']) && $_POST['action'] == 'reschedule'){
     exit();
 }
 
-$pendingList = mysqli_query($conn,"
-SELECT a.*, u.full_name AS patient_name, u.email AS patient_email
-FROM appointments a
-JOIN patients u ON a.patient_id = u.patient_id
-WHERE a.status = 'Pending'
-ORDER BY a.appointment_date ASC, a.appointment_time ASC
-");
+$pendingList = mysqli_query($conn,
+    "SELECT a.*, u.full_name AS patient_name, u.email AS patient_email
+     FROM appointments a
+     JOIN patients u ON a.patient_id = u.patient_id
+     WHERE a.status = 'Pending'
+     ORDER BY a.appointment_date ASC, a.appointment_time ASC"
+);
 
-$nextQueue = mysqli_fetch_assoc(mysqli_query($conn,"
-SELECT COALESCE(MAX(queue_number),0)+1 AS next_q FROM appointments
-WHERE appointment_date = CURDATE()
-"))['next_q'];
+$nextQueue = mysqli_fetch_assoc(mysqli_query($conn,
+    "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q FROM appointments
+     WHERE appointment_date = CURDATE()"
+))['next_q'];
 ?>
 
 <?php include("../includes/receptionist_header.php"); ?>
@@ -126,30 +126,18 @@ WHERE appointment_date = CURDATE()
 
 <?php include("../includes/receptionist_topbar.php"); ?>
 
-<?php if(isset($_GET['success'])): ?>
+<?php if (isset($_GET['success'])): ?>
 <div class="alert-success">
 <i class="fa-solid fa-circle-check"></i>
 <?php echo $_GET['success'] == 'approved' ? 'Appointment approved successfully.' : 'Appointment rescheduled successfully.'; ?>
 </div>
 <?php endif; ?>
 
-<?php if(isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
-<div class="alert-error" style="
-    background:rgba(239,68,68,0.10);
-    border:1px solid rgba(239,68,68,0.30);
-    border-radius:14px;
-    padding:14px 20px;
-    margin-bottom:20px;
-    color:#f87171;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:14px;
-    font-weight:500;
-">
+<?php if (isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
+<div class="alert-error" style="background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.30);border-radius:14px;padding:14px 20px;margin-bottom:20px;color:#f87171;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;">
 <i class="fa-solid fa-triangle-exclamation"></i>
 Queue #<?php echo (int)$_GET['queue']; ?> is already taken on <?php echo date('F d, Y', strtotime($_GET['date'])); ?>.
-Next available queue number is<strong style="color:#fca5a5;">#<?php echo (int)$_GET['suggested'];?></strong>.
+Next available queue number is<strong style="color:#fca5a5;">#<?php echo (int)$_GET['suggested']; ?></strong>.
 Please re-approve with the correct queue number.
 </div>
 <?php endif; ?>
@@ -164,11 +152,12 @@ Please re-approve with the correct queue number.
 <div class="badge-count"><?php echo mysqli_num_rows($pendingList); ?> Pending</div>
 </div>
 
-<?php if(mysqli_num_rows($pendingList) > 0): ?>
+<?php if (mysqli_num_rows($pendingList) > 0): ?>
 
 <table>
 <thead>
 <tr>
+    <th>Appt ID</th>
     <th>Patient</th>
     <th>Service</th>
     <th>Requested Date</th>
@@ -179,9 +168,15 @@ Please re-approve with the correct queue number.
 </thead>
 <tbody>
 
-<?php while($row = mysqli_fetch_assoc($pendingList)): ?>
+<?php while ($row = mysqli_fetch_assoc($pendingList)): ?>
 
 <tr>
+
+<td>
+<span style="font-family:monospace;font-size:13px;color:#94a3b8;">
+    <?php echo htmlspecialchars($row['appointment_id']); ?>
+</span>
+</td>
 
 <td>
 <div class="service-info">
@@ -195,7 +190,7 @@ Please re-approve with the correct queue number.
 </div>
 </td>
 
-<td><?php echo htmlspecialchars($row['service_type'] ?? $row['service'] ?? '—'); ?></td>
+<td><?php echo htmlspecialchars($row['service_type'] ?? '—'); ?></td>
 
 <td>
 <div class="table-date">
@@ -211,15 +206,14 @@ Please re-approve with the correct queue number.
 </div>
 </td>
 
-<td><?php echo !empty($row['notes']) ? htmlspecialchars(substr($row['notes'],0,40)).'...' : '—'; ?></td>
+<td><?php echo !empty($row['notes']) ? htmlspecialchars(substr($row['notes'], 0, 40)) . '...' : '—'; ?></td>
 
 <td style="width:150px;white-space:nowrap;">
 <div class="action-group">
 
-<!-- APPROVE BUTTON (triggers modal) -->
 <button class="approve-btn"
 onclick="openApproveModal(
-    <?php echo $row['appointment_id']; ?>,
+    '<?php echo addslashes($row['appointment_id']); ?>',
     '<?php echo addslashes($row['patient_name']); ?>',
     '<?php echo $row['appointment_date']; ?>',
     '<?php echo $row['appointment_time']; ?>',
@@ -228,10 +222,9 @@ onclick="openApproveModal(
 <i class="fa-solid fa-check"></i> Approve
 </button>
 
-<!-- RESCHEDULE BUTTON (triggers modal) -->
 <button class="reschedule-btn"
 onclick="openRescheduleModal(
-    <?php echo $row['appointment_id']; ?>,
+    '<?php echo addslashes($row['appointment_id']); ?>',
     '<?php echo addslashes($row['patient_name']); ?>'
 )">
 <i class="fa-solid fa-calendar-pen"></i> Reschedule
@@ -368,7 +361,6 @@ document.querySelectorAll('.modal-overlay').forEach(function(overlay){
     });
 });
 
-// When date changes in approve modal, fetch suggested queue number for that date
 document.getElementById('approveDate').addEventListener('change', function(){
     var date = this.value;
     if(!date) return;

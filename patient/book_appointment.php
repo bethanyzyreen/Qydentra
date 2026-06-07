@@ -1,71 +1,58 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+?>
+<?php
 $allowed_roles = ['patient'];
 include("../includes/auth_check.php");
+require_once(__DIR__ . "/../includes/id_helper.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $patient_id = $_SESSION['user_id'];
+    $patient_id = $_SESSION['user_id'];  // VARCHAR e.g. PT001
 
     $service = mysqli_real_escape_string($conn, $_POST['service']);
-    $date = mysqli_real_escape_string($conn, $_POST['date']);
-    $time = mysqli_real_escape_string($conn, $_POST['time']);
-    $notes = mysqli_real_escape_string($conn, $_POST['notes']);
+    $date    = mysqli_real_escape_string($conn, $_POST['date']);
+    $time    = mysqli_real_escape_string($conn, $_POST['time']);
+    $notes   = mysqli_real_escape_string($conn, $_POST['notes'] ?? '');
 
-    // FIX: map service to description
     $service_desc = "";
-
     switch ($service) {
-        case "Teeth Cleaning":
-            $service_desc = "Routine Dental Care";
-            break;
-
-        case "Tooth Extraction":
-            $service_desc = "Tooth Removal";
-            break;
-
-        case "Dental Filling":
-            $service_desc = "Tooth Restoration";
-            break;
-
-        case "Braces Consultation":
-            $service_desc = "Orthodontic Assessment";
-            break;
-
-        case "Dental Checkup":
-            $service_desc = "General Oral Exam";
-            break;
-
-        default:
-            $service_desc = "General Dental Service";
+        case "Teeth Cleaning":       $service_desc = "Routine Dental Care";     break;
+        case "Tooth Extraction":     $service_desc = "Tooth Removal";           break;
+        case "Dental Filling":       $service_desc = "Tooth Restoration";       break;
+        case "Braces Consultation":  $service_desc = "Orthodontic Assessment";  break;
+        case "Dental Checkup":       $service_desc = "General Oral Exam";       break;
+        default:                     $service_desc = "General Dental Service";
     }
 
-    $sql = "INSERT INTO appointments 
+    // Trigger auto-assigns appointment_id (e.g. AP001)
+    $sql = "INSERT INTO appointments
     (patient_id, service_type, service_desc, appointment_date, appointment_time, notes, status)
-    VALUES 
+    VALUES
     ('$patient_id', '$service', '$service_desc', '$date', '$time', '$notes', 'Pending')";
 
-    if (mysqli_query($conn, $sql)) {
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
 
-        // Get new appointment_id for FK links
-        $new_appt_id = (int)mysqli_insert_id($conn);
+        // Retrieve the newly created appointment_id (VARCHAR)
+        $new_appt_id = get_last_inserted_id($conn, 'appointments');
 
-        // Resolve patient name
         $patient_name = $_SESSION['full_name'] ?? '';
-        if(empty($patient_name)){
+        if (empty($patient_name)) {
+            $pid_esc = mysqli_real_escape_string($conn, $patient_id);
             $prow = mysqli_fetch_assoc(mysqli_query($conn,
-                "SELECT full_name FROM patients WHERE patient_id = '$patient_id'"));
+                "SELECT full_name FROM patients WHERE patient_id = '$pid_esc'"));
             $patient_name = $prow['full_name'] ?? '';
         }
 
-        // Notify the patient
         notify_patient(
-            $conn, (int)$patient_id,
+            $conn, $patient_id,
             'Appointment Request Submitted',
             notification_patient_request_submitted($patient_name),
             'Appointment', $new_appt_id
         );
 
-        // Notify all receptionists
         notify_receptionists(
             $conn,
             'New Appointment Booked',

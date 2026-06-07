@@ -1,62 +1,68 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+?>
+<?php
 $allowed_roles = ['receptionist'];
 include("../includes/auth_check.php");
+require_once(__DIR__ . "/../includes/id_helper.php");
 
 $success = '';
-$error = '';
+$error   = '';
 
 /* ================= REGISTER WALK-IN ================= */
-if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])){
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])) {
 
     $full_name = mysqli_real_escape_string($conn, trim($_POST['full_name']));
-    $email = mysqli_real_escape_string($conn, trim($_POST['email']));
-    $service = mysqli_real_escape_string($conn, $_POST['service']);
-    $date = mysqli_real_escape_string($conn, $_POST['appointment_date']);
-    $time = mysqli_real_escape_string($conn, $_POST['appointment_time']);
-    $notes = mysqli_real_escape_string($conn, $_POST['notes']);
+    $email     = mysqli_real_escape_string($conn, trim($_POST['email']));
+    $service   = mysqli_real_escape_string($conn, $_POST['service']);
+    $date      = mysqli_real_escape_string($conn, $_POST['appointment_date']);
+    $time      = mysqli_real_escape_string($conn, $_POST['appointment_time']);
+    $notes     = mysqli_real_escape_string($conn, $_POST['notes'] ?? '');
 
     // Check if patient already exists
-    $checkUser = mysqli_fetch_assoc(mysqli_query($conn,"SELECT patient_id AS user_id FROM patients WHERE email='$email'"));
+    $checkUser = mysqli_fetch_assoc(mysqli_query($conn,
+        "SELECT patient_id FROM patients WHERE email='$email'"
+    ));
 
-    if($checkUser){
-        $patient_id = $checkUser['user_id'];
+    if ($checkUser) {
+        $patient_id = $checkUser['patient_id'];   // VARCHAR e.g. PT001
     } else {
-        // Create new patient user
-        $tempPass = password_hash('walkin'.rand(1000,9999), PASSWORD_DEFAULT);
-        mysqli_query($conn,"
-        INSERT INTO patients (full_name, email, password, role)
-        VALUES ('$full_name', '$email', '$tempPass', 'patient')
-        ");
-        $patient_id = mysqli_insert_id($conn);
+        // Create new patient — trigger assigns patient_id automatically
+        $tempPass = password_hash('walkin' . rand(1000, 9999), PASSWORD_DEFAULT);
+        mysqli_query($conn,
+            "INSERT INTO patients (full_name, email, password, role)
+             VALUES ('$full_name', '$email', '$tempPass', 'patient')"
+        );
+        $patient_id = get_last_inserted_id($conn, 'patients');
     }
 
-    // Get next queue number for that date (excluding cancelled appointments)
-    $nextQueueResult = mysqli_fetch_assoc(mysqli_query($conn,"
-    SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
-    FROM appointments
-    WHERE appointment_date='$date'
-    AND status NOT IN ('Cancelled')
-    "));
+    // Get next queue number for that date (excluding cancelled)
+    $nextQueueResult = mysqli_fetch_assoc(mysqli_query($conn,
+        "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
+         FROM appointments
+         WHERE appointment_date='$date'
+         AND status NOT IN ('Cancelled')"
+    ));
     $queueNumber = $nextQueueResult['next_q'];
 
-    // Insert appointment as Approved with queue
-    mysqli_query($conn,"
-    INSERT INTO appointments
-    (patient_id, service_type, appointment_date, appointment_time, status, queue_number, notes)
-    VALUES
-    ('$patient_id', '$service', '$date', '$time', 'Approved', '$queueNumber', '$notes')
-    ");
-    $new_appt_id = (int)mysqli_insert_id($conn);
+    // Insert appointment — trigger assigns appointment_id
+    $pid_esc = mysqli_real_escape_string($conn, $patient_id);
+    mysqli_query($conn,
+        "INSERT INTO appointments
+         (patient_id, service_type, service_desc, appointment_date, appointment_time, status, queue_number, notes)
+         VALUES
+         ('$pid_esc', '$service', '$service', '$date', '$time', 'Approved', '$queueNumber', '$notes')"
+    );
+    $new_appt_id = get_last_inserted_id($conn, 'appointments');
 
-    // Notify patient
     notify_patient(
-        $conn, (int)$patient_id,
+        $conn, $patient_id,
         'Walk-in Appointment Registered',
         notification_patient_walkin_recorded($full_name, $service, $date, $time),
         'Appointment', $new_appt_id
     );
 
-    // Notify all receptionists
     notify_receptionists(
         $conn,
         'Walk-in Appointment Recorded',
@@ -68,14 +74,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])){
 }
 
 // Today's walk-ins
-$todayWalkins = mysqli_query($conn,"
-SELECT a.*, u.full_name AS patient_name
-FROM appointments a
-JOIN patients u ON a.patient_id = u.patient_id
-WHERE a.appointment_date = CURDATE()
-AND a.status IN ('Approved','In Progress','Completed')
-ORDER BY a.queue_number ASC
-");
+$todayWalkins = mysqli_query($conn,
+    "SELECT a.*, u.full_name AS patient_name
+     FROM appointments a
+     JOIN patients u ON a.patient_id = u.patient_id
+     WHERE a.appointment_date = CURDATE()
+     AND a.status IN ('Approved','In Progress','Completed')
+     ORDER BY a.queue_number ASC"
+);
 ?>
 
 <?php include("../includes/receptionist_header.php"); ?>
@@ -88,7 +94,7 @@ ORDER BY a.queue_number ASC
 
 <?php include("../includes/receptionist_topbar.php"); ?>
 
-<?php if($success): ?>
+<?php if ($success): ?>
 <div class="alert-success">
 <i class="fa-solid fa-circle-check"></i>
 <?php echo $success; ?>
@@ -172,9 +178,9 @@ Register Walk-in
 </div>
 </div>
 
-<?php if(mysqli_num_rows($todayWalkins) > 0): ?>
+<?php if (mysqli_num_rows($todayWalkins) > 0): ?>
 
-<?php while($row = mysqli_fetch_assoc($todayWalkins)): ?>
+<?php while ($row = mysqli_fetch_assoc($todayWalkins)): ?>
 
 <div class="queue-card-item">
 
@@ -184,7 +190,7 @@ Register Walk-in
 
 <div class="queue-card-info">
 <h4><?php echo htmlspecialchars($row['patient_name']); ?></h4>
-<p><?php echo htmlspecialchars($row['service_type'] ?? $row['service'] ?? '—'); ?></p>
+<p><?php echo htmlspecialchars($row['service_type'] ?? '—'); ?></p>
 </div>
 
 <div class="status-pill <?php echo strtolower($row['status']); ?>">

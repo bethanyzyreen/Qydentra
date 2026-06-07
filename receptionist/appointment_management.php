@@ -3,20 +3,22 @@ $allowed_roles = ['receptionist'];
 include("../includes/auth_check.php");
 
 /* ================= CANCEL ACTION ================= */
-if(isset($_POST['action']) && $_POST['action'] == 'cancel'){
-    $id = (int)$_POST['appointment_id'];
-    mysqli_query($conn,"UPDATE appointments SET status='Cancelled' WHERE appointment_id='$id'");
+if (isset($_POST['action']) && $_POST['action'] == 'cancel') {
+    $id = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
+
+    mysqli_query($conn, "UPDATE appointments SET status='Cancelled' WHERE appointment_id='$id'");
 
     $getAppt = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT a.*, u.full_name AS patient_name FROM appointments a JOIN patients u ON a.patient_id = u.patient_id WHERE a.appointment_id='$id'"
+        "SELECT a.*, u.full_name AS patient_name
+         FROM appointments a JOIN patients u ON a.patient_id = u.patient_id
+         WHERE a.appointment_id='$id'"
     ));
-    $pid          = (int)$getAppt['patient_id'];
+    $pid          = $getAppt['patient_id'];   // VARCHAR e.g. PT001
     $patient_name = $getAppt['patient_name'];
     $service      = $getAppt['service_type'];
     $fmt_date     = date("F d, Y", strtotime($getAppt['appointment_date']));
     $fmt_time     = date("g:i A",  strtotime($getAppt['appointment_time']));
 
-    // Notify patient
     notify_patient(
         $conn, $pid,
         'Appointment Cancelled',
@@ -24,7 +26,6 @@ if(isset($_POST['action']) && $_POST['action'] == 'cancel'){
         'Appointment', $id
     );
 
-    // Notify all receptionists (including self, for record)
     notify_receptionists(
         $conn,
         'Appointment Cancelled',
@@ -37,17 +38,15 @@ if(isset($_POST['action']) && $_POST['action'] == 'cancel'){
 }
 
 /* ================= REASSIGN QUEUE ACTION ================= */
-if(isset($_POST['action']) && $_POST['action'] == 'reassign'){
-    $id = (int)$_POST['appointment_id'];
+if (isset($_POST['action']) && $_POST['action'] == 'reassign') {
+    $id    = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
     $queue = (int)$_POST['queue_number'];
 
-    // Get the appointment date for this appointment
     $apptDate = mysqli_fetch_assoc(mysqli_query($conn,
         "SELECT appointment_date FROM appointments WHERE appointment_id='$id'"
     ));
     $apptDateVal = mysqli_real_escape_string($conn, $apptDate['appointment_date']);
 
-    // Check if queue number is already taken on that date by another non-cancelled appointment
     $check = mysqli_fetch_assoc(mysqli_query($conn,
         "SELECT COUNT(*) AS cnt FROM appointments
          WHERE appointment_date='$apptDateVal'
@@ -55,7 +54,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'reassign'){
          AND appointment_id != '$id'
          AND status NOT IN ('Cancelled')"
     ));
-    if((int)$check['cnt'] > 0){
+    if ((int)$check['cnt'] > 0) {
         $nextAvail = mysqli_fetch_assoc(mysqli_query($conn,
             "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
              FROM appointments
@@ -67,33 +66,33 @@ if(isset($_POST['action']) && $_POST['action'] == 'reassign'){
         exit();
     }
 
-    mysqli_query($conn,"UPDATE appointments SET queue_number='$queue' WHERE appointment_id='$id'");
+    mysqli_query($conn, "UPDATE appointments SET queue_number='$queue' WHERE appointment_id='$id'");
     header("Location: appointment_management.php?success=reassigned");
     exit();
 }
 
-$statusFilter = isset($_GET['status']) ? mysqli_real_escape_string($conn, $_GET['status']) : 'all';
-$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, trim($_GET['search'])) : '';
-$patientFilter = isset($_GET['patient_id']) ? (int)$_GET['patient_id'] : 0;
+$statusFilter  = isset($_GET['status'])     ? mysqli_real_escape_string($conn, $_GET['status'])     : 'all';
+$search        = isset($_GET['search'])     ? mysqli_real_escape_string($conn, trim($_GET['search'])) : '';
+$patientFilter = isset($_GET['patient_id']) ? mysqli_real_escape_string($conn, $_GET['patient_id']) : '';
 
 $where = "WHERE 1=1";
-if($statusFilter !== 'all'){
+if ($statusFilter !== 'all') {
     $where .= " AND a.status='$statusFilter'";
 }
-if(!empty($search)){
+if (!empty($search)) {
     $where .= " AND (u.full_name LIKE '%$search%' OR u.email LIKE '%$search%' OR a.service_type LIKE '%$search%')";
 }
-if($patientFilter > 0){
+if (!empty($patientFilter)) {
     $where .= " AND a.patient_id='$patientFilter'";
 }
 
-$appointments = mysqli_query($conn,"
-SELECT a.*, u.full_name AS patient_name, u.email AS patient_email
-FROM appointments a
-JOIN patients u ON a.patient_id = u.patient_id
-$where
-ORDER BY a.appointment_date DESC, a.appointment_time DESC
-");
+$appointments = mysqli_query($conn,
+    "SELECT a.*, u.full_name AS patient_name, u.email AS patient_email
+     FROM appointments a
+     JOIN patients u ON a.patient_id = u.patient_id
+     $where
+     ORDER BY a.appointment_date DESC, a.appointment_time DESC"
+);
 ?>
 
 <?php include("../includes/receptionist_header.php"); ?>
@@ -106,30 +105,18 @@ ORDER BY a.appointment_date DESC, a.appointment_time DESC
 
 <?php include("../includes/receptionist_topbar.php"); ?>
 
-<?php if(isset($_GET['success'])): ?>
+<?php if (isset($_GET['success'])): ?>
 <div class="alert-success">
 <i class="fa-solid fa-circle-check"></i>
 <?php
-$msgs = ['cancelled'=>'Appointment cancelled.','reassigned'=>'Queue number updated.'];
+$msgs = ['cancelled' => 'Appointment cancelled.', 'reassigned' => 'Queue number updated.'];
 echo $msgs[$_GET['success']] ?? 'Action completed.';
 ?>
 </div>
 <?php endif; ?>
 
-<?php if(isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
-<div style="
-    background:rgba(239,68,68,0.10);
-    border:1px solid rgba(239,68,68,0.30);
-    border-radius:14px;
-    padding:14px 20px;
-    margin-bottom:20px;
-    color:#f87171;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:14px;
-    font-weight:500;
-">
+<?php if (isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
+<div style="background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.30);border-radius:14px;padding:14px 20px;margin-bottom:20px;color:#f87171;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;">
 <i class="fa-solid fa-triangle-exclamation"></i>
 Queue #<?php echo (int)$_GET['queue']; ?> is already taken for that date.
 Next available is <strong style="color:#fca5a5;">&nbsp;#<?php echo (int)$_GET['suggested']; ?></strong>.
@@ -139,18 +126,18 @@ Next available is <strong style="color:#fca5a5;">&nbsp;#<?php echo (int)$_GET['s
 <!-- FILTER + SEARCH BAR -->
 <div class="appt-toolbar-wrap">
   <div class="filter-bar">
-    <a href="?status=all<?php echo !empty($search)?'&search='.urlencode($search):''; ?>" class="filter-btn <?php echo $statusFilter=='all'?'active':''; ?>">All</a>
-    <a href="?status=Pending<?php echo !empty($search)?'&search='.urlencode($search):''; ?>" class="filter-btn <?php echo $statusFilter=='Pending'?'active':''; ?>">Pending</a>
-    <a href="?status=Approved<?php echo !empty($search)?'&search='.urlencode($search):''; ?>" class="filter-btn <?php echo $statusFilter=='Approved'?'active':''; ?>">Approved</a>
-    <a href="?status=Completed<?php echo !empty($search)?'&search='.urlencode($search):''; ?>" class="filter-btn <?php echo $statusFilter=='Completed'?'active':''; ?>">Completed</a>
-    <a href="?status=Cancelled<?php echo !empty($search)?'&search='.urlencode($search):''; ?>" class="filter-btn <?php echo $statusFilter=='Cancelled'?'active':''; ?>">Cancelled</a>
+    <a href="?status=all<?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>" class="filter-btn <?php echo $statusFilter == 'all' ? 'active' : ''; ?>">All</a>
+    <a href="?status=Pending<?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>" class="filter-btn <?php echo $statusFilter == 'Pending' ? 'active' : ''; ?>">Pending</a>
+    <a href="?status=Approved<?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>" class="filter-btn <?php echo $statusFilter == 'Approved' ? 'active' : ''; ?>">Approved</a>
+    <a href="?status=Completed<?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>" class="filter-btn <?php echo $statusFilter == 'Completed' ? 'active' : ''; ?>">Completed</a>
+    <a href="?status=Cancelled<?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>" class="filter-btn <?php echo $statusFilter == 'Cancelled' ? 'active' : ''; ?>">Cancelled</a>
   </div>
   <form method="GET" class="appt-search-form">
     <input type="hidden" name="status" value="<?php echo $statusFilter; ?>">
     <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>"
       placeholder="Search patient, email or service..." class="search-box" style="width:280px;">
     <button type="submit" class="table-btn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
-    <?php if(!empty($search)): ?>
+    <?php if (!empty($search)): ?>
     <a href="?status=<?php echo $statusFilter; ?>" class="table-btn" style="background:rgba(255,255,255,0.05);text-decoration:none;">
       <i class="fa-solid fa-xmark"></i> Clear
     </a>
@@ -174,6 +161,7 @@ Review Pending
 <table>
 <thead>
 <tr>
+    <th>Appt ID</th>
     <th>Patient</th>
     <th>Service</th>
     <th>Date</th>
@@ -185,10 +173,16 @@ Review Pending
 </thead>
 <tbody>
 
-<?php if(mysqli_num_rows($appointments) > 0): ?>
-<?php while($row = mysqli_fetch_assoc($appointments)): ?>
+<?php if (mysqli_num_rows($appointments) > 0): ?>
+<?php while ($row = mysqli_fetch_assoc($appointments)): ?>
 
 <tr>
+
+<td>
+<span style="font-family:monospace;font-size:13px;color:#94a3b8;">
+    <?php echo htmlspecialchars($row['appointment_id']); ?>
+</span>
+</td>
 
 <td>
 <div class="service-info">
@@ -202,7 +196,7 @@ Review Pending
 </div>
 </td>
 
-<td><?php echo htmlspecialchars($row['service_type'] ?? $row['service'] ?? '—'); ?></td>
+<td><?php echo htmlspecialchars($row['service_type'] ?? '—'); ?></td>
 
 <td>
 <div class="table-date">
@@ -226,25 +220,25 @@ Review Pending
 
 <td>
 <div class="queue-pill">
-<?php echo !empty($row['queue_number']) ? '#'.$row['queue_number'] : '—'; ?>
+<?php echo !empty($row['queue_number']) ? '#' . $row['queue_number'] : '—'; ?>
 </div>
 </td>
 
 <td>
 <div class="action-group">
 
-<?php if($row['status'] == 'Approved'): ?>
+<?php if ($row['status'] == 'Approved'): ?>
 <button class="action-btn-sm edit"
-onclick="openQueueModal(<?php echo $row['appointment_id']; ?>, '<?php echo addslashes($row['patient_name']); ?>', <?php echo (int)$row['queue_number']; ?>)">
+onclick="openQueueModal('<?php echo addslashes($row['appointment_id']); ?>', '<?php echo addslashes($row['patient_name']); ?>', <?php echo (int)$row['queue_number']; ?>)">
 <i class="fa-solid fa-hashtag"></i>
 </button>
 <?php endif; ?>
 
-<?php if(in_array($row['status'], ['Pending','Approved'])): ?>
+<?php if (in_array($row['status'], ['Pending', 'Approved'])): ?>
 <form method="POST" style="display:inline;"
 onsubmit="return confirm('Cancel this appointment?')">
 <input type="hidden" name="action" value="cancel">
-<input type="hidden" name="appointment_id" value="<?php echo $row['appointment_id']; ?>">
+<input type="hidden" name="appointment_id" value="<?php echo htmlspecialchars($row['appointment_id']); ?>">
 <button type="submit" class="action-btn-sm cancel-sm">
 <i class="fa-solid fa-xmark"></i>
 </button>
@@ -259,7 +253,7 @@ onsubmit="return confirm('Cancel this appointment?')">
 <?php endwhile; ?>
 <?php else: ?>
 <tr>
-<td colspan="7" style="text-align:center;padding:30px;">No appointments found.</td>
+<td colspan="8" style="text-align:center;padding:30px;">No appointments found.</td>
 </tr>
 <?php endif; ?>
 
