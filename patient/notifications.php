@@ -115,7 +115,6 @@ if (isset($_POST['mark_all_read'])) {
 
             <div class="notification-actions">
                 <?php if ($isUnread): ?>
-                    <div class="notification-dot"></div>
                     <form method="POST" style="margin:0;">
                         <input type="hidden" name="notif_id" value="<?php echo htmlspecialchars($notif_id); ?>">
                         <button type="submit" name="mark_read" class="mark-read-btn">

@@ -87,7 +87,6 @@ class="search-box" style="width:320px;">
 </div>
 <div class="patient-info">
 <h4><?php echo htmlspecialchars($row['full_name']); ?></h4>
-<p><?php echo fmt_id('PT', (int)$row['patient_id']); ?></p>
 </div>
 </div>
 </td>
@@ -115,10 +114,10 @@ class="search-box" style="width:320px;">
 
 <td>
 <button class="action-btn-sm edit"
-onclick="openPatientModal_js($
+onclick="openPatientModal_js(
     '<?php echo addslashes($row['full_name']); ?>',
     '<?php echo addslashes($row['email']); ?>',
-    <?php echo (int)$row['patient_id']; ?>,
+    '<?php echo addslashes($row['patient_id']); ?>',
     <?php echo (int)$row['total_appointments']; ?>,
     <?php echo (int)$row['completed']; ?>,
     <?php echo (int)$row['pending']; ?>

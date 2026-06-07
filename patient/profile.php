@@ -80,7 +80,7 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
                         <?php if(!empty($user['profile_photo'])){ ?>
 
                             <img
-                                src="/uploads/profile/<?php echo htmlspecialchars($user['profile_photo']); ?>"
+                                src="../uploads/profile/<?php echo htmlspecialchars($user['profile_photo']); ?>"
                                 class="profile-avatar-img"
                                 onerror="this.style.display='none';document.getElementById('profile-initial-span').style.display='flex'">
                             <span id="profile-initial-span" class="profile-initial" style="display:none;">
@@ -135,11 +135,6 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
             </span>
 
             <div class="profile-info-box">
-
-                <div class="profile-info-item">
-                    <strong>User ID</strong>
-                    <p>#<?php echo $user['patient_id']; ?></p>
-                </div>
 
                 <div class="profile-info-item">
                     <strong>Account Type</strong>

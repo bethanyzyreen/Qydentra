@@ -1,18 +1,17 @@
 -- ============================================================
--- Qydentra Database Schema  (v4 — VARCHAR prefixed PKs)
+-- Qydentra Database Schema  (v5 — role-specific staff prefixes)
 -- ============================================================
 -- Primary key format:  prefix + zero-padded 3-digit number
 --   PT → patients.patient_id              PT001, PT002, …
---   ST → staffs.staff_id                  ST001, ST002, …  (dentist / admin)
 --   RE → staffs.staff_id (receptionists)  RE001, RE002, …
+--   DE → staffs.staff_id (dentists)       DE001, DE002, …
+--   AD → staffs.staff_id (admins)         AD001, AD002, …
 --   AP → appointments.appointment_id      AP001, AP002, …
 --   PN → patient_notifications.notification_id       PN001, PN002, …
 --   RN → receptionist_notifications.receptionist_notification_id  RN001, RN002, …
 --
--- Auto-increment behaviour is preserved via helper tables + BEFORE INSERT triggers.
--- The application layer never constructs IDs — it calls INSERT without supplying a PK
--- and reads it back with LAST_INSERT_ID_STR() or mysqli_insert_id() (see note below).
--- IDs are stored/queried as VARCHAR; they are NEVER displayed in the application UI.
+-- Each staff role has its own independent sequence so numbering
+-- restarts per role (RE001, DE001, AD001 can all coexist).
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS qydentra;
@@ -22,13 +21,17 @@ USE qydentra;
 -- Sequence helper tables  (one row each, holds last used int)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS _seq_patients      (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
-CREATE TABLE IF NOT EXISTS _seq_staffs        (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS _seq_staff_re      (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS _seq_staff_de      (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
+CREATE TABLE IF NOT EXISTS _seq_staff_ad      (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS _seq_appointments  (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS _seq_pat_notif     (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS _seq_rec_notif     (last_id INT UNSIGNED NOT NULL DEFAULT 0) ENGINE=InnoDB;
 
 INSERT INTO _seq_patients     VALUES (0);
-INSERT INTO _seq_staffs       VALUES (0);
+INSERT INTO _seq_staff_re     VALUES (0);
+INSERT INTO _seq_staff_de     VALUES (0);
+INSERT INTO _seq_staff_ad     VALUES (0);
 INSERT INTO _seq_appointments VALUES (0);
 INSERT INTO _seq_pat_notif    VALUES (0);
 INSERT INTO _seq_rec_notif    VALUES (0);
@@ -60,10 +63,13 @@ END$$
 DELIMITER ;
 
 -- ============================================================
--- staffs  (prefix ST for dentist/admin, RE for receptionists)
+-- staffs
+--   RE → receptionist   (RE001, RE002, …)
+--   DE → dentist        (DE001, DE002, …)
+--   AD → admin          (AD001, AD002, …)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS staffs (
-    staff_id      VARCHAR(10)  NOT NULL PRIMARY KEY,   -- RE001 / ST001
+    staff_id      VARCHAR(10)  NOT NULL PRIMARY KEY,   -- RE001 / DE001 / AD001
     full_name     VARCHAR(100) NOT NULL,
     email         VARCHAR(100) UNIQUE NOT NULL,
     password      VARCHAR(255) NOT NULL,
@@ -79,14 +85,22 @@ FOR EACH ROW
 BEGIN
     DECLARE next_id INT;
     DECLARE prefix  VARCHAR(2);
-    UPDATE _seq_staffs SET last_id = last_id + 1;
-    SELECT last_id INTO next_id FROM _seq_staffs LIMIT 1;
-    -- Receptionists get prefix RE; everyone else gets ST
+
     IF NEW.role = 'receptionist' THEN
+        UPDATE _seq_staff_re SET last_id = last_id + 1;
+        SELECT last_id INTO next_id FROM _seq_staff_re LIMIT 1;
         SET prefix = 'RE';
+    ELSEIF NEW.role = 'dentist' THEN
+        UPDATE _seq_staff_de SET last_id = last_id + 1;
+        SELECT last_id INTO next_id FROM _seq_staff_de LIMIT 1;
+        SET prefix = 'DE';
     ELSE
-        SET prefix = 'ST';
+        -- admin (and any future role falls here as AD)
+        UPDATE _seq_staff_ad SET last_id = last_id + 1;
+        SELECT last_id INTO next_id FROM _seq_staff_ad LIMIT 1;
+        SET prefix = 'AD';
     END IF;
+
     SET NEW.staff_id = CONCAT(prefix, LPAD(next_id, 3, '0'));
 END$$
 DELIMITER ;
@@ -180,7 +194,8 @@ END$$
 DELIMITER ;
 
 -- ============================================================
--- Seed accounts 
+-- Seed accounts
+-- Generated IDs:  receptionist → RE001 | dentist → DE001 | admin → AD001
 -- ============================================================
 
 /* Receptionist — email: receptionist@qydentra.com  pass: qydentra.receptionist */

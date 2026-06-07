@@ -16,6 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $time    = mysqli_real_escape_string($conn, $_POST['time']);
     $notes   = mysqli_real_escape_string($conn, $_POST['notes'] ?? '');
 
+    // ── Past date / time validation ──────────────────────────────────────────
+    $now           = new DateTime('now');
+    $selected_dt   = new DateTime($date . ' ' . $time);
+    if ($selected_dt <= $now) {
+        $booking_error = "You cannot book an appointment in the past. Please choose a future date and time.";
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     $service_desc = "";
     switch ($service) {
         case "Teeth Cleaning":       $service_desc = "Routine Dental Care";     break;
@@ -27,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Trigger auto-assigns appointment_id (e.g. AP001)
+    if (!isset($booking_error)) {
     $sql = "INSERT INTO appointments
     (patient_id, service_type, service_desc, appointment_date, appointment_time, notes, status)
     VALUES
@@ -66,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         die("DB ERROR: " . mysqli_error($conn));
     }
+    } // end past-date check
 }
 ?>
 
@@ -97,7 +107,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         </div>
 
-        <form method="POST" class="booking-form">
+        <?php if (isset($booking_error)): ?>
+        <div class="pat-alert pat-alert-error" style="margin-bottom:16px;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <?php echo htmlspecialchars($booking_error); ?>
+        </div>
+        <?php endif; ?>
+
+        <form method="POST" class="booking-form" id="bookingForm">
 
             <div class="form-group">
 
@@ -270,6 +287,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 </div>
+
+<script>
+// ── Client-side past date/time guard ─────────────────────────────────────────
+(function () {
+    const dateInput = document.querySelector('input[name="date"]');
+    const timeInput = document.querySelector('input[name="time"]');
+    const form      = document.getElementById('bookingForm');
+
+    function setMinTime() {
+        const today   = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        if (dateInput.value === todayStr) {
+            // Block times in the past for today
+            const hh = String(today.getHours()).padStart(2, '0');
+            const mm = String(today.getMinutes()).padStart(2, '0');
+            timeInput.min = hh + ':' + mm;
+        } else {
+            timeInput.min = '08:00';
+        }
+    }
+
+    dateInput.addEventListener('change', setMinTime);
+    setMinTime();
+
+    form.addEventListener('submit', function (e) {
+        const selected = new Date(dateInput.value + 'T' + timeInput.value);
+        if (selected <= new Date()) {
+            e.preventDefault();
+            alert('You cannot book an appointment in the past. Please choose a future date and time.');
+        }
+    });
+})();
+</script>
 
 </body>
 </html>

@@ -26,20 +26,16 @@ if($file['size'] > 5 * 1024 * 1024){
     exit();
 }
 
-// ── Resolve the upload folder (works regardless of where PHP is running) ─────
-$folder = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/uploads/profile/';
-
-// Fallback: use __DIR__-relative path if DOCUMENT_ROOT doesn't contain the project
-if(!is_dir(dirname($folder))){
-    $folder = __DIR__ . '/../uploads/profile/';
-}
+// ── Resolve the upload folder (always relative to this file's location) ──────
+$folder = realpath(__DIR__ . '/../uploads/profile') . DIRECTORY_SEPARATOR;
 
 // Create folder if it doesn't exist
-if(!is_dir($folder)){
-    if(!mkdir($folder, 0775, true)){
+if (!is_dir($folder)) {
+    if (!mkdir(__DIR__ . '/../uploads/profile/', 0775, true)) {
         header("Location: profile.php?error=upload_failed&reason=mkdir");
         exit();
     }
+    $folder = realpath(__DIR__ . '/../uploads/profile') . DIRECTORY_SEPARATOR;
 }
 
 // Check folder is writable
