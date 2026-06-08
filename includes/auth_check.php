@@ -6,9 +6,7 @@ if(session_status() === PHP_SESSION_NONE){
 }
 
 // Always ensure $conn is available
-if(!isset($conn)){
-    require_once(__DIR__ . "/../config/database.php");
-}
+require_once(__DIR__ . "/../config/database.php");
 
 // Load shared notification formatting helpers
 require_once(__DIR__ . "/notification_templates.php");
@@ -36,6 +34,9 @@ if(isset($allowed_roles) && is_array($allowed_roles)){
                 exit();
             case 'receptionist':
                 header("Location: ../receptionist/dashboard.php");
+                exit();
+            case 'dentist':
+                header("Location: ../dentist/dashboard.php");
                 exit();
             default:
                 header("Location: ../auth/login.php");

@@ -39,7 +39,7 @@ if (mysqli_num_rows($result) > 0) {
                 header("Location: ../receptionist/dashboard.php");
                 exit();
             case 'dentist':
-                header("Location: ../receptionist/dashboard.php");
+                header("Location: ../dentist/dashboard.php");
                 exit();
             default:
                 $_SESSION['error'] = "No dashboard available for this role.";
@@ -54,7 +54,33 @@ if (mysqli_num_rows($result) > 0) {
 }
 
 // ---------------------------------------------------------------
-// 2. Check patients table SECOND
+// 2. Check dentists table SECOND
+// ---------------------------------------------------------------
+$sql    = "SELECT dentist_id AS user_id, full_name, password, role, profile_photo
+           FROM dentists WHERE email='$email' LIMIT 1";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+    $user = mysqli_fetch_assoc($result);
+
+    if (password_verify($password, $user['password'])) {
+        $_SESSION['user_id']       = $user['user_id'];
+        $_SESSION['role']          = $user['role'];
+        $_SESSION['name']          = $user['full_name'];
+        $_SESSION['full_name']     = $user['full_name'];
+        $_SESSION['profile_photo'] = $user['profile_photo'] ?? '';
+
+        header("Location: ../dentist/dashboard.php");
+        exit();
+    } else {
+        $_SESSION['error'] = "Incorrect password.";
+        header("Location: login.php");
+        exit();
+    }
+}
+
+// ---------------------------------------------------------------
+// 3. Check patients table THIRD
 // ---------------------------------------------------------------
 $sql    = "SELECT patient_id AS user_id, full_name, password, role, profile_photo
            FROM patients WHERE email='$email' LIMIT 1";

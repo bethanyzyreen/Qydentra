@@ -30,4 +30,8 @@ mysqli_set_charset($conn, "utf8mb4");
 
 // Ensure autocommit is ON so every INSERT/UPDATE commits immediately
 mysqli_autocommit($conn, true);
+
+// Set default timezone to Philippines/Manila
+date_default_timezone_set('Asia/Manila');
+mysqli_query($conn, "SET time_zone = '+08:00'");
 ?>
