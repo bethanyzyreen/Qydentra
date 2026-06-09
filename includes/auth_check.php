@@ -6,6 +6,7 @@ if(session_status() === PHP_SESSION_NONE){
 }
 
 // Always ensure $conn is available
+$conn = $conn ?? null;
 require_once(__DIR__ . "/../config/database.php");
 
 // Load shared notification formatting helpers

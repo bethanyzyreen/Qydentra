@@ -73,6 +73,59 @@ function notify_patient(
 }
 
 /**
+ * Insert a notification for every patient.
+ *
+ * @param mysqli      $conn
+ * @param string      $title
+ * @param string      $message
+ * @param string      $type
+ * @param string|null $appointment_id
+ * @return bool
+ */
+function notify_all_patients(
+    mysqli  $conn,
+    string  $title,
+    string  $message,
+    string  $type           = 'System',
+    ?string $appointment_id = null
+): bool {
+    $t  = mysqli_real_escape_string($conn, $title);
+    $m  = mysqli_real_escape_string($conn, $message);
+    $tp = mysqli_real_escape_string($conn, $type);
+
+    $appt_sql = ($appointment_id !== null)
+        ? "'" . mysqli_real_escape_string($conn, $appointment_id) . "'"
+        : 'NULL';
+
+    $result = mysqli_query($conn, "SELECT patient_id FROM patients");
+    if (!$result) {
+        error_log('[Qydentra] notify_all_patients failed: ' . mysqli_error($conn));
+        return false;
+    }
+    if (mysqli_num_rows($result) === 0) {
+        error_log('[Qydentra] notify_all_patients: no patient accounts found.');
+        return false;
+    }
+
+    $all = true;
+    while ($row = mysqli_fetch_assoc($result)) {
+        $pid = mysqli_real_escape_string($conn, $row['patient_id']);
+        $sql = "INSERT INTO patient_notifications
+                    (patient_id, title, type, message, appointment_id, is_read)
+                VALUES
+                    ('$pid', '$t', '$tp', '$m', $appt_sql, 0)";
+
+        if (!mysqli_query($conn, $sql)) {
+            error_log('[Qydentra] notify_all_patients failed for patient_id=' . $pid
+                . ': ' . mysqli_error($conn));
+            $all = false;
+        }
+    }
+
+    return $all;
+}
+
+/**
  * Insert a notification for every receptionist (or one specific one).
  *
  * @param mysqli      $conn

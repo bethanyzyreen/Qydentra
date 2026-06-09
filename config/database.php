@@ -1,5 +1,7 @@
 <?php
 
+$conn = $conn ?? null;
+
 if (isset($conn) && $conn instanceof mysqli) {
     return;
 }

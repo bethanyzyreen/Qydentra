@@ -36,7 +36,7 @@ if (mysqli_num_rows($result) > 0) {
                 header("Location: ../receptionist/dashboard.php");
                 exit();
             case 'admin':
-                header("Location: ../receptionist/dashboard.php");
+                header("Location: ../admin/dashboard.php");
                 exit();
             case 'dentist':
                 header("Location: ../dentist/dashboard.php");
