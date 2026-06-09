@@ -13,6 +13,7 @@ if($hour >= 5 && $hour < 12){
 
 $name = $_SESSION['name'] ?? 'Dentist';
 $initial = strtoupper(substr($name, 0, 1));
+$dentist_has_photo = !empty($_SESSION['profile_photo'] ?? '');
 ?>
 
 <div class="topbar">
@@ -26,14 +27,21 @@ $initial = strtoupper(substr($name, 0, 1));
 
 <div class="topbar-right-group">
 <!-- Dentist doesn't use receptionist notifications -->
-<div class="profile-box hover-glow" onclick="window.location.href='dashboard.php'">
+<div class="profile-box hover-glow" onclick="window.location.href='profile.php'">
 
 <div class="topbar-avatar">
     <span class="topbar-avatar-initial"><?php echo $initial; ?></span>
-    <img src="../assets/img/dentist.png"
-         alt="Profile"
-         onload="this.style.display='block'"
-         onerror="this.style.display='none'">
+    <?php if($dentist_has_photo): ?>
+        <img src="../uploads/profile/<?php echo htmlspecialchars($_SESSION['profile_photo']); ?>"
+             alt="Profile"
+             onload="this.style.display='block'"
+             onerror="this.style.display='none'">
+    <?php else: ?>
+        <img src="../assets/img/dentist.png"
+             alt="Profile"
+             onload="this.style.display='block'"
+             onerror="this.style.display='none'">
+    <?php endif; ?>
 </div>
 
 <div>

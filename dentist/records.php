@@ -16,9 +16,10 @@ if(!empty($patient_id)) {
     $patient = mysqli_fetch_assoc($patientQuery);
 
     $historyQuery = mysqli_query($conn, "
-        SELECT * FROM appointments 
-        WHERE patient_id='$patient_id' 
-        ORDER BY appointment_date DESC, appointment_time DESC
+        SELECT a.*
+        FROM appointments a
+        WHERE a.patient_id='$patient_id' 
+        ORDER BY a.appointment_date DESC, a.appointment_time DESC
     ");
 ?>
 <?php include("../includes/dentist_header.php"); ?>
@@ -31,11 +32,27 @@ if(!empty($patient_id)) {
     <a href="records.php" class="table-btn" style="text-decoration:none;"><i class="fa-solid fa-arrow-left"></i> Back to Patients</a>
 </div>
 
-<div class="table-container hover-glow" style="margin-bottom:24px;">
-    <div class="table-header">
-        <div>
-            <h2><i class="fa-solid fa-user"></i> Patient Profile: <?php echo htmlspecialchars($patient['full_name']); ?></h2>
-            <p>Email: <?php echo htmlspecialchars($patient['email']); ?> | Phone: <?php echo htmlspecialchars($patient['phone_number'] ?? 'N/A'); ?></p>
+<div class="table-container hover-glow" style="margin-bottom:28px; padding:32px 36px;">
+    <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+        <div style="width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#60a5fa,#3b82f6); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; color:#0f172a; flex-shrink:0; box-shadow:0 0 24px rgba(96,165,250,0.25);">
+            <?php echo strtoupper(substr($patient['full_name'], 0, 1)); ?>
+        </div>
+        <div style="flex:1; min-width:200px;">
+            <h2 style="font-size:22px; font-weight:700; color:#f8fafc; margin:0 0 6px 0;">
+                <?php echo htmlspecialchars($patient['full_name']); ?>
+            </h2>
+            <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:8px;">
+                <span style="display:flex; align-items:center; gap:6px; color:#94a3b8; font-size:14px;">
+                    <i class="fa-solid fa-envelope" style="color:#60a5fa;"></i>
+                    <?php echo htmlspecialchars($patient['email']); ?>
+                </span>
+                <?php if(!empty($patient['phone_number'])): ?>
+                <span style="display:flex; align-items:center; gap:6px; color:#94a3b8; font-size:14px;">
+                    <i class="fa-solid fa-phone" style="color:#60a5fa;"></i>
+                    <?php echo htmlspecialchars($patient['phone_number']); ?>
+                </span>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>
@@ -43,10 +60,10 @@ if(!empty($patient_id)) {
 
 
 <div class="table-container hover-glow">
-    <div class="table-header">
+    <div class="table-header" style="padding-bottom:20px;">
         <div>
-            <h2>Treatment History</h2>
-            <p>Past appointments and consultation notes.</p>
+            <h2 style="font-size:18px; font-weight:600; color:#f8fafc;"><i class="fa-solid fa-clock-rotate-left" style="color:#60a5fa; margin-right:8px;"></i>Treatment History</h2>
+            <p style="color:#64748b; margin-top:4px; font-size:14px;">Past appointments and consultation notes.</p>
         </div>
     </div>
     
@@ -80,23 +97,23 @@ if(!empty($patient_id)) {
                     </div>
                     <?php endif; ?>
                 </td>
-                <td style="max-width:250px; white-space:normal; vertical-align:top;">
+                <td style="white-space:normal; vertical-align:top; min-width:200px;">
                     <?php 
                     $p_notes = trim($appt['notes'] ?? '');
                     $d_notes = trim($appt['dentist_notes'] ?? '');
                     
                     if(!empty($d_notes)) {
-                        echo "<div style='margin-bottom:8px; color:#cbd5e1; font-size:13px;'>" . nl2br(htmlspecialchars($d_notes)) . "</div>";
+                        echo "<div style='margin-bottom:8px; color:#cbd5e1; font-size:13px; line-height:1.6;'>" . nl2br(htmlspecialchars($d_notes)) . "</div>";
                     }
                     if(!empty($p_notes)) {
-                        echo "<div style='font-size:12px; color:#64748b; border-left:2px solid #334155; padding-left:8px;'><i>Patient:</i> " . htmlspecialchars($p_notes) . "</div>";
+                        echo "<div style='font-size:12px; color:#64748b; border-left:2px solid #334155; padding-left:8px; margin-top:4px;'><i>Patient:</i> " . htmlspecialchars($p_notes) . "</div>";
                     }
                     if(empty($d_notes) && empty($p_notes)) {
                         echo "<span style='color:#64748b;font-style:italic;font-size:13px;'>—</span>";
                     }
                     ?>
 
-                    <button class="table-btn" style="margin-top:12px; font-size:12px; padding:6px 12px; background:rgba(96,165,250,0.1); color:#60a5fa;"
+                    <button class="table-btn" style="margin-top:14px; font-size:12px; padding:6px 14px; background:rgba(96,165,250,0.1); color:#60a5fa;"
                         onclick="openHistoryModal(this)"
                         data-med="<?php echo htmlspecialchars($appt['medical_history'] ?? ''); ?>"
                         data-odo="<?php echo htmlspecialchars($appt['odontogram_data'] ?? '{}'); ?>"
@@ -104,11 +121,11 @@ if(!empty($patient_id)) {
                         <i class="fa-solid fa-tooth"></i> View Chart
                     </button>
                 </td>
-                <td style="max-width:250px; white-space:normal; vertical-align:top;">
+                <td style="white-space:normal; vertical-align:top; min-width:160px;">
                     <?php 
                     $prescription = trim($appt['prescription'] ?? '');
                     if(!empty($prescription)) {
-                        echo "<div style='color:#93c5fd; font-size:13px;'>" . nl2br(htmlspecialchars($prescription)) . "</div>";
+                        echo "<div style='color:#93c5fd; font-size:13px; line-height:1.6;'>" . nl2br(htmlspecialchars($prescription)) . "</div>";
                     } else {
                         echo "<span style='color:#64748b;font-style:italic;font-size:13px;'>—</span>";
                     }

@@ -37,6 +37,12 @@ class="<?php echo ($current_page == 'records.php') ? 'active' : ''; ?>">
 <span>Patient Records</span>
 </a>
 
+<a href="profile.php"
+class="<?php echo ($current_page == 'profile.php') ? 'active' : ''; ?>">
+<i class="fa-solid fa-user-circle"></i>
+<span>My Profile</span>
+</a>
+
 <!-- Note: consultation.php is normally accessed via Schedule/Queue, not the main sidebar -->
 
 </div>

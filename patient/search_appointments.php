@@ -7,7 +7,7 @@ $user_id = $_SESSION['user_id'];
 $status = $_GET['status'] ?? 'all';
 $search = trim($_GET['search'] ?? '');
 
-$sql = "SELECT * FROM appointments WHERE patient_id='$user_id'";
+$sql = "SELECT a.*, d.full_name AS treated_by_name FROM appointments a LEFT JOIN dentists d ON a.dentist_id = d.dentist_id WHERE a.patient_id='$user_id'";
 
 // ================= STATUS FILTER =================
 if ($status !== 'all') {
@@ -45,7 +45,7 @@ $result = mysqli_query($conn, $sql);
 
 // ================= NO RESULTS =================
 if (mysqli_num_rows($result) == 0) {
-    echo "<tr><td colspan='6' style='text-align:center; padding:20px;'>No appointments found.</td></tr>";
+    echo "<tr><td colspan='7' style='text-align:center; padding:20px;'>No appointments found.</td></tr>";
     exit;
 }
 
@@ -116,6 +116,12 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <i class='fa-solid fa-clock'></i>
                 " . date("g:i A", strtotime($row['appointment_time'])) . "
             </div>
+        </td>
+
+        <td>
+            " . (!empty($row['treated_by_name'])
+                ? "<div style='display:flex;align-items:center;gap:6px;'><i class='fa-solid fa-user-doctor' style='color:#a78bfa;font-size:12px;'></i><span style='color:#c4b5fd;font-size:13px;'>" . htmlspecialchars($row['treated_by_name']) . "</span></div>"
+                : "<span style='color:#64748b;font-size:13px;'>—</span>") . "
         </td>
 
         <td>

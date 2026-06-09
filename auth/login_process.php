@@ -56,7 +56,7 @@ if (mysqli_num_rows($result) > 0) {
 // ---------------------------------------------------------------
 // 2. Check dentists table SECOND
 // ---------------------------------------------------------------
-$sql    = "SELECT dentist_id AS user_id, full_name, password, role, profile_photo
+$sql    = "SELECT dentist_id AS user_id, full_name, password, role, profile_photo, status
            FROM dentists WHERE email='$email' LIMIT 1";
 $result = mysqli_query($conn, $sql);
 
@@ -64,6 +64,12 @@ if (mysqli_num_rows($result) > 0) {
     $user = mysqli_fetch_assoc($result);
 
     if (password_verify($password, $user['password'])) {
+        // Block inactive/resigned dentists from logging in
+        if (($user['status'] ?? 'active') === 'inactive') {
+            $_SESSION['error'] = "Your account has been deactivated. Please contact the administrator.";
+            header("Location: login.php");
+            exit();
+        }
         $_SESSION['user_id']       = $user['user_id'];
         $_SESSION['role']          = $user['role'];
         $_SESSION['name']          = $user['full_name'];

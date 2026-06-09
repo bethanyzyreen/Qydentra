@@ -58,6 +58,7 @@ include("../includes/auth_check.php");
                 <th>Service</th>
                 <th>Date</th>
                 <th>Time</th>
+                <th>Dentist</th>
                 <th>Status</th>
                 <th>Queue</th>
                 <th>Action</th>

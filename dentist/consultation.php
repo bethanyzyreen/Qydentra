@@ -43,7 +43,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
     mysqli_query($conn, "
         UPDATE appointments 
         SET service_desc='$service_desc', dentist_notes='$dentist_notes', prescription='$prescription', status='$status',
-            medical_history='$medical_history', odontogram_data='$odontogram_data'
+            medical_history='$medical_history', odontogram_data='$odontogram_data',
+            dentist_id='" . mysqli_real_escape_string($conn, $_SESSION['user_id']) . "'
         WHERE appointment_id='$id'
     ");
 

@@ -407,8 +407,16 @@ mysqli_data_seek($inactiveDents, 0);
                     <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:<?php echo $isInactive ? 'rgba(248,113,113,0.10)' : 'rgba(167,139,250,0.10)'; ?>; color:<?php echo $isInactive ? '#f87171' : '#a78bfa'; ?>; border:1px solid <?php echo $isInactive ? 'rgba(248,113,113,0.18)' : 'rgba(167,139,250,0.18)'; ?>;">
-                                <i class="fa-solid fa-<?php echo $isInactive ? 'user-slash' : 'user-doctor'; ?>"></i>
+                            <div class="service-icon" style="background:<?php echo $isInactive ? 'rgba(248,113,113,0.10)' : 'rgba(167,139,250,0.10)'; ?>; color:<?php echo $isInactive ? '#f87171' : '#a78bfa'; ?>; border:1px solid <?php echo $isInactive ? 'rgba(248,113,113,0.18)' : 'rgba(167,139,250,0.18)'; ?>; overflow:hidden; padding:0;">
+                                <?php if (!empty($d['profile_photo'])): ?>
+                                    <img src="../uploads/profile/<?php echo htmlspecialchars($d['profile_photo']); ?>"
+                                         alt="<?php echo htmlspecialchars($d['full_name']); ?>"
+                                         style="width:100%; height:100%; object-fit:cover; border-radius:inherit;"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                                    <i class="fa-solid fa-<?php echo $isInactive ? 'user-slash' : 'user-doctor'; ?>" style="display:none;"></i>
+                                <?php else: ?>
+                                    <i class="fa-solid fa-<?php echo $isInactive ? 'user-slash' : 'user-doctor'; ?>"></i>
+                                <?php endif; ?>
                             </div>
                             <div>
                                 <h4><?php echo htmlspecialchars($d['full_name']); ?></h4>
@@ -492,8 +500,16 @@ mysqli_data_seek($inactiveDents, 0);
                     <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:rgba(248,113,113,0.10); color:#f87171; border:1px solid rgba(248,113,113,0.18);">
-                                <i class="fa-solid fa-user-slash"></i>
+                            <div class="service-icon" style="background:rgba(248,113,113,0.10); color:#f87171; border:1px solid rgba(248,113,113,0.18); overflow:hidden; padding:0;">
+                                <?php if (!empty($d['profile_photo'])): ?>
+                                    <img src="../uploads/profile/<?php echo htmlspecialchars($d['profile_photo']); ?>"
+                                         alt="<?php echo htmlspecialchars($d['full_name']); ?>"
+                                         style="width:100%; height:100%; object-fit:cover; border-radius:inherit; opacity:0.6;"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+                                    <i class="fa-solid fa-user-slash" style="display:none;"></i>
+                                <?php else: ?>
+                                    <i class="fa-solid fa-user-slash"></i>
+                                <?php endif; ?>
                             </div>
                             <div><h4><?php echo htmlspecialchars($d['full_name']); ?></h4></div>
                         </div>
