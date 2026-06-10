@@ -4,7 +4,7 @@
     "contact_email": "info@qydentra.com",
     "contact_phone": "",
     "appointment_limit": 20,
-    "queue_limit": 30,
+    "queue_limit": 10,
     "maintenance_mode": 0,
     "allow_registration": 1,
     "allow_cancellation": 1
