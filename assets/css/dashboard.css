@@ -1014,6 +1014,12 @@ margin-top:0px;
 width:100%;
 overflow-x:auto;
 overflow-y:visible;
+max-width:100%;
+}
+
+.table-container table {
+    min-width: 100%;
+    white-space: normal;
 }
 
 /* ================= TABLE HEADER ================= */
@@ -2186,12 +2192,7 @@ right:18px;
 .read-label i { color: #22c55e; }
 
 .notification-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #6366f1;
-    box-shadow: 0 0 8px rgba(99,102,241,0.6);
-    flex-shrink: 0;
+    display: none; /* REMOVED: Purple dot next to Mark as Read button */
 }
 
 /* ================= PROFILE HERO ================= */
