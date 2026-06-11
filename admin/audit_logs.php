@@ -131,10 +131,10 @@ $totalAllLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total
                     $colors = $actionColorMap[$actionKey] ?? ['rgba(107,114,128,0.10)','rgba(107,114,128,0.22)','#9ca3af'];
                 ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($log['audit_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($log['audit_id']); ?></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:8px;">
-                            <div style="width:28px; height:28px; border-radius:8px; background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.18); display:flex; align-items:center; justify-content:center; color:#60a5fa; font-size:11px; font-weight:700; flex-shrink:0;">
+                            <div style="width:28px; height:28px; border-radius:8px; background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.18); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:11px; font-weight:700; flex-shrink:0;">
                                 <i class="fa-solid fa-user-shield"></i>
                             </div>
                             <span style="font-size:13px;"><?php echo htmlspecialchars($log['admin_id']); ?></span>
@@ -146,7 +146,7 @@ $totalAllLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total
                         </span>
                     </td>
                     <td style="max-width:220px; font-size:13px; color:#94a3b8;"><?php echo htmlspecialchars($log['details'] ?: '—'); ?></td>
-                    <td style="font-size:12px; color:#64748b;"><?php echo htmlspecialchars($log['ip_address'] ?: '—'); ?></td>
+                    <td style="font-size:12px; color:#ffffff;"><?php echo htmlspecialchars($log['ip_address'] ?: '—'); ?></td>
                     <td><div class="table-date"><i class="fa-solid fa-clock"></i><?php echo date('M d, Y g:i A', strtotime($log['created_at'])); ?></div></td>
                 </tr>
                 <?php endwhile; ?>

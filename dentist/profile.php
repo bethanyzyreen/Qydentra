@@ -90,7 +90,7 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
     <h2 style="margin-bottom:4px;">
         <i class="fa-solid fa-user-doctor" style="color:#ffffff; margin-right:8px;"></i>My Profile
     </h2>
-    <p style="color:#64748b; font-size:13px; margin-bottom:24px;">Update your profile photo.</p>
+    <p style="color:#d1d5db; font-size:13px; margin-bottom:24px;">Update your profile photo.</p>
 
     <!-- Current photo display -->
     <div style="display:flex; align-items:center; gap:20px; margin-bottom:28px;">
@@ -107,7 +107,7 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
         </div>
         <div>
             <h3 style="margin:0 0 4px; color:#f1f5f9; font-size:18px;">Dr. <?php echo htmlspecialchars($dentist['full_name'] ?? ''); ?></h3>
-            <p style="margin:0; color:#64748b; font-size:13px;"><?php echo htmlspecialchars($dentist['email'] ?? ''); ?></p>
+            <p style="margin:0; color:#d1d5db; font-size:13px;"><?php echo htmlspecialchars($dentist['email'] ?? ''); ?></p>
             <p style="margin:4px 0 0; color:#ffffff; font-size:12px; font-weight:600;">Dentist — <?php echo htmlspecialchars($user_id); ?></p>
         </div>
     </div>

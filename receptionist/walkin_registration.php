@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])) {
         // Create new patient — trigger assigns patient_id automatically
         $tempPass = password_hash('walkin' . rand(1000, 9999), PASSWORD_DEFAULT);
         mysqli_query($conn,
-            "INSERT INTO patients (full_name, email, password, role)
-             VALUES ('$full_name', '$email', '$tempPass', 'patient')"
+            "INSERT INTO patients (patient_id, full_name, email, password, role)
+             VALUES ('$patient_id', '$full_name', '$email', '$tempPass', 'patient')"
         );
         $patient_id = get_last_inserted_id($conn, 'patients');
     }
@@ -123,7 +123,7 @@ $todayWalkins = mysqli_query($conn,
 <div class="form-group">
 <label><i class="fa-solid fa-envelope"></i> Patient Email</label>
 <input type="email" name="email" placeholder="Enter email address" required>
-<small style="color:#64748b;font-size:12px;">If not registered, a new patient account will be created.</small>
+<small style="color:#d1d5db;font-size:12px;">If not registered, a new patient account will be created.</small>
 </div>
 
 <div class="form-group">

@@ -36,4 +36,20 @@ mysqli_autocommit($conn, true);
 // Set default timezone to Philippines/Manila
 date_default_timezone_set('Asia/Manila');
 mysqli_query($conn, "SET time_zone = '+08:00'");
+
+// ---------------------------------------------------------------
+// Schema migration: ensure dentists table has all required columns
+// (guards against importing an older SQL dump that lacks them)
+// ---------------------------------------------------------------
+@mysqli_query($conn, "ALTER TABLE dentists ADD COLUMN IF NOT EXISTS status ENUM('active','inactive') NOT NULL DEFAULT 'active'");
+@mysqli_query($conn, "ALTER TABLE dentists ADD COLUMN IF NOT EXISTS resigned_at DATETIME DEFAULT NULL");
+@mysqli_query($conn, "ALTER TABLE dentists ADD COLUMN IF NOT EXISTS resignation_note VARCHAR(255) DEFAULT NULL");
+
+// ---------------------------------------------------------------
+// Data migration: dentists must ONLY exist in the `dentists` table.
+// Old SQL dumps seeded dentist@qydentra.com into `staffs` too, which
+// blocks login because staffs is checked first. Remove any dentist
+// rows that crept into staffs.
+// ---------------------------------------------------------------
+@mysqli_query($conn, "DELETE FROM staffs WHERE role = 'dentist'");
 ?>

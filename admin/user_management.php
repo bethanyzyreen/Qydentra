@@ -93,7 +93,7 @@ $totalCount = mysqli_num_rows($patients);
 <!-- ADD / EDIT FORM -->
 <div class="form-card hover-glow">
     <h2>
-        <i class="fa-solid fa-<?php echo $editPatient ? 'pen-to-square' : 'user-plus'; ?>" style="color:#60a5fa; margin-right:8px;"></i>
+        <i class="fa-solid fa-<?php echo $editPatient ? 'pen-to-square' : 'user-plus'; ?>" style="color:#ffffff; margin-right:8px;"></i>
         <?php echo $editPatient ? 'Edit Patient' : 'Add Patient'; ?>
     </h2>
     <form method="POST">
@@ -174,10 +174,10 @@ $totalCount = mysqli_num_rows($patients);
             <?php if (mysqli_num_rows($patients) > 0): ?>
                 <?php while ($p = mysqli_fetch_assoc($patients)): ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($p['patient_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($p['patient_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon consultation" style="background:rgba(96,165,250,0.10); color:#60a5fa; border:1px solid rgba(96,165,250,0.18);">
+                            <div class="service-icon consultation" style="background:rgba(96,165,250,0.10); color:#ffffff; border:1px solid rgba(96,165,250,0.18);">
                                 <i class="fa-solid fa-user"></i>
                             </div>
                             <div>

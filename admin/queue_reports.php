@@ -148,7 +148,7 @@ $exportParamsPdf = http_build_query(['report_date'=>$report_date,'status'=>$stat
                             <div class="service-icon consultation"><i class="fa-solid fa-user"></i></div>
                             <div>
                                 <h4><?php echo htmlspecialchars($row['patient_name'] ?: $row['patient_id']); ?></h4>
-                                <p style="font-size:12px; color:#64748b;"><?php echo htmlspecialchars($row['appointment_id']); ?></p>
+                                <p style="font-size:12px; color:#ffffff;"><?php echo htmlspecialchars($row['appointment_id']); ?></p>
                             </div>
                         </div>
                     </td>

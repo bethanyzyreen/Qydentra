@@ -1,3 +1,6 @@
-
 <?php
-echo password_hash("qydentra.recep", PASSWORD_BCRYPT);?>
+$password = "qydentra.dentist";
+$hash = password_hash($password, PASSWORD_BCRYPT);
+
+echo $hash; // Copy this into your database
+?>

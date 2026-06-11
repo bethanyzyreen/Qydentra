@@ -121,12 +121,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
         <?php endif; ?>
 
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:16px; margin-bottom:16px;">
-            <p style="margin:0 0 8px 0; color:#64748b; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Service Requested</p>
+            <p style="margin:0 0 8px 0; color:#d1d5db; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Service Requested</p>
             <p style="margin:0; color:#e2e8f0; font-size:15px; font-weight:500;"><i class="fa-solid fa-tooth" style="color:#60a5fa; margin-right:6px;"></i> <?php echo htmlspecialchars($appt['service_type'] ?? '—'); ?></p>
         </div>
 
         <div style="border-top:1px solid rgba(255,255,255,0.05); padding-top:16px; margin-bottom:16px;">
-            <p style="margin:0 0 8px 0; color:#64748b; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Patient's Reason / Note</p>
+            <p style="margin:0 0 8px 0; color:#d1d5db; font-size:12px; text-transform:uppercase; letter-spacing:0.5px;">Patient's Reason / Note</p>
             <p style="margin:0; color:#e2e8f0; font-size:14px; font-style:italic; background:rgba(255,255,255,0.02); padding:10px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
                 "<?php echo htmlspecialchars($appt['notes'] ?? 'No notes provided by patient.'); ?>"
             </p>
@@ -181,7 +181,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
                     </div>
                 </div>
                 <div id="odontogram-legend" style="margin-top:12px; display:flex; gap:12px; justify-content:center; font-size:12px;"></div>
-                <p style="margin:8px 0 0 0; color:#64748b; font-size:12px; text-align:center;">Select a status from the legend, then click the teeth to apply it.</p>
+                <p style="margin:8px 0 0 0; color:#d1d5db; font-size:12px; text-align:center;">Select a status from the legend, then click the teeth to apply it.</p>
             </div>
             <div class="form-group" style="margin-bottom: 24px;">
                 <label style="display:block; color:#94a3b8; font-size:14px; margin-bottom:8px; font-weight:500;">Dentist's Notes & Findings</label>

@@ -167,17 +167,17 @@ onclick="openPatientModal_js(
 
 <div style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);border-radius:14px;padding:16px;text-align:center;">
 <h4 style="font-size:24px;color:#60a5fa;" id="modalTotal"></h4>
-<p style="color:#64748b;font-size:12px;">Total Visits</p>
+<p style="color:#d1d5db;font-size:12px;">Total Visits</p>
 </div>
 
 <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:14px;padding:16px;text-align:center;">
 <h4 style="font-size:24px;color:#22c55e;" id="modalCompleted"></h4>
-<p style="color:#64748b;font-size:12px;">Completed</p>
+<p style="color:#d1d5db;font-size:12px;">Completed</p>
 </div>
 
 <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.15);border-radius:14px;padding:16px;text-align:center;">
 <h4 style="font-size:24px;color:#f59e0b;" id="modalPending"></h4>
-<p style="color:#64748b;font-size:12px;">Pending</p>
+<p style="color:#d1d5db;font-size:12px;">Pending</p>
 </div>
 
 </div>

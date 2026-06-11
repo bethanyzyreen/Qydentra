@@ -1,5 +1,10 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -15,10 +20,11 @@ if (empty($email) || empty($password)) {
 }
 
 // ---------------------------------------------------------------
-// 1. Check staffs table FIRST (receptionist, admin, dentist)
+// 1. Check staffs table FIRST (receptionist and admin ONLY)
+//    Dentists are stored in the separate `dentists` table — never staffs.
 // ---------------------------------------------------------------
 $sql    = "SELECT staff_id AS user_id, full_name, password, role, profile_photo
-           FROM staffs WHERE email='$email' LIMIT 1";
+           FROM staffs WHERE email='$email' AND role != 'dentist' LIMIT 1";
 $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) > 0) {

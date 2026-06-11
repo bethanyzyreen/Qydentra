@@ -72,7 +72,7 @@ $recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM
 
 <div class="grid-4" style="margin-bottom:32px;">
     <a href="service_management.php" class="stat-card hover-glow" style="text-decoration:none; display:block;">
-        <h3><i class="fa-solid fa-briefcase-medical" style="margin-right:6px; color:#60a5fa;"></i> Services</h3>
+        <h3><i class="fa-solid fa-briefcase-medical" style="margin-right:6px; color:#ffffff;"></i> Services</h3>
         <p><?php echo $totalServices; ?></p>
     </a>
     <a href="dentist_schedule_management.php" class="stat-card hover-glow" style="text-decoration:none; display:block;">
@@ -81,7 +81,7 @@ $recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM
     </a>
     <a href="notifications.php" class="stat-card hover-glow" style="text-decoration:none; display:block;">
         <h3><i class="fa-solid fa-bell" style="margin-right:6px; color:#ffffff;"></i> Notifications</h3>
-        <p style="color:#60A5FA; font-size:14px; font-weight:600; margin-top:4px;">Broadcast</p>
+        <p style="color:#ffffff; font-size:14px; font-weight:600; margin-top:4px;">Broadcast</p>
     </a>
     <a href="audit_logs.php" class="stat-card hover-glow" style="text-decoration:none; display:block;">
         <h3><i class="fa-solid fa-file-lines" style="margin-right:6px; color:#34d399;"></i> Audit Logs</h3>

@@ -94,7 +94,7 @@ mysqli_data_seek($schedules, 0);
 <!-- FORM -->
 <div class="form-card hover-glow">
     <h2>
-        <i class="fa-solid fa-<?php echo $editSchedule ? 'pen-to-square' : 'calendar-plus'; ?>" style="color:#60a5fa; margin-right:8px;"></i>
+        <i class="fa-solid fa-<?php echo $editSchedule ? 'pen-to-square' : 'calendar-plus'; ?>" style="color:#ffffff; margin-right:8px;"></i>
         <?php echo $editSchedule ? 'Edit Schedule' : 'Add Schedule'; ?>
     </h2>
     <form method="POST">
@@ -207,10 +207,10 @@ mysqli_data_seek($schedules, 0);
             <?php if ($totalSchedules > 0): ?>
                 <?php while ($sch = mysqli_fetch_assoc($schedules)): ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($sch['schedule_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($sch['schedule_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:rgba(59,130,246,0.10); color:#60A5FA; border:1px solid rgba(59,130,246,0.20);">
+                            <div class="service-icon" style="background:rgba(59,130,246,0.10); color:#ffffff; border:1px solid rgba(59,130,246,0.20);">
                                 <i class="fa-solid fa-user-doctor"></i>
                             </div>
                             <div><h4><?php echo htmlspecialchars($sch['dentist_name'] ?: $sch['dentist_id']); ?></h4></div>

@@ -96,7 +96,7 @@ mysqli_data_seek($notifications, 0);
 
 <!-- COMPOSE FORM -->
 <div class="form-card hover-glow" style="margin-bottom:0;">
-    <h2><i class="fa-solid fa-paper-plane" style="color:#60a5fa; margin-right:8px;"></i>Compose Notification</h2>
+    <h2><i class="fa-solid fa-paper-plane" style="color:#ffffff; margin-right:8px;"></i>Compose Notification</h2>
     <form method="POST">
         <input type="hidden" name="action" value="send_notification">
         <div class="form-group">
@@ -171,7 +171,7 @@ mysqli_data_seek($notifications, 0);
             <?php if ($totalNotifs > 0): ?>
                 <?php while ($n = mysqli_fetch_assoc($notifications)): ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($n['admin_notification_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($n['admin_notification_id']); ?></td>
                     <td><strong style="color:#e5e7eb;"><?php echo htmlspecialchars($n['title']); ?></strong></td>
                     <td style="max-width:240px; font-size:13px; color:#94a3b8;"><?php echo htmlspecialchars($n['message']); ?></td>
                     <td>

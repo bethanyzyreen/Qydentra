@@ -63,7 +63,7 @@ if(!empty($patient_id)) {
     <div class="table-header" style="padding-bottom:20px;">
         <div>
             <h2 style="font-size:18px; font-weight:600; color:#f8fafc;"><i class="fa-solid fa-clock-rotate-left" style="color:#60a5fa; margin-right:8px;"></i>Treatment History</h2>
-            <p style="color:#64748b; margin-top:4px; font-size:14px;">Past appointments and consultation notes.</p>
+            <p style="color:#d1d5db; margin-top:4px; font-size:14px;">Past appointments and consultation notes.</p>
         </div>
     </div>
     
@@ -106,10 +106,10 @@ if(!empty($patient_id)) {
                         echo "<div style='margin-bottom:8px; color:#cbd5e1; font-size:13px; line-height:1.6;'>" . nl2br(htmlspecialchars($d_notes)) . "</div>";
                     }
                     if(!empty($p_notes)) {
-                        echo "<div style='font-size:12px; color:#64748b; border-left:2px solid #334155; padding-left:8px; margin-top:4px;'><i>Patient:</i> " . htmlspecialchars($p_notes) . "</div>";
+                        echo "<div style='font-size:12px; color:#d1d5db; border-left:2px solid #334155; padding-left:8px; margin-top:4px;'><i>Patient:</i> " . htmlspecialchars($p_notes) . "</div>";
                     }
                     if(empty($d_notes) && empty($p_notes)) {
-                        echo "<span style='color:#64748b;font-style:italic;font-size:13px;'>—</span>";
+                        echo "<span style='color:#d1d5db;font-style:italic;font-size:13px;'>—</span>";
                     }
                     ?>
 
@@ -127,7 +127,7 @@ if(!empty($patient_id)) {
                     if(!empty($prescription)) {
                         echo "<div style='color:#93c5fd; font-size:13px; line-height:1.6;'>" . nl2br(htmlspecialchars($prescription)) . "</div>";
                     } else {
-                        echo "<span style='color:#64748b;font-style:italic;font-size:13px;'>—</span>";
+                        echo "<span style='color:#d1d5db;font-style:italic;font-size:13px;'>—</span>";
                     }
                     ?>
                 </td>
@@ -498,17 +498,17 @@ onclick="openPatientModal_js(
 
 <div style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.15);border-radius:14px;padding:16px;text-align:center;">
 <h4 style="font-size:24px;color:#60a5fa;" id="modalTotal"></h4>
-<p style="color:#64748b;font-size:12px;">Total Visits</p>
+<p style="color:#d1d5db;font-size:12px;">Total Visits</p>
 </div>
 
 <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:14px;padding:16px;text-align:center;">
 <h4 style="font-size:24px;color:#22c55e;" id="modalCompleted"></h4>
-<p style="color:#64748b;font-size:12px;">Completed</p>
+<p style="color:#d1d5db;font-size:12px;">Completed</p>
 </div>
 
 <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.15);border-radius:14px;padding:16px;text-align:center;">
 <h4 style="font-size:24px;color:#f59e0b;" id="modalPending"></h4>
-<p style="color:#64748b;font-size:12px;">Pending</p>
+<p style="color:#d1d5db;font-size:12px;">Pending</p>
 </div>
 
 </div>

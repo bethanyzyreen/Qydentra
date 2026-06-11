@@ -63,9 +63,9 @@ $settings = array_merge($defaults, $settings);
 <!-- Clinic Identity -->
 <div class="form-card hover-glow" style="margin-bottom:20px;">
     <h2 style="margin-bottom:4px;">
-        <i class="fa-solid fa-building-user" style="color:#60a5fa; margin-right:8px;"></i>Clinic Information
+        <i class="fa-solid fa-building-user" style="color:#ffffff; margin-right:8px;"></i>Clinic Information
     </h2>
-    <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Basic identity shown across the system and in patient-facing pages.</p>
+    <p style="color:#d1d5db; font-size:13px; margin-bottom:20px;">Basic identity shown across the system and in patient-facing pages.</p>
 
     <div class="form-grid-2">
         <div class="form-group">
@@ -94,18 +94,18 @@ $settings = array_merge($defaults, $settings);
     <h2 style="margin-bottom:4px;">
         <i class="fa-solid fa-calendar-check" style="color:#ffffff; margin-right:8px;"></i>Booking & Queue Limits
     </h2>
-    <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Control how many appointments and queue slots are allowed per day.</p>
+    <p style="color:#d1d5db; font-size:13px; margin-bottom:20px;">Control how many appointments and queue slots are allowed per day.</p>
 
     <div class="form-grid-2" style="max-width:560px;">
         <div class="form-group">
             <label>Max Appointments per Day</label>
             <input type="number" name="appointment_limit" value="<?php echo intval($settings['appointment_limit']); ?>" min="1" max="500" placeholder="20">
-            <small style="color:#64748b; font-size:12px; margin-top:4px; display:block;">Patients won't be able to book beyond this daily limit.</small>
+            <small style="color:#d1d5db; font-size:12px; margin-top:4px; display:block;">Patients won't be able to book beyond this daily limit.</small>
         </div>
         <div class="form-group">
             <label>Max Queue Slots per Day</label>
             <input type="number" name="queue_limit" value="<?php echo intval($settings['queue_limit']); ?>" min="1" max="500" placeholder="30">
-            <small style="color:#64748b; font-size:12px; margin-top:4px; display:block;">Walk-in queue will close once this number is reached.</small>
+            <small style="color:#d1d5db; font-size:12px; margin-top:4px; display:block;">Walk-in queue will close once this number is reached.</small>
         </div>
     </div>
 </div>
@@ -113,9 +113,9 @@ $settings = array_merge($defaults, $settings);
 <!-- System Toggles -->
 <div class="form-card hover-glow" style="margin-bottom:20px;">
     <h2 style="margin-bottom:4px;">
-        <i class="fa-solid fa-toggle-on" style="color:#4ade80; margin-right:8px;"></i>System Controls
+        <i class="fa-solid fa-toggle-on" style="color:#ffffff; margin-right:8px;"></i>System Controls
     </h2>
-    <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Enable or disable key system behaviours.</p>
+    <p style="color:#d1d5db; font-size:13px; margin-bottom:20px;">Enable or disable key system behaviours.</p>
 
     <div style="display:flex; flex-direction:column; gap:16px;">
         <label class="toggle-row">
@@ -177,7 +177,7 @@ $settings = array_merge($defaults, $settings);
 .toggle-row:hover { border-color: rgba(96,165,250,0.25); }
 .toggle-row > div:last-child { flex:1; }
 .toggle-row strong { display:block; font-size:14px; color:#e2e8f0; margin-bottom:2px; }
-.toggle-row p { margin:0; font-size:12px; color:#64748b; line-height:1.4; }
+.toggle-row p { margin:0; font-size:12px; color:#d1d5db; line-height:1.4; }
 .toggle-wrap {
     position: relative;
     width: 44px;

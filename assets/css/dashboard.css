@@ -315,7 +315,7 @@ background:linear-gradient(135deg,#60A5FA,#3B82F6);
 
 .topbar-left p{
 margin-top:10px;
-color:#9ca3af;
+color:#ffffff;
 font-size:15px;
 }
 
@@ -369,7 +369,7 @@ box-shadow:
 
 .profile-role{
 font-size:13px;
-color:#9ca3af;
+color:#ffffff;
 }
 
 .profile-box{
@@ -635,7 +635,7 @@ color:#34d399;
 
 .card p{
 font-size:13px;
-color:#9ca3af;
+color:#ffffff;
 line-height:1.5;
 }
 
@@ -803,7 +803,7 @@ linear-gradient(
 #2563EB
 );
 
-color:#111827;
+color:#ffffff;
 
 transition:0.3s;
 
@@ -917,7 +917,7 @@ transition:0.3s ease;
 }
 
 .search-box::placeholder{
-color:#9ca3af;
+color:#ffffff;
 }
 
 .search-box:focus{
@@ -1041,7 +1041,7 @@ margin:0;
 
 .table-header p{
 font-size:14px;
-color:#9ca3af;
+color:#ffffff;
 line-height:1.5;
 
 margin:0;
@@ -1123,7 +1123,7 @@ font-weight:600;
 letter-spacing:0.6px;
 text-transform:uppercase;
 
-color:#94a3b8;
+color:#ffffff;
 
 vertical-align:middle;
 }
@@ -1268,7 +1268,7 @@ color:#f8fafc;
 
 .service-info p{
 font-size:13px;
-color:#9ca3af;
+color:#ffffff;
 }
 
 /* ================= DATE ================= */
@@ -1356,7 +1356,7 @@ color:#c084fc;
 .status-pill.no-show{
 background:rgba(107,114,128,0.15);
 border:1px solid rgba(156,163,175,0.25);
-color:#9ca3af;
+color:#ffffff;
 }
 
 /* In Progress (with hyphen class from PHP str_replace) */
@@ -1732,7 +1732,7 @@ font-weight:700;
 
 .guide-card .table-header p{
 font-size:14px;
-color:#9ca3af;
+color:#ffffff;
 }
 
 /* GUIDE ITEMS */
@@ -1789,7 +1789,7 @@ color:#f8fafc;
 
 .guide-item p{
 font-size:13px;
-color:#9ca3af;
+color:#ffffff;
 line-height:1.5;
 }
 
@@ -1895,7 +1895,7 @@ linear-gradient(
 
 font-size:15px;
 
-color:#9ca3af;
+color:#ffffff;
 
 margin-bottom:28px;
 }
@@ -2000,7 +2000,7 @@ margin:0 0 22px 0;
 
 .page-header p{
     margin-top:6px;
-    color:#9ca3af;
+    color:#ffffff;
     font-size:15px;
 }
 
@@ -2125,7 +2125,7 @@ line-height:1.4;
 
 .notification-content small{
 font-size:12px;
-color:#9ca3af;
+color:#ffffff;
 }
 
 /* UNREAD DOT */
@@ -2178,7 +2178,7 @@ right:18px;
 
 .read-label {
     font-size: 0.75rem;
-    color: #64748b;
+    color: #ffffff;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2331,7 +2331,7 @@ margin-bottom:6px;
 .profile-email{
 
 font-size:15px;
-color:#9ca3af;
+color:#ffffff;
 
 margin-bottom:14px;
 }
@@ -2460,7 +2460,7 @@ text-align:center;
 display:block;
 
 font-size:12px;
-color:#9ca3af;
+color:#ffffff;
 
 margin-bottom:6px;
 }
@@ -2580,7 +2580,7 @@ background:linear-gradient(
 #2563EB
 );
 
-color:#111827;
+color:#ffffff;
 
 transition:0.3s;
 }
@@ -2694,7 +2694,7 @@ table td:last-child{
 /* ================= EMPTY ACTION ================= */
 
 .action-empty{
-    color:#94a3b8;
+    color:#ffffff;
     font-weight:600;
 }
 
@@ -2853,7 +2853,7 @@ grid-template-columns:1fr;
 .pat-notif-icon-read {
     background: rgba(100,116,139,0.15);
     border: 1.5px solid rgba(100,116,139,0.2);
-    color: #64748b;
+    color: #ffffff;
 }
 
 /* Message body */
@@ -2870,7 +2870,7 @@ grid-template-columns:1fr;
 }
 .pat-notif-time {
     font-size: 0.75rem;
-    color: #64748b;
+    color: #ffffff;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -3106,5 +3106,5 @@ grid-template-columns:1fr;
 }
 .notification-content small,
 .pat-notif-time {
-    color: #94a3b8 !important;
+    color: #ffffff !important;
 }

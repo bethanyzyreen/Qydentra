@@ -80,7 +80,7 @@ mysqli_data_seek($services, 0);
 <!-- FORM -->
 <div class="form-card hover-glow">
     <h2>
-        <i class="fa-solid fa-<?php echo $editService ? 'pen-to-square' : 'plus-circle'; ?>" style="color:#60a5fa; margin-right:8px;"></i>
+        <i class="fa-solid fa-<?php echo $editService ? 'pen-to-square' : 'plus-circle'; ?>" style="color:#ffffff; margin-right:8px;"></i>
         <?php echo $editService ? 'Edit Service' : 'Add Service'; ?>
     </h2>
     <form method="POST">
@@ -139,10 +139,10 @@ mysqli_data_seek($services, 0);
             <?php if ($totalServices > 0): ?>
                 <?php while ($svc = mysqli_fetch_assoc($services)): ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($svc['service_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($svc['service_id']); ?></td>
                     <td>
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <div style="width:34px; height:34px; border-radius:10px; background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.18); display:flex; align-items:center; justify-content:center; color:#60a5fa; flex-shrink:0;">
+                            <div style="width:34px; height:34px; border-radius:10px; background:rgba(96,165,250,0.10); border:1px solid rgba(96,165,250,0.18); display:flex; align-items:center; justify-content:center; color:#ffffff; flex-shrink:0;">
                                 <i class="fa-solid fa-tooth" style="font-size:13px;"></i>
                             </div>
                             <strong><?php echo htmlspecialchars($svc['service_name']); ?></strong>

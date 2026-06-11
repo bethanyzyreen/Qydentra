@@ -121,7 +121,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         <td>
             " . (!empty($row['treated_by_name'])
                 ? "<div style='display:flex;align-items:center;gap:6px;'><i class='fa-solid fa-user-doctor' style='color:#ffffff;font-size:12px;'></i><span style='color:#93C5FD;font-size:13px;'>" . htmlspecialchars($row['treated_by_name']) . "</span></div>"
-                : "<span style='color:#64748b;font-size:13px;'>—</span>") . "
+                : "<span style='color:#d1d5db;font-size:13px;'>—</span>") . "
         </td>
 
         <td>

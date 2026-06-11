@@ -208,7 +208,7 @@ mysqli_data_seek($inactiveDents, 0);
 <?php if ($editStaff): ?>
 <div class="form-card hover-glow">
     <h2>
-        <i class="fa-solid fa-pen-to-square" style="color:#60a5fa; margin-right:8px;"></i>
+        <i class="fa-solid fa-pen-to-square" style="color:#ffffff; margin-right:8px;"></i>
         Edit Staff Account
     </h2>
     <form method="POST">
@@ -234,7 +234,7 @@ mysqli_data_seek($inactiveDents, 0);
         </div>
         <div class="form-grid-2" style="max-width:520px;">
             <div class="form-group">
-                <label>New Password <span style="color:#64748b; font-weight:400;">(leave blank to keep current)</span></label>
+                <label>New Password <span style="color:#d1d5db; font-weight:400;">(leave blank to keep current)</span></label>
                 <input type="password" name="password" placeholder="••••••••">
             </div>
         </div>
@@ -260,10 +260,10 @@ mysqli_data_seek($inactiveDents, 0);
             <?php if ($totalStaff > 0): ?>
                 <?php while ($s = mysqli_fetch_assoc($staffList)): ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($s['staff_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($s['staff_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:rgba(96,165,250,0.10); color:#60a5fa; border:1px solid rgba(96,165,250,0.18);">
+                            <div class="service-icon" style="background:rgba(96,165,250,0.10); color:#ffffff; border:1px solid rgba(96,165,250,0.18);">
                                 <i class="fa-solid fa-id-badge"></i>
                             </div>
                             <div><h4><?php echo htmlspecialchars($s['full_name']); ?></h4></div>
@@ -344,7 +344,7 @@ mysqli_data_seek($inactiveDents, 0);
                     </option>
                 <?php endwhile; ?>
             </select>
-            <small style="display:block; margin-top:6px; color:#64748b; font-size:12px;"><i class="fa-solid fa-circle-info" style="margin-right:4px;"></i>Appointments, dental records and schedules will be reassigned to this new dentist. The resigned dentist account is preserved.</small>
+            <small style="display:block; margin-top:6px; color:#d1d5db; font-size:12px;"><i class="fa-solid fa-circle-info" style="margin-right:4px;"></i>Appointments, dental records and schedules will be reassigned to this new dentist. The resigned dentist account is preserved.</small>
         </div>
         <?php endif; ?>
         <?php endif; ?>
@@ -369,14 +369,14 @@ mysqli_data_seek($inactiveDents, 0);
             </div>
             <div>
                 <h3 style="margin:0; font-size:16px; color:#f1f5f9;">Mark as Resigned / Inactive</h3>
-                <p style="margin:2px 0 0; font-size:12px; color:#64748b;">The dentist account and all records will be preserved.</p>
+                <p style="margin:2px 0 0; font-size:12px; color:#d1d5db;">The dentist account and all records will be preserved.</p>
             </div>
         </div>
         <form method="POST" id="resignForm">
             <input type="hidden" name="action" value="mark_resigned">
             <input type="hidden" name="dentist_id" id="resignDentistId">
             <div class="form-group" style="margin-bottom:20px;">
-                <label style="font-size:13px; color:#94a3b8; margin-bottom:6px; display:block;">Reason / Note <span style="color:#64748b;">(optional)</span></label>
+                <label style="font-size:13px; color:#94a3b8; margin-bottom:6px; display:block;">Reason / Note <span style="color:#d1d5db;">(optional)</span></label>
                 <input type="text" name="resignation_note" id="resignNote" placeholder="e.g. Resigned effective June 2026" style="width:100%; background:#0f172a; border:1px solid rgba(248,113,113,0.2); border-radius:8px; padding:10px 12px; color:#f1f5f9; font-size:14px; outline:none; box-sizing:border-box;">
             </div>
             <div style="display:flex; gap:10px;">
@@ -404,10 +404,10 @@ mysqli_data_seek($inactiveDents, 0);
                 <?php while ($d = mysqli_fetch_assoc($dentistList)): ?>
                 <?php $isInactive = ($d['status'] ?? 'active') === 'inactive'; ?>
                 <tr style="<?php echo $isInactive ? 'opacity:0.6;' : ''; ?>">
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:<?php echo $isInactive ? 'rgba(248,113,113,0.10)' : 'rgba(59,130,246,0.10)'; ?>; color:<?php echo $isInactive ? '#f87171' : '#60A5FA'; ?>; border:1px solid <?php echo $isInactive ? 'rgba(248,113,113,0.18)' : 'rgba(59,130,246,0.20)'; ?>; overflow:hidden; padding:0;">
+                            <div class="service-icon" style="background:<?php echo $isInactive ? 'rgba(248,113,113,0.10)' : 'rgba(59,130,246,0.10)'; ?>; color:<?php echo $isInactive ? '#f87171' : '#ffffff'; ?>; border:1px solid <?php echo $isInactive ? 'rgba(248,113,113,0.18)' : 'rgba(59,130,246,0.20)'; ?>; overflow:hidden; padding:0;">
                                 <?php if (!empty($d['profile_photo'])): ?>
                                     <img src="../uploads/profile/<?php echo htmlspecialchars($d['profile_photo']); ?>"
                                          alt="<?php echo htmlspecialchars($d['full_name']); ?>"
@@ -421,7 +421,7 @@ mysqli_data_seek($inactiveDents, 0);
                             <div>
                                 <h4><?php echo htmlspecialchars($d['full_name']); ?></h4>
                                 <?php if ($isInactive && $d['resignation_note']): ?>
-                                    <small style="color:#64748b; font-size:11px;"><i class="fa-solid fa-note-sticky" style="margin-right:3px;"></i><?php echo htmlspecialchars($d['resignation_note']); ?></small>
+                                    <small style="color:#d1d5db; font-size:11px;"><i class="fa-solid fa-note-sticky" style="margin-right:3px;"></i><?php echo htmlspecialchars($d['resignation_note']); ?></small>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -497,7 +497,7 @@ mysqli_data_seek($inactiveDents, 0);
             <?php if ($totalInactive > 0): ?>
                 <?php while ($d = mysqli_fetch_assoc($inactiveDents)): ?>
                 <tr style="opacity:0.75;">
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
                     <td>
                         <div class="service-info">
                             <div class="service-icon" style="background:rgba(248,113,113,0.10); color:#f87171; border:1px solid rgba(248,113,113,0.18); overflow:hidden; padding:0;">
@@ -516,7 +516,7 @@ mysqli_data_seek($inactiveDents, 0);
                     </td>
                     <td style="color:#94a3b8; font-size:13px;"><?php echo htmlspecialchars($d['email']); ?></td>
                     <td><div class="table-date"><i class="fa-solid fa-calendar-days"></i><?php echo $d['resigned_at'] ? date('M d, Y', strtotime($d['resigned_at'])) : '—'; ?></div></td>
-                    <td style="font-size:13px; color:#64748b; max-width:180px;"><?php echo htmlspecialchars($d['resignation_note'] ?: '—'); ?></td>
+                    <td style="font-size:13px; color:#d1d5db; max-width:180px;"><?php echo htmlspecialchars($d['resignation_note'] ?: '—'); ?></td>
                     <td>
                         <div class="action-group">
                             <form method="POST" style="display:inline;" onsubmit="return confirm('Reactivate this dentist account?');">

@@ -172,7 +172,7 @@ $exportParamsPdf = http_build_query(['start_date'=>$start_date,'end_date'=>$end_
             <?php if (count($appointments) > 0): ?>
                 <?php foreach ($appointments as $row): ?>
                 <tr>
-                    <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($row['appointment_id']); ?></td>
+                    <td style="color:#ffffff; font-size:12px;"><?php echo htmlspecialchars($row['appointment_id']); ?></td>
                     <td>
                         <div class="service-info">
                             <div class="service-icon consultation"><i class="fa-solid fa-user"></i></div>
