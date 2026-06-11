@@ -108,7 +108,7 @@ $todayWalkins = mysqli_query($conn,
 
 <div class="table-header">
 <div>
-<h2>Walk-in Registration</h2>
+<h2><i class="fa-solid fa-person-walking-arrow-right" style="color:#ffffff; margin-right:8px;"></i>Walk-in Registration</h2>
 <p>Register walk-in patients and assign queue numbers.</p>
 </div>
 </div>
@@ -173,7 +173,7 @@ Register Walk-in
 
 <div class="table-header">
 <div>
-<h2>Today's Queue</h2>
+<h2><i class="fa-solid fa-list-ol" style="color:#ffffff; margin-right:8px;"></i>Today's Queue</h2>
 <p><?php echo date("F d, Y"); ?></p>
 </div>
 </div>

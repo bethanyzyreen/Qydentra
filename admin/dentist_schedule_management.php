@@ -187,7 +187,7 @@ mysqli_data_seek($schedules, 0);
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Dentist Schedules</h2>
+            <h2><i class="fa-solid fa-calendar-week" style="color:#ffffff; margin-right:8px;"></i>Dentist Schedules</h2>
             <p><?php echo $totalSchedules; ?> schedule<?php echo $totalSchedules != 1 ? 's' : ''; ?> found.</p>
         </div>
     </div>
@@ -210,7 +210,7 @@ mysqli_data_seek($schedules, 0);
                     <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($sch['schedule_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:rgba(167,139,250,0.10); color:#a78bfa; border:1px solid rgba(167,139,250,0.18);">
+                            <div class="service-icon" style="background:rgba(59,130,246,0.10); color:#60A5FA; border:1px solid rgba(59,130,246,0.20);">
                                 <i class="fa-solid fa-user-doctor"></i>
                             </div>
                             <div><h4><?php echo htmlspecialchars($sch['dentist_name'] ?: $sch['dentist_id']); ?></h4></div>

@@ -142,7 +142,7 @@ $exportParamsPdf = http_build_query(['start_date'=>$start_date,'end_date'=>$end_
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Appointments</h2>
+            <h2><i class="fa-solid fa-calendar-days" style="color:#ffffff; margin-right:8px;"></i>Appointments</h2>
             <p><?php echo (int)$totals['total']; ?> result<?php echo $totals['total'] != 1 ? 's' : ''; ?> for <?php echo date('M d', strtotime($start_date)); ?> – <?php echo date('M d, Y', strtotime($end_date)); ?>.</p>
         </div>
         <div style="display:flex; gap:10px;">

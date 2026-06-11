@@ -99,7 +99,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
 <div class="table-container hover-glow" style="margin-bottom: 0;">
     <div class="table-header">
         <div>
-            <h2><i class="fa-solid fa-user-injured"></i> Patient Info</h2>
+            <h2><i class="fa-solid fa-user-injured" style="color:#ffffff; margin-right:8px;"></i> Patient Info</h2>
         </div>
     </div>
     <div style="padding: 20px;">
@@ -144,7 +144,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
 <div class="table-container hover-glow" style="margin-bottom: 0;">
     <div class="table-header">
         <div>
-            <h2><i class="fa-solid fa-stethoscope"></i> Treatment & Consultation Notes</h2>
+            <h2><i class="fa-solid fa-stethoscope" style="color:#ffffff; margin-right:8px;"></i> Treatment & Consultation Notes</h2>
         </div>
         <div class="status-pill <?php echo strtolower($appt['status']); ?>">
             <?php echo ucfirst($appt['status']); ?>

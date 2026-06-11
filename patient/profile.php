@@ -55,7 +55,7 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
 
     <div class="table-header">
         <div>
-            <h2>My Profile</h2>
+            <h2><i class="fa-solid fa-user-circle" style="color:#ffffff; margin-right:8px;"></i>My Profile</h2>
             <p>Manage your account information and security settings</p>
         </div>
     </div>

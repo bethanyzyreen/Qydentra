@@ -116,7 +116,7 @@ $completedCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
 
 <div class="table-header">
 <div>
-<h2>Queue Management</h2>
+<h2><i class="fa-solid fa-users-line" style="color:#ffffff; margin-right:8px;"></i>Queue Management</h2>
 <p>Manage patient queue for <?php echo date("F d, Y", strtotime($dateFilter)); ?>.</p>
 </div>
 <button class="table-btn" onclick="window.location.href='walkin_registration.php'">

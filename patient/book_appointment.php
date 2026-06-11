@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="table-header">
 
             <div>
-                <h2>Book Appointment</h2>
+                <h2><i class="fa-solid fa-calendar-plus" style="color:#ffffff; margin-right:8px;"></i>Book Appointment</h2>
 
                 <p>
                     Schedule your next dental visit quickly and easily.
@@ -208,7 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="table-header">
 
             <div>
-                <h2>Appointment Guide</h2>
+                <h2><i class="fa-solid fa-circle-info" style="color:#ffffff; margin-right:8px;"></i>Appointment Guide</h2>
 
                 <p>
                     Important information about your appointment.

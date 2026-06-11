@@ -35,7 +35,7 @@
 }
 
 .stat-card:nth-child(2) p { color: #fbbf24; }
-.stat-card:nth-child(3) p { color: #a78bfa; }
+.stat-card:nth-child(3) p { color: #60A5FA; }
 .stat-card:nth-child(4) p { color: #34d399; }
 .stat-card:nth-child(5) p { color: #f87171; }
 .stat-card:nth-child(6) p { color: #fb923c; }
@@ -341,7 +341,7 @@
 .status-pill.approved   { background: rgba(96,165,250,0.12);  border: 1px solid rgba(96,165,250,0.25);  color: #60a5fa; }
 .status-pill.completed  { background: rgba(34,197,94,0.12);   border: 1px solid rgba(34,197,94,0.25);   color: #4ade80; }
 .status-pill.cancelled  { background: rgba(239,68,68,0.12);   border: 1px solid rgba(239,68,68,0.25);   color: #f87171; }
-.status-pill.in-progress{ background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25); color: #a78bfa; }
+.status-pill.in-progress{ background: rgba(59,130,246,0.10); border: 1px solid rgba(59,130,246,0.20); color: #60A5FA; }
 .status-pill.active     { background: rgba(34,197,94,0.12);   border: 1px solid rgba(34,197,94,0.25);   color: #4ade80; }
 .status-pill.inactive   { background: rgba(107,114,128,0.12); border: 1px solid rgba(107,114,128,0.25); color: #9ca3af; }
 
@@ -360,7 +360,7 @@
 
 .role-badge.admin        { background: rgba(239,68,68,0.12);   border: 1px solid rgba(239,68,68,0.22);   color: #f87171; }
 .role-badge.receptionist { background: rgba(96,165,250,0.12);  border: 1px solid rgba(96,165,250,0.22);  color: #60a5fa; }
-.role-badge.dentist      { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.22); color: #a78bfa; }
+.role-badge.dentist      { background: rgba(59,130,246,0.10); border: 1px solid rgba(59,130,246,0.20); color: #60A5FA; }
 .role-badge.patient      { background: rgba(34,197,94,0.12);   border: 1px solid rgba(34,197,94,0.22);   color: #4ade80; }
 
 /* ── QUEUE PILL ── */

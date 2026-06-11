@@ -52,7 +52,7 @@ if (isset($_POST['mark_all_read'])) {
 
     <div class="table-header">
         <div>
-            <h2>Notifications</h2>
+            <h2><i class="fa-solid fa-bell" style="color:#ffffff; margin-right:8px;"></i>Notifications</h2>
             <p>Stay updated with your appointment alerts and updates</p>
         </div>
         <?php

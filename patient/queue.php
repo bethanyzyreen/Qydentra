@@ -17,7 +17,7 @@ include("../includes/auth_check.php");
 
     <div class="table-header">
         <div>
-            <h2>Queue Tracking</h2>
+            <h2><i class="fa-solid fa-list-ol" style="color:#ffffff; margin-right:8px;"></i>Queue Tracking</h2>
             <p>View your current queue status and position</p>
         </div>
     </div>

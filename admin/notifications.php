@@ -141,7 +141,7 @@ mysqli_data_seek($notifications, 0);
             <div><i class="fa-solid fa-users" style="color:#60a5fa; width:18px;"></i> <strong>All Users</strong> — patients + receptionists</div>
             <div><i class="fa-solid fa-user" style="color:#4ade80; width:18px;"></i> <strong>Patients Only</strong> — visible in patient portal</div>
             <div><i class="fa-solid fa-id-badge" style="color:#fbbf24; width:18px;"></i> <strong>Receptionists Only</strong> — staff-facing</div>
-            <div><i class="fa-solid fa-bullseye" style="color:#a78bfa; width:18px;"></i> <strong>Specific ID</strong> — target one account</div>
+            <div><i class="fa-solid fa-bullseye" style="color:#ffffff; width:18px;"></i> <strong>Specific ID</strong> — target one account</div>
         </div>
     </div>
 </div>
@@ -152,7 +152,7 @@ mysqli_data_seek($notifications, 0);
 <div class="table-container hover-glow" style="margin-top:24px;">
     <div class="table-header">
         <div>
-            <h2>Sent Notifications</h2>
+            <h2><i class="fa-solid fa-paper-plane" style="color:#ffffff; margin-right:8px;"></i>Sent Notifications</h2>
             <p><?php echo $totalNotifs; ?> notification<?php echo $totalNotifs != 1 ? 's' : ''; ?> on record.</p>
         </div>
     </div>

@@ -110,7 +110,7 @@ $exportParamsPdf = http_build_query(['report_date'=>$report_date,'status'=>$stat
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Queue List</h2>
+            <h2><i class="fa-solid fa-list-ol" style="color:#ffffff; margin-right:8px;"></i>Queue List</h2>
             <p><?php echo date('l, F d, Y', strtotime($report_date)); ?> — <?php echo (int)$totals['total']; ?> entrie<?php echo $totals['total'] != 1 ? 's' : ''; ?>.</p>
         </div>
         <div style="display:flex; gap:10px;">

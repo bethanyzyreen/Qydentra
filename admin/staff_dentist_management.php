@@ -193,7 +193,7 @@ mysqli_data_seek($inactiveDents, 0);
     <a href="?tab=staff" class="table-btn <?php echo $activeTab === 'staff' ? 'active' : ''; ?>" style="<?php echo $activeTab === 'staff' ? 'background:rgba(96,165,250,0.14); border-color:rgba(96,165,250,0.30); color:#60a5fa;' : ''; ?>">
         <i class="fa-solid fa-id-badge"></i> Staff (<?php echo $totalStaff; ?>)
     </a>
-    <a href="?tab=dentists" class="table-btn <?php echo $activeTab === 'dentists' ? 'active' : ''; ?>" style="<?php echo $activeTab === 'dentists' ? 'background:rgba(167,139,250,0.14); border-color:rgba(167,139,250,0.30); color:#a78bfa;' : ''; ?>">
+    <a href="?tab=dentists" class="table-btn <?php echo $activeTab === 'dentists' ? 'active' : ''; ?>" style="<?php echo $activeTab === 'dentists' ? 'background:rgba(59,130,246,0.10); border-color:rgba(59,130,246,0.30); color:#60A5FA;' : ''; ?>">
         <i class="fa-solid fa-user-doctor"></i> Dentists (<?php echo $totalDentists; ?>)
     </a>
     <?php if ($totalInactive > 0): ?>
@@ -250,7 +250,7 @@ mysqli_data_seek($inactiveDents, 0);
 
 <div class="table-container hover-glow">
     <div class="table-header">
-        <div><h2>Staff Accounts</h2><p><?php echo $totalStaff; ?> staff account<?php echo $totalStaff != 1 ? 's' : ''; ?>.</p></div>
+        <div><h2><i class="fa-solid fa-users-gear" style="color:#ffffff; margin-right:8px;"></i>Staff Accounts</h2><p><?php echo $totalStaff; ?> staff account<?php echo $totalStaff != 1 ? 's' : ''; ?>.</p></div>
     </div>
     <table>
         <thead>
@@ -299,7 +299,7 @@ mysqli_data_seek($inactiveDents, 0);
 <!-- ── DENTIST SECTION ── -->
 <div class="form-card hover-glow">
     <h2>
-        <i class="fa-solid fa-<?php echo $editDentist ? 'pen-to-square' : 'user-plus'; ?>" style="color:#a78bfa; margin-right:8px;"></i>
+        <i class="fa-solid fa-<?php echo $editDentist ? 'pen-to-square' : 'user-plus'; ?>" style="color:#ffffff; margin-right:8px;"></i>
         <?php echo $editDentist ? 'Edit Dentist Account' : 'Add Dentist Account'; ?>
     </h2>
     <form method="POST">
@@ -349,7 +349,7 @@ mysqli_data_seek($inactiveDents, 0);
         <?php endif; ?>
         <?php endif; ?>
         <div class="form-actions">
-            <button type="submit" class="btn-primary" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">
+            <button type="submit" class="btn-primary" style="background:linear-gradient(135deg,#3B82F6,#2563EB);">
                 <i class="fa-solid fa-<?php echo $editDentist ? 'floppy-disk' : 'plus'; ?>"></i>
                 <?php echo $editDentist ? 'Save Changes' : 'Create Dentist'; ?>
             </button>
@@ -393,7 +393,7 @@ mysqli_data_seek($inactiveDents, 0);
 
 <div class="table-container hover-glow">
     <div class="table-header">
-        <div><h2>Dentist Accounts</h2><p><?php echo $totalDentists; ?> dentist<?php echo $totalDentists != 1 ? 's' : ''; ?> on record.</p></div>
+        <div><h2><i class="fa-solid fa-user-doctor" style="color:#ffffff; margin-right:8px;"></i>Dentist Accounts</h2><p><?php echo $totalDentists; ?> dentist<?php echo $totalDentists != 1 ? 's' : ''; ?> on record.</p></div>
     </div>
     <table>
         <thead>
@@ -407,7 +407,7 @@ mysqli_data_seek($inactiveDents, 0);
                     <td style="color:#64748b; font-size:12px;"><?php echo htmlspecialchars($d['dentist_id']); ?></td>
                     <td>
                         <div class="service-info">
-                            <div class="service-icon" style="background:<?php echo $isInactive ? 'rgba(248,113,113,0.10)' : 'rgba(167,139,250,0.10)'; ?>; color:<?php echo $isInactive ? '#f87171' : '#a78bfa'; ?>; border:1px solid <?php echo $isInactive ? 'rgba(248,113,113,0.18)' : 'rgba(167,139,250,0.18)'; ?>; overflow:hidden; padding:0;">
+                            <div class="service-icon" style="background:<?php echo $isInactive ? 'rgba(248,113,113,0.10)' : 'rgba(59,130,246,0.10)'; ?>; color:<?php echo $isInactive ? '#f87171' : '#60A5FA'; ?>; border:1px solid <?php echo $isInactive ? 'rgba(248,113,113,0.18)' : 'rgba(59,130,246,0.20)'; ?>; overflow:hidden; padding:0;">
                                 <?php if (!empty($d['profile_photo'])): ?>
                                     <img src="../uploads/profile/<?php echo htmlspecialchars($d['profile_photo']); ?>"
                                          alt="<?php echo htmlspecialchars($d['full_name']); ?>"

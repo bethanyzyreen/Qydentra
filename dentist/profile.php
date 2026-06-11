@@ -88,7 +88,7 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
 
 <div class="form-card hover-glow" style="max-width:520px;">
     <h2 style="margin-bottom:4px;">
-        <i class="fa-solid fa-user-doctor" style="color:#a78bfa; margin-right:8px;"></i>My Profile
+        <i class="fa-solid fa-user-doctor" style="color:#ffffff; margin-right:8px;"></i>My Profile
     </h2>
     <p style="color:#64748b; font-size:13px; margin-bottom:24px;">Update your profile photo.</p>
 
@@ -98,9 +98,9 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
             <?php if (!empty($dentist['profile_photo'])): ?>
                 <img src="../uploads/profile/<?php echo htmlspecialchars($dentist['profile_photo']); ?>"
                      alt="Profile"
-                     style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid rgba(167,139,250,0.3);">
+                     style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid rgba(59,130,246,0.30);">
             <?php else: ?>
-                <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#a78bfa,#7c3aed); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; color:#fff; border:2px solid rgba(167,139,250,0.3);">
+                <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#3B82F6,#2563EB); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; color:#fff; border:2px solid rgba(59,130,246,0.30);">
                     <?php echo strtoupper(substr($dentist['full_name'] ?? 'D', 0, 1)); ?>
                 </div>
             <?php endif; ?>
@@ -108,7 +108,7 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
         <div>
             <h3 style="margin:0 0 4px; color:#f1f5f9; font-size:18px;">Dr. <?php echo htmlspecialchars($dentist['full_name'] ?? ''); ?></h3>
             <p style="margin:0; color:#64748b; font-size:13px;"><?php echo htmlspecialchars($dentist['email'] ?? ''); ?></p>
-            <p style="margin:4px 0 0; color:#a78bfa; font-size:12px; font-weight:600;">Dentist — <?php echo htmlspecialchars($user_id); ?></p>
+            <p style="margin:4px 0 0; color:#ffffff; font-size:12px; font-weight:600;">Dentist — <?php echo htmlspecialchars($user_id); ?></p>
         </div>
     </div>
 
@@ -116,16 +116,16 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
     <form method="POST" enctype="multipart/form-data">
         <div class="form-group" style="margin-bottom:20px;">
             <label style="font-size:13px; color:#94a3b8; margin-bottom:8px; display:block;">
-                <i class="fa-solid fa-camera" style="margin-right:5px; color:#a78bfa;"></i>Upload New Photo
+                <i class="fa-solid fa-camera" style="margin-right:5px; color:#ffffff;"></i>Upload New Photo
             </label>
             <input type="file" name="profile_photo" accept=".jpg,.jpeg,.png,.webp"
-                   style="width:100%; background:#0f172a; border:1px solid rgba(167,139,250,0.2); border-radius:10px; padding:10px 12px; color:#f1f5f9; font-size:13px; cursor:pointer; box-sizing:border-box;">
+                   style="width:100%; background:#0f172a; border:1px solid rgba(59,130,246,0.20); border-radius:10px; padding:10px 12px; color:#f1f5f9; font-size:13px; cursor:pointer; box-sizing:border-box;">
             <small style="display:block; margin-top:6px; color:#475569; font-size:12px;">
                 JPG, PNG or WebP · Max 5MB
             </small>
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn-primary" style="background:linear-gradient(135deg,#a78bfa,#7c3aed);">
+            <button type="submit" class="btn-primary" style="background:linear-gradient(135deg,#3B82F6,#2563EB);">
                 <i class="fa-solid fa-upload"></i> Save Photo
             </button>
         </div>

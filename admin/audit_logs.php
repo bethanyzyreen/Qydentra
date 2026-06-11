@@ -37,7 +37,7 @@ $totalAllLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total
     <div class="stat-card hover-glow"><h3>Total Entries</h3><p><?php echo $totalAllLogs; ?></p></div>
     <div class="stat-card hover-glow"><h3>Showing</h3><p style="color:#fbbf24;"><?php echo $totalLogs; ?></p></div>
     <div class="stat-card hover-glow"><h3>Today's Logs</h3>
-        <p style="color:#a78bfa;"><?php
+        <p style="color:#ffffff;"><?php
             $todayLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM admin_audit_logs WHERE DATE(created_at)=CURDATE()"))['total'];
             echo $todayLogs;
         ?></p>
@@ -95,7 +95,7 @@ $totalAllLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Audit History</h2>
+            <h2><i class="fa-solid fa-shield-halved" style="color:#ffffff; margin-right:8px;"></i>Audit History</h2>
             <p>Showing <?php echo $totalLogs; ?> of <?php echo $totalAllLogs; ?> total entries.</p>
         </div>
         <button class="export-btn csv" onclick="exportLogsCSV()">

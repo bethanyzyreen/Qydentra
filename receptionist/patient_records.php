@@ -38,7 +38,7 @@ ORDER BY u.full_name ASC
 
 <div class="table-header">
 <div>
-<h2>Patient Records</h2>
+<h2><i class="fa-solid fa-folder-open" style="color:#ffffff; margin-right:8px;"></i>Patient Records</h2>
 <p>Browse and search all registered patients.</p>
 </div>
 </div>

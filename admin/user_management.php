@@ -146,7 +146,7 @@ $totalCount = mysqli_num_rows($patients);
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Patient Accounts</h2>
+            <h2><i class="fa-solid fa-users" style="color:#ffffff; margin-right:8px;"></i>Patient Accounts</h2>
             <p><?php echo $totalCount; ?> patient<?php echo $totalCount != 1 ? 's' : ''; ?> registered.</p>
         </div>
         <form method="GET" style="display:flex; gap:10px; align-items:center;">

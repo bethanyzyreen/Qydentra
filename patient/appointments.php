@@ -41,7 +41,7 @@ include("../includes/auth_check.php");
     <div class="table-header">
 
         <div>
-            <h2>My Appointments</h2>
+            <h2><i class="fa-solid fa-calendar-check" style="color:#ffffff; margin-right:8px;"></i>My Appointments</h2>
             <p>All your dental appointments with status and queue tracking.</p>
         </div>
 

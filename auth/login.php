@@ -25,7 +25,7 @@ Qydentra
 </div>
 
 <p class="tagline">
-Dental Appointment & Queue System
+Dental Appointment &amp; Queue System
 </p>
 
 <?php if(isset($_SESSION["error"])): ?>
@@ -45,6 +45,13 @@ Dental Appointment & Queue System
     Your account has been deactivated. Please contact the administrator.
 </div>
 <?php endif; ?>
+
+<?php if (!empty($_GET['reset'])): ?>
+<div class="alert-success-msg">
+    If that email is registered, a reset link has been sent.
+</div>
+<?php endif; ?>
+
 <form action="login_process.php" method="POST">
 
 <div class="input-group">
@@ -53,6 +60,10 @@ Dental Appointment & Queue System
 
 <div class="input-group">
 <input type="password" name="password" placeholder="Enter your password" required>
+</div>
+
+<div class="forgot-password">
+<a href="#" onclick="openForgotModal(); return false;">Forgot password?</a>
 </div>
 
 <button type="submit">
@@ -69,6 +80,34 @@ Don't have an account?
 </div>
 
 </div>
+
+<!-- Forgot Password Modal -->
+<div class="modal-overlay" id="forgotModal">
+<div class="modal-box">
+<h3>Reset Password</h3>
+<p>Enter your email address and we'll send you a link to reset your password.</p>
+<form action="forgot_password.php" method="POST">
+<input type="email" name="reset_email" placeholder="Enter your email address" required>
+<div class="modal-actions">
+<button type="submit" class="modal-btn-send">Send Reset Link</button>
+<button type="button" class="modal-btn-cancel" onclick="closeForgotModal()">Cancel</button>
+</div>
+</form>
+</div>
+</div>
+
+<script>
+function openForgotModal() {
+    document.getElementById('forgotModal').classList.add('active');
+}
+function closeForgotModal() {
+    document.getElementById('forgotModal').classList.remove('active');
+}
+// Close on overlay click
+document.getElementById('forgotModal').addEventListener('click', function(e) {
+    if (e.target === this) closeForgotModal();
+});
+</script>
 
 </body>
 </html>

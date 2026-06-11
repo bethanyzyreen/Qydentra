@@ -80,8 +80,8 @@ $recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM
         <p style="color:#fbbf24; font-size:14px; font-weight:600; margin-top:4px;">Manage</p>
     </a>
     <a href="notifications.php" class="stat-card hover-glow" style="text-decoration:none; display:block;">
-        <h3><i class="fa-solid fa-bell" style="margin-right:6px; color:#a78bfa;"></i> Notifications</h3>
-        <p style="color:#a78bfa; font-size:14px; font-weight:600; margin-top:4px;">Broadcast</p>
+        <h3><i class="fa-solid fa-bell" style="margin-right:6px; color:#ffffff;"></i> Notifications</h3>
+        <p style="color:#60A5FA; font-size:14px; font-weight:600; margin-top:4px;">Broadcast</p>
     </a>
     <a href="audit_logs.php" class="stat-card hover-glow" style="text-decoration:none; display:block;">
         <h3><i class="fa-solid fa-file-lines" style="margin-right:6px; color:#34d399;"></i> Audit Logs</h3>
@@ -93,7 +93,7 @@ $recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Recent Appointments</h2>
+            <h2><i class="fa-solid fa-clock-rotate-left" style="color:#ffffff; margin-right:8px;"></i>Recent Appointments</h2>
             <p>Latest activity across all appointment records.</p>
         </div>
         <a href="appointment_reports.php" class="table-btn">

@@ -146,7 +146,7 @@ Please re-approve with the correct queue number.
 
 <div class="table-header">
 <div>
-<h2>Pending Appointments</h2>
+<h2><i class="fa-solid fa-hourglass-half" style="color:#ffffff; margin-right:8px;"></i>Pending Appointments</h2>
 <p>Review and approve patient appointment requests.</p>
 </div>
 <div class="badge-count"><?php echo mysqli_num_rows($pendingList); ?> Pending</div>

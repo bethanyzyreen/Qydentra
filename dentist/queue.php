@@ -87,7 +87,7 @@ $inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
 
 <div class="table-header">
 <div>
-<h2><i class="fa-solid fa-users"></i> Patient Queue</h2>
+<h2><i class="fa-solid fa-users" style="color:#ffffff; margin-right:8px;"></i> Patient Queue</h2>
 <p>Manage today's live patient queue.</p>
 </div>
 </div>
@@ -147,7 +147,7 @@ $inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
 <td>
 <?php if($row['status'] == 'In Progress'): ?>
     <!-- Already in progress, just resume -->
-    <a href="consultation.php?id=<?php echo urlencode($row['appointment_id']); ?>" class="primary-btn hover-glow" style="padding: 6px 12px; font-size: 13px;">
+    <a href="consultation.php?id=<?php echo urlencode($row['appointment_id']); ?>" class="primary-btn hover-glow" style="padding: 6px 12px; font-size: 13px; color:#ffffff;">
         <i class="fa-solid fa-play"></i> Resume
     </a>
 <?php else: ?>
@@ -155,7 +155,7 @@ $inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
     <form method="POST" style="display:inline;">
         <input type="hidden" name="action" value="call_patient">
         <input type="hidden" name="appointment_id" value="<?php echo htmlspecialchars($row['appointment_id']); ?>">
-        <button type="submit" class="primary-btn hover-glow" style="padding: 6px 12px; font-size: 13px; background:linear-gradient(135deg,#22c55e,#16a34a);">
+        <button type="submit" class="primary-btn hover-glow" style="padding: 6px 12px; font-size: 13px; background:linear-gradient(135deg,#3B82F6,#2563EB); color:#ffffff;">
             <i class="fa-solid fa-bullhorn"></i> Call
         </button>
     </form>

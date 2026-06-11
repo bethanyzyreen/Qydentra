@@ -119,7 +119,7 @@ mysqli_data_seek($services, 0);
 <div class="table-container hover-glow">
     <div class="table-header">
         <div>
-            <h2>Dental Services</h2>
+            <h2><i class="fa-solid fa-tooth" style="color:#ffffff; margin-right:8px;"></i>Dental Services</h2>
             <p><?php echo $totalServices; ?> service<?php echo $totalServices != 1 ? 's' : ''; ?> available.</p>
         </div>
     </div>

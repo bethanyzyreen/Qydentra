@@ -131,7 +131,7 @@ onclick="window.location.href='queue_management.php'">
 
 <div class="table-header">
 <div>
-<h2>Recent Appointments</h2>
+<h2><i class="fa-solid fa-clock-rotate-left" style="color:#ffffff; margin-right:8px;"></i>Recent Appointments</h2>
 <p>Latest appointment requests and their current status.</p>
 </div>
 <button class="table-btn"

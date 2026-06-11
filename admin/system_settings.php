@@ -92,7 +92,7 @@ $settings = array_merge($defaults, $settings);
 <!-- Booking & Queue -->
 <div class="form-card hover-glow" style="margin-bottom:20px;">
     <h2 style="margin-bottom:4px;">
-        <i class="fa-solid fa-calendar-check" style="color:#a78bfa; margin-right:8px;"></i>Booking & Queue Limits
+        <i class="fa-solid fa-calendar-check" style="color:#ffffff; margin-right:8px;"></i>Booking & Queue Limits
     </h2>
     <p style="color:#64748b; font-size:13px; margin-bottom:20px;">Control how many appointments and queue slots are allowed per day.</p>
 

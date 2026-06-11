@@ -131,7 +131,7 @@ LIMIT 7
 
 <div class="table-header">
 <div>
-<h2>Today's Live Queue Overview</h2>
+<h2><i class="fa-solid fa-users-line" style="color:#ffffff; margin-right:8px;"></i>Today's Live Queue Overview</h2>
 <p>Current patient queue status for today's appointments.</p>
 </div>
 <button class="table-btn" onclick="window.location.href='queue.php'">
@@ -193,11 +193,11 @@ Manage Queue
 
 <td>
 <?php if($row['status'] == 'Approved' || $row['status'] == 'In Progress'): ?>
-<a href="queue.php" class="table-btn" style="background:rgba(34,197,94,0.1); color:#22c55e;">
+<a href="queue.php" class="table-btn" style="background:rgba(59,130,246,0.12); color:#60A5FA;">
 <i class="fa-solid fa-arrow-right"></i> Go to Queue
 </a>
 <?php else: ?>
-<a href="records.php?patient_id=<?php echo urlencode($row['patient_id']); ?>" class="table-btn" style="background:rgba(96,165,250,0.1); color:#60a5fa;">
+<a href="records.php?patient_id=<?php echo urlencode($row['patient_id']); ?>" class="table-btn" style="background:rgba(59,130,246,0.12); color:#60A5FA;">
 <i class="fa-solid fa-eye"></i> View Records
 </a>
 <?php endif; ?>

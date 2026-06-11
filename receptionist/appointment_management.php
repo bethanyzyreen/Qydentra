@@ -149,7 +149,7 @@ Next available is <strong style="color:#fca5a5;">&nbsp;#<?php echo (int)$_GET['s
 
 <div class="table-header">
 <div>
-<h2>Appointment Management</h2>
+<h2><i class="fa-solid fa-calendar-days" style="color:#ffffff; margin-right:8px;"></i>Appointment Management</h2>
 <p>View, manage, and update all patient appointments.</p>
 </div>
 <button class="table-btn" onclick="window.location.href='pending_appointments.php'">

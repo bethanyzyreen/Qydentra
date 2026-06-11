@@ -32,7 +32,7 @@ ORDER BY
 
 <div class="table-header">
 <div>
-<h2><i class="fa-solid fa-calendar-day"></i> Today's Schedule</h2>
+<h2><i class="fa-solid fa-calendar-day" style="color:#ffffff; margin-right:8px;"></i> Today's Schedule</h2>
 <p>View all patients scheduled for today.</p>
 </div>
 <div class="badge-count"><?php echo mysqli_num_rows($scheduleQuery); ?> Scheduled</div>
@@ -94,7 +94,7 @@ ORDER BY
 </td>
 
 <td>
-<a href="queue.php" class="table-btn" style="background:rgba(34,197,94,0.1); color:#22c55e;">
+<a href="queue.php" class="table-btn" style="background:rgba(59,130,246,0.12); color:#60A5FA;">
 <i class="fa-solid fa-arrow-right"></i> Go to Queue
 </a>
 </td>
