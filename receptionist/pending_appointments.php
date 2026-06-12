@@ -5,29 +5,13 @@ include("../includes/auth_check.php");
 /* ================= APPROVE ACTION ================= */
 if (isset($_POST['action']) && $_POST['action'] == 'approve') {
     $id    = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
-    $queue = (int)$_POST['queue_number'];
     $date  = mysqli_real_escape_string($conn, $_POST['appointment_date']);
     $time  = mysqli_real_escape_string($conn, $_POST['appointment_time']);
 
-    // Enforce unique queue per day
-    $existing = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT COUNT(*) AS cnt FROM appointments
-         WHERE appointment_date='$date'
-         AND queue_number='$queue'
-         AND appointment_id != '$id'
-         AND status NOT IN ('Cancelled')"
-    ));
-    if ((int)$existing['cnt'] > 0) {
-        $nextAvail = mysqli_fetch_assoc(mysqli_query($conn,
-            "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
-             FROM appointments
-             WHERE appointment_date='$date'
-             AND status NOT IN ('Cancelled')"
-        ));
-        $suggested = (int)$nextAvail['next_q'];
-        header("Location: pending_appointments.php?error=queue_taken&queue=$queue&suggested=$suggested&date=$date");
-        exit();
-    }
+    // Queue number is always determined by the time slot (08:00=1 ... 17:00=10)
+    $slot_map = ['08:00'=>1,'09:00'=>2,'10:00'=>3,'11:00'=>4,'12:00'=>5,
+                 '13:00'=>6,'14:00'=>7,'15:00'=>8,'16:00'=>9,'17:00'=>10];
+    $queue = $slot_map[$time] ?? (int)($_POST['queue_number'] ?? 0);
 
     mysqli_query($conn,
         "UPDATE appointments
@@ -127,19 +111,11 @@ $nextQueue = mysqli_fetch_assoc(mysqli_query($conn,
 <?php include("../includes/receptionist_topbar.php"); ?>
 
 <?php if (isset($_GET['success'])): ?>
-<div class="alert-success">
-<i class="fa-solid fa-circle-check"></i>
-<?php echo $_GET['success'] == 'approved' ? 'Appointment approved successfully.' : 'Appointment rescheduled successfully.'; ?>
-</div>
+<div data-toast="<?php echo $_GET['success'] == 'approved' ? 'Appointment approved successfully.' : 'Appointment rescheduled successfully.'; ?>" data-toast-type="success"></div>
 <?php endif; ?>
 
 <?php if (isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
-<div class="alert-error" style="background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.30);border-radius:14px;padding:14px 20px;margin-bottom:20px;color:#f87171;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;">
-<i class="fa-solid fa-triangle-exclamation"></i>
-Queue #<?php echo (int)$_GET['queue']; ?> is already taken on <?php echo date('F d, Y', strtotime($_GET['date'])); ?>.
-Next available queue number is<strong style="color:#fca5a5;">#<?php echo (int)$_GET['suggested']; ?></strong>.
-Please re-approve with the correct queue number.
-</div>
+<div data-toast="Queue #<?php echo (int)$_GET['queue']; ?> is already taken. Next available is #<?php echo (int)$_GET['suggested']; ?>. Please re-approve with the correct queue number." data-toast-type="error"></div>
 <?php endif; ?>
 
 <div class="table-container hover-glow">
@@ -217,7 +193,7 @@ onclick="openApproveModal(
     '<?php echo addslashes($row['patient_name']); ?>',
     '<?php echo $row['appointment_date']; ?>',
     '<?php echo $row['appointment_time']; ?>',
-    <?php echo $nextQueue; ?>
+    <?php echo (int)$row['queue_number']; ?>
 )">
 <i class="fa-solid fa-check"></i> Approve
 </button>
@@ -284,7 +260,9 @@ onclick="openRescheduleModal(
 </div>
 <div class="form-group">
 <label><i class="fa-solid fa-hashtag"></i> Queue Number</label>
-<input type="number" name="queue_number" id="approveQueue" min="1" required>
+<input type="hidden" name="queue_number" id="approveQueue">
+<div id="approveQueueDisplay" style="padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#93c5fd;font-weight:600;font-size:15px;">—</div>
+<small style="color:#9ca3af;font-size:11px;margin-top:4px;display:block;">Auto-set from the chosen time slot.</small>
 </div>
 </div>
 
@@ -336,12 +314,29 @@ onclick="openRescheduleModal(
 </div>
 
 <script>
+const slotMap = {'08:00':1,'09:00':2,'10:00':3,'11:00':4,'12:00':5,
+                 '13:00':6,'14:00':7,'15:00':8,'16:00':9,'17:00':10};
+
+function getQueueFromTime(time) {
+    // Normalize to HH:00
+    var hh = time ? time.substring(0,5).replace(/:\d\d$/, ':00') : '';
+    // For <input type="time"> values like "08:00"
+    var normalized = time ? time.substring(0,2) + ':00' : '';
+    return slotMap[normalized] || slotMap[hh] || '—';
+}
+
+function updateQueueDisplay(time) {
+    var q = getQueueFromTime(time);
+    document.getElementById('approveQueue').value = q !== '—' ? q : '';
+    document.getElementById('approveQueueDisplay').textContent = q !== '—' ? '#' + q : '—';
+}
+
 function openApproveModal(id, name, date, time, queue){
     document.getElementById('approveAppointmentId').value = id;
     document.getElementById('approvePatientName').textContent = 'Patient: ' + name;
     document.getElementById('approveDate').value = date;
     document.getElementById('approveTime').value = time;
-    document.getElementById('approveQueue').value = queue;
+    updateQueueDisplay(time);
     document.getElementById('approveModal').classList.add('active');
 }
 
@@ -361,12 +356,9 @@ document.querySelectorAll('.modal-overlay').forEach(function(overlay){
     });
 });
 
-document.getElementById('approveDate').addEventListener('change', function(){
-    var date = this.value;
-    if(!date) return;
-    fetch('get_queue_suggestion.php?date=' + encodeURIComponent(date))
-        .then(function(r){ return r.json(); })
-        .then(function(data){ document.getElementById('approveQueue').value = data.next_q; });
+// When time changes in the modal, recalculate queue
+document.getElementById('approveTime').addEventListener('change', function(){
+    updateQueueDisplay(this.value);
 });
 </script>
 

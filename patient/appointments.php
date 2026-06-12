@@ -13,6 +13,19 @@ include("../includes/auth_check.php");
 
 <?php include("../includes/topbar.php"); ?>
 
+<?php if (!empty($_GET['cancelled'])): ?>
+<div data-toast="Your appointment has been cancelled. That time slot is now available for booking again." data-toast-type="success"></div>
+<?php endif; ?>
+
+<?php if (!empty($_SESSION['booking_confirmation'])): ?>
+<?php
+    $bc = $_SESSION['booking_confirmation'];
+    unset($_SESSION['booking_confirmation']);
+    $bc_msg = "Appointment booked! Queue #" . $bc['queue_number'] . " — " . $bc['time_label'] . " on " . date('M j, Y', strtotime($bc['date'])) . ".";
+?>
+<div data-toast="<?php echo htmlspecialchars($bc_msg); ?>" data-toast-type="success"></div>
+<?php endif; ?>
+
 <!-- ================= TOOLBAR ================= -->
 
 <div class="appointments-toolbar">

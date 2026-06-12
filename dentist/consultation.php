@@ -43,8 +43,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
     mysqli_query($conn, "
         UPDATE appointments 
         SET service_desc='$service_desc', dentist_notes='$dentist_notes', prescription='$prescription', status='$status',
-            medical_history='$medical_history', odontogram_data='$odontogram_data',
-            dentist_id='" . mysqli_real_escape_string($conn, $_SESSION['user_id']) . "'
+            medical_history='$medical_history', odontogram_data='$odontogram_data'
         WHERE appointment_id='$id'
     ");
 
@@ -88,9 +87,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
 </div>
 
 <?php if (isset($_GET['success']) && $_GET['success'] == 'saved'): ?>
-<div class="alert-success" style="margin-bottom:20px;">
-<i class="fa-solid fa-circle-check"></i> Treatment notes saved successfully.
-</div>
+<div data-toast="Treatment notes saved successfully." data-toast-type="success"></div>
 <?php endif; ?>
 
 <div style="display:grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-bottom: 24px;">

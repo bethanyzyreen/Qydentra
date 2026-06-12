@@ -1,0 +1,31 @@
+<?php
+header('Content-Type: application/json');
+require_once(__DIR__ . '/../config/database.php');
+/** @var mysqli $conn */
+$allowed_roles = ['patient'];
+include(__DIR__ . '/../includes/auth_check.php');
+
+$date = mysqli_real_escape_string($conn, $_GET['date'] ?? '');
+$time = mysqli_real_escape_string($conn, $_GET['time'] ?? '');
+
+$result = ['available' => true];
+
+if (empty($date) || empty($time)) {
+    echo json_encode($result);
+    exit;
+}
+
+// Normalize to hour-only (HH:00) so 10:00 and 10:01 are the same slot
+$time = date('H:00', strtotime($time));
+
+$slot_check_sql = "SELECT COUNT(*) AS cnt FROM appointments
+    WHERE appointment_date='$date'
+      AND TIME_FORMAT(appointment_time, '%H:00') = '$time'
+      AND status <> 'Cancelled'";
+
+$slot_check = mysqli_fetch_assoc(mysqli_query($conn, $slot_check_sql));
+if ($slot_check && $slot_check['cnt'] > 0) {
+    $result['available'] = false;
+}
+
+echo json_encode($result);

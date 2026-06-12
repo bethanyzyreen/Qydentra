@@ -149,7 +149,6 @@ if(!empty($patient_id)) {
     <?php endif; ?>
 </div>
 </div>
-</div>
 
 <!-- HISTORY MODAL -->
 <div class="modal-overlay" id="historyModal">

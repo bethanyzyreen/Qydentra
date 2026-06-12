@@ -37,16 +37,10 @@ $error_msgs = [
     '1'                => 'Something went wrong. Please try again.',
 ];
 if(isset($_GET['success'])): $sk = $_GET['success']; ?>
-<div class="pat-alert pat-alert-success">
-    <i class="fa-solid fa-circle-check"></i>
-    <?php echo htmlspecialchars($success_msgs[$sk] ?? 'Action completed.'); ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($success_msgs[$sk] ?? 'Action completed.'); ?>" data-toast-type="success"></div>
 <?php endif; ?>
 <?php if(isset($_GET['error'])): $ek = $_GET['error']; ?>
-<div class="pat-alert pat-alert-error">
-    <i class="fa-solid fa-triangle-exclamation"></i>
-    <?php echo htmlspecialchars($error_msgs[$ek] ?? 'Something went wrong.'); ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($error_msgs[$ek] ?? 'Something went wrong.'); ?>" data-toast-type="error"></div>
 <?php endif; ?>
 
 <div class="table-container hover-glow">

@@ -1,10 +1,10 @@
 <?php
 $allowed_roles = ['receptionist'];
-include("../includes/auth_check.php");
+include(__DIR__ . '/../includes/auth_check.php');
 
 $date = mysqli_real_escape_string($conn, $_GET['date'] ?? date('Y-m-d'));
 
-// Only count non-cancelled appointments to get next available queue number
+// Count all non-cancelled appointments (including Pending ones which now carry queue numbers)
 $row = mysqli_fetch_assoc(mysqli_query($conn,
     "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
      FROM appointments

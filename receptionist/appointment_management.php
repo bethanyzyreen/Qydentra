@@ -39,32 +39,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'cancel') {
 
 /* ================= REASSIGN QUEUE ACTION ================= */
 if (isset($_POST['action']) && $_POST['action'] == 'reassign') {
-    $id    = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
-    $queue = (int)$_POST['queue_number'];
+    $id = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
 
-    $apptDate = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT appointment_date FROM appointments WHERE appointment_id='$id'"
+    // Get the appointment's time to derive the correct queue slot
+    $apptRow = mysqli_fetch_assoc(mysqli_query($conn,
+        "SELECT appointment_time FROM appointments WHERE appointment_id='$id'"
     ));
-    $apptDateVal = mysqli_real_escape_string($conn, $apptDate['appointment_date']);
+    $apptTime = date('H:00', strtotime($apptRow['appointment_time']));
 
-    $check = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT COUNT(*) AS cnt FROM appointments
-         WHERE appointment_date='$apptDateVal'
-         AND queue_number='$queue'
-         AND appointment_id != '$id'
-         AND status NOT IN ('Cancelled')"
-    ));
-    if ((int)$check['cnt'] > 0) {
-        $nextAvail = mysqli_fetch_assoc(mysqli_query($conn,
-            "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
-             FROM appointments
-             WHERE appointment_date='$apptDateVal'
-             AND status NOT IN ('Cancelled')"
-        ));
-        $suggested = (int)$nextAvail['next_q'];
-        header("Location: appointment_management.php?error=queue_taken&queue=$queue&suggested=$suggested");
-        exit();
-    }
+    $slot_map = ['08:00'=>1,'09:00'=>2,'10:00'=>3,'11:00'=>4,'12:00'=>5,
+                 '13:00'=>6,'14:00'=>7,'15:00'=>8,'16:00'=>9,'17:00'=>10];
+    $queue = $slot_map[$apptTime] ?? (int)($_POST['queue_number'] ?? 0);
 
     mysqli_query($conn, "UPDATE appointments SET queue_number='$queue' WHERE appointment_id='$id'");
     header("Location: appointment_management.php?success=reassigned");
@@ -106,21 +91,15 @@ $appointments = mysqli_query($conn,
 <?php include("../includes/receptionist_topbar.php"); ?>
 
 <?php if (isset($_GET['success'])): ?>
-<div class="alert-success">
-<i class="fa-solid fa-circle-check"></i>
 <?php
-$msgs = ['cancelled' => 'Appointment cancelled.', 'reassigned' => 'Queue number updated.'];
-echo $msgs[$_GET['success']] ?? 'Action completed.';
+$msgs = ['cancelled' => 'Appointment cancelled. That time slot is now open for new bookings.', 'reassigned' => 'Queue number updated.'];
+$msg = $msgs[$_GET['success']] ?? 'Action completed.';
 ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($msg); ?>" data-toast-type="success"></div>
 <?php endif; ?>
 
 <?php if (isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
-<div style="background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.30);border-radius:14px;padding:14px 20px;margin-bottom:20px;color:#f87171;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;">
-<i class="fa-solid fa-triangle-exclamation"></i>
-Queue #<?php echo (int)$_GET['queue']; ?> is already taken for that date.
-Next available is <strong style="color:#fca5a5;">&nbsp;#<?php echo (int)$_GET['suggested']; ?></strong>.
-</div>
+<div data-toast="Queue #<?php echo (int)$_GET['queue']; ?> is already taken. Next available is #<?php echo (int)$_GET['suggested']; ?>." data-toast-type="error"></div>
 <?php endif; ?>
 
 <!-- FILTER + SEARCH BAR -->
@@ -269,7 +248,7 @@ onsubmit="return confirm('Cancel this appointment?')">
 <div class="modal-card">
 
 <div class="modal-header">
-<h3><i class="fa-solid fa-hashtag"></i> Reassign Queue Number</h3>
+<h3><i class="fa-solid fa-hashtag"></i> Queue Number</h3>
 <button class="modal-close" onclick="closeModal('queueModal')">
 <i class="fa-solid fa-xmark"></i>
 </button>
@@ -277,29 +256,23 @@ onsubmit="return confirm('Cancel this appointment?')">
 
 <p id="queuePatientName" style="color:#94a3b8;margin-bottom:20px;"></p>
 
-<form method="POST">
-<input type="hidden" name="action" value="reassign">
-<input type="hidden" name="appointment_id" id="queueAppointmentId">
-
-<div class="form-group">
-<label><i class="fa-solid fa-hashtag"></i> New Queue Number</label>
-<input type="number" name="queue_number" id="queueNumber" min="1" required>
+<div style="padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;text-align:center;">
+<div style="color:#9ca3af;font-size:12px;margin-bottom:6px;">Assigned Queue Number</div>
+<div id="queueDisplay" style="color:#93c5fd;font-size:28px;font-weight:700;">—</div>
+<div style="color:#6b7280;font-size:11px;margin-top:8px;">Queue numbers are fixed to their time slot.</div>
 </div>
 
-<button type="submit" class="primary-btn hover-glow">
-<i class="fa-solid fa-hashtag"></i> Update Queue
+<button type="button" class="primary-btn hover-glow" style="margin-top:16px;" onclick="closeModal('queueModal')">
+<i class="fa-solid fa-check"></i> Close
 </button>
-
-</form>
 
 </div>
 </div>
 
 <script>
 function openQueueModal(id, name, queue){
-    document.getElementById('queueAppointmentId').value = id;
     document.getElementById('queuePatientName').textContent = 'Patient: ' + name;
-    document.getElementById('queueNumber').value = queue || '';
+    document.getElementById('queueDisplay').textContent = queue ? '#' + queue : '—';
     document.getElementById('queueModal').classList.add('active');
 }
 function closeModal(id){

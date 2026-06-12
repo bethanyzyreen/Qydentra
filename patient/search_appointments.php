@@ -7,7 +7,7 @@ $user_id = $_SESSION['user_id'];
 $status = $_GET['status'] ?? 'all';
 $search = trim($_GET['search'] ?? '');
 
-$sql = "SELECT a.*, d.full_name AS treated_by_name FROM appointments a LEFT JOIN dentists d ON a.dentist_id = d.dentist_id WHERE a.patient_id='$user_id'";
+$sql = "SELECT a.*, '' AS treated_by_name FROM appointments a WHERE a.patient_id='$user_id'";
 
 // ================= STATUS FILTER =================
 if ($status !== 'all') {

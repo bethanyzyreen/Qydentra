@@ -37,14 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register_walkin'])) {
         $patient_id = get_last_inserted_id($conn, 'patients');
     }
 
-    // Get next queue number for that date (excluding cancelled)
-    $nextQueueResult = mysqli_fetch_assoc(mysqli_query($conn,
-        "SELECT COALESCE(MAX(queue_number),0)+1 AS next_q
-         FROM appointments
-         WHERE appointment_date='$date'
-         AND status NOT IN ('Cancelled')"
-    ));
-    $queueNumber = $nextQueueResult['next_q'];
+    // Queue number = slot index based on chosen time (08:00=1, 09:00=2, ... 17:00=10)
+    $slot_map = ['08:00'=>1,'09:00'=>2,'10:00'=>3,'11:00'=>4,'12:00'=>5,
+                 '13:00'=>6,'14:00'=>7,'15:00'=>8,'16:00'=>9,'17:00'=>10];
+    $queueNumber = $slot_map[$time] ?? 0;
 
     // Insert appointment — trigger assigns appointment_id
     $pid_esc = mysqli_real_escape_string($conn, $patient_id);
@@ -95,10 +91,7 @@ $todayWalkins = mysqli_query($conn,
 <?php include("../includes/receptionist_topbar.php"); ?>
 
 <?php if ($success): ?>
-<div class="alert-success">
-<i class="fa-solid fa-circle-check"></i>
-<?php echo $success; ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($success); ?>" data-toast-type="success"></div>
 <?php endif; ?>
 
 <div class="booking-layout">

@@ -48,5 +48,5 @@ if ($apptRow) {
     );
 }
 
-header("Location: appointments.php");
+header("Location: appointments.php?cancelled=1");
 exit();
