@@ -17,7 +17,7 @@
 
 | Role         | Email                          | Password                |
 |--------------|--------------------------------|-------------------------|
-| Receptionist | receptionist@qydentraa.com     | qydentra.receptionist   |
+| Receptionist | receptionist@qydentra.com     | qydentra.receptionist   |
 | Admin        | admin@qydentra.com             | qydentra.admin          |
 | Dentist      | dentist@qydentra.com           | qydentra.dentist        |
 
