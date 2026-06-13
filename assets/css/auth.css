@@ -297,3 +297,9 @@ margin-bottom: 18px;
 font-size: 14px;
 text-align: center;
 }
+
+/* Hide default browser password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}

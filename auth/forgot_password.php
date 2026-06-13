@@ -5,21 +5,19 @@ require_once '../config/database.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['reset_email'] ?? '');
 
-    // Always redirect with "success" so we don't reveal whether the email exists
+    // Always set the exact same success message
+    $_SESSION['reset_success'] = "Password reset request processed. If an account with that email exists, reset instructions have been generated.";
+
     if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $email_safe = mysqli_real_escape_string($conn, $email);
 
         // Search across all user tables (staffs, dentists, patients)
         $found = false;
 
-        $tables = [
-            ['staffs',   'full_name'],
-            ['dentists', 'full_name'],
-            ['patients', 'full_name'],
-        ];
+        $tables = ['staffs', 'dentists', 'patients'];
 
-        foreach ($tables as [$table, $name_col]) {
-            $result = mysqli_query($conn, "SELECT $name_col AS full_name FROM `$table` WHERE email='$email_safe' LIMIT 1");
+        foreach ($tables as $table) {
+            $result = mysqli_query($conn, "SELECT email FROM `$table` WHERE email='$email_safe' LIMIT 1");
             if ($result && mysqli_num_rows($result) > 0) {
                 $found = true;
                 break;
@@ -27,19 +25,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($found) {
-            // TODO: generate a reset token, store it, and email the link.
-            // Example (requires a password_resets table and mail setup):
-            //   $token = bin2hex(random_bytes(32));
-            //   $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
-            //   mysqli_query($conn, "INSERT INTO password_resets (email, token, expires_at)
-            //       VALUES ('$email_safe','$token','$expires')
-            //       ON DUPLICATE KEY UPDATE token=VALUES(token), expires_at=VALUES(expires_at)");
-            //   mail($email, 'Reset your Qydentra password',
-            //       "Click here: https://yoursite.com/auth/reset_password.php?token=$token");
+            // Generate a secure raw token
+            $raw_token = bin2hex(random_bytes(32));
+            
+            // Hash the token for storage
+            $token_hash = password_hash($raw_token, PASSWORD_DEFAULT);
+            
+            // 1 hour expiration
+            $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+            // Invalidate any previous active tokens for this email
+            mysqli_query($conn, "DELETE FROM password_resets WHERE email='$email_safe'");
+
+            // Store the hashed token in the database
+            $stmt = $conn->prepare("INSERT INTO password_resets (email, token_hash, expires_at) VALUES (?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param("sss", $email, $token_hash, $expires_at);
+                $stmt->execute();
+                $stmt->close();
+                
+                // Set the raw token in the reset URL for development mode testing
+                $reset_link = "http://localhost/Qydentra/auth/reset_password.php?email=" . urlencode($email) . "&token=" . $raw_token;
+                $_SESSION['dev_reset_link'] = $reset_link;
+                
+                // TODO: When SMTP is configured, send the $reset_link via email here.
+            }
         }
     }
 
-    header('Location: login.php?reset=1');
+    header('Location: login.php');
     exit;
 }
 

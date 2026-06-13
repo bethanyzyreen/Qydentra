@@ -146,8 +146,10 @@ if (!$insertStmt) {
 $insertStmt->bind_param("ssss", $patient_id, $name, $email, $password);
 
 if ($insertStmt->execute()) {
-    $_SESSION['success'] = "Registration successful! Please log in.";
-    header("Location: login.php");
+    $_SESSION['success'] = "Registration successful!";
+    $insertStmt->close();
+    // Auto-login using existing authentication system
+    require_once 'login_process.php';
     exit();
 } else {
     error_log("[Qydentra Registration Error] Insert failed: " . $insertStmt->error);

@@ -196,7 +196,7 @@ Register Walk-in
 
 <?php else: ?>
 <div class="empty-state" style="padding:30px 0;">
-<i class="fa-solid fa-users" style="font-size:32px;color:#334155;"></i>
+<i class="fa-solid fa-users" style="font-size:32px;color:#ffffff;"></i>
 <h3>No queue yet today</h3>
 <p>Register walk-in patients to populate the queue.</p>
 </div>

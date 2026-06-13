@@ -1,181 +1,193 @@
--- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Win64 (AMD64)
---
--- Host: localhost    Database: qydentra
--- ------------------------------------------------------
--- Server version	10.4.32-MariaDB
+-- ============================================================
+-- Qydentra Database - phpMyAdmin Compatible Version
+-- Fixed: Removed DEFINER clauses from triggers
+-- Run this AFTER creating and selecting the database
+-- ============================================================
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
+SET NAMES utf8mb4;
 
---
--- Table structure for table `_seq_appointments`
---
+-- -----------------------------------------------------------
+-- Sequence Tables
+-- -----------------------------------------------------------
 
 DROP TABLE IF EXISTS `_seq_appointments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_appointments` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_appointments`
---
-
-LOCK TABLES `_seq_appointments` WRITE;
-/*!40000 ALTER TABLE `_seq_appointments` DISABLE KEYS */;
 INSERT INTO `_seq_appointments` VALUES (4);
-/*!40000 ALTER TABLE `_seq_appointments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `_seq_pat_notif`
---
 
 DROP TABLE IF EXISTS `_seq_pat_notif`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_pat_notif` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_pat_notif`
---
-
-LOCK TABLES `_seq_pat_notif` WRITE;
-/*!40000 ALTER TABLE `_seq_pat_notif` DISABLE KEYS */;
 INSERT INTO `_seq_pat_notif` VALUES (18);
-/*!40000 ALTER TABLE `_seq_pat_notif` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `_seq_patients`
---
 
 DROP TABLE IF EXISTS `_seq_patients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_patients` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_patients`
---
-
-LOCK TABLES `_seq_patients` WRITE;
-/*!40000 ALTER TABLE `_seq_patients` DISABLE KEYS */;
 INSERT INTO `_seq_patients` VALUES (2);
-/*!40000 ALTER TABLE `_seq_patients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `_seq_rec_notif`
---
 
 DROP TABLE IF EXISTS `_seq_rec_notif`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_rec_notif` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_rec_notif`
---
-
-LOCK TABLES `_seq_rec_notif` WRITE;
-/*!40000 ALTER TABLE `_seq_rec_notif` DISABLE KEYS */;
 INSERT INTO `_seq_rec_notif` VALUES (8);
-/*!40000 ALTER TABLE `_seq_rec_notif` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `_seq_staff_ad`
---
 
 DROP TABLE IF EXISTS `_seq_staff_ad`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_staff_ad` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_staff_ad`
---
-
-LOCK TABLES `_seq_staff_ad` WRITE;
-/*!40000 ALTER TABLE `_seq_staff_ad` DISABLE KEYS */;
 INSERT INTO `_seq_staff_ad` VALUES (1);
-/*!40000 ALTER TABLE `_seq_staff_ad` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `_seq_staff_de`
---
 
 DROP TABLE IF EXISTS `_seq_staff_de`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_staff_de` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_staff_de`
---
-
-LOCK TABLES `_seq_staff_de` WRITE;
-/*!40000 ALTER TABLE `_seq_staff_de` DISABLE KEYS */;
 INSERT INTO `_seq_staff_de` VALUES (1);
-/*!40000 ALTER TABLE `_seq_staff_de` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `_seq_staff_re`
---
 
 DROP TABLE IF EXISTS `_seq_staff_re`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `_seq_staff_re` (
   `last_id` int(10) unsigned NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `_seq_staff_re`
---
-
-LOCK TABLES `_seq_staff_re` WRITE;
-/*!40000 ALTER TABLE `_seq_staff_re` DISABLE KEYS */;
 INSERT INTO `_seq_staff_re` VALUES (1);
-/*!40000 ALTER TABLE `_seq_staff_re` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `appointments`
---
+-- -----------------------------------------------------------
+-- password_resets
+-- -----------------------------------------------------------
+
+DROP TABLE IF EXISTS `password_resets`;
+CREATE TABLE `password_resets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(100) NOT NULL,
+  `token_hash` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------------
+-- staffs (no FK dependencies)
+-- -----------------------------------------------------------
+
+DROP TABLE IF EXISTS `staffs`;
+CREATE TABLE `staffs` (
+  `staff_id` varchar(10) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(50) NOT NULL,
+  `profile_photo` text DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `resigned_at` datetime DEFAULT NULL,
+  `resignation_note` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`staff_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `staffs` VALUES
+('AD001','Clinic Admin','admin@qydentra.com','$2y$10$LeToVUwUqDZzNMn7HH3mme5z4oaZnid9dGR4JxbkABCu5eNLC0sym','admin',NULL,'active',NULL,NULL,'2026-06-08 04:33:25'),
+('RE001','Clinic Receptionist','receptionist@qydentra.com','$2y$10$55aHBBqLFz35wzeS0JvaMexCGGWjEcG7laJTP4Igisizk0UT2wyiq','receptionist',NULL,'active',NULL,NULL,'2026-06-08 04:33:25');
+
+DROP TRIGGER IF EXISTS `trg_staffs_bi`;
+DELIMITER ;;
+CREATE TRIGGER `trg_staffs_bi`
+BEFORE INSERT ON `staffs`
+FOR EACH ROW
+BEGIN
+    DECLARE next_id INT;
+    DECLARE prefix  VARCHAR(2);
+
+    IF NEW.role = 'receptionist' THEN
+        UPDATE _seq_staff_re SET last_id = last_id + 1;
+        SELECT last_id INTO next_id FROM _seq_staff_re LIMIT 1;
+        SET prefix = 'RE';
+    ELSEIF NEW.role = 'dentist' THEN
+        UPDATE _seq_staff_de SET last_id = last_id + 1;
+        SELECT last_id INTO next_id FROM _seq_staff_de LIMIT 1;
+        SET prefix = 'DE';
+    ELSE
+        UPDATE _seq_staff_ad SET last_id = last_id + 1;
+        SELECT last_id INTO next_id FROM _seq_staff_ad LIMIT 1;
+        SET prefix = 'AD';
+    END IF;
+
+    SET NEW.staff_id = CONCAT(prefix, LPAD(next_id, 3, '0'));
+END;;
+DELIMITER ;
+
+-- -----------------------------------------------------------
+-- dentists (no FK dependencies)
+-- -----------------------------------------------------------
+
+DROP TABLE IF EXISTS `dentists`;
+CREATE TABLE `dentists` (
+  `dentist_id` varchar(10) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(50) DEFAULT 'dentist',
+  `specialization` varchar(100) DEFAULT NULL,
+  `contact_number` varchar(20) DEFAULT NULL,
+  `profile_photo` text DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `resigned_at` datetime DEFAULT NULL,
+  `resignation_note` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`dentist_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `dentists` VALUES
+('DE001','Clinic Dentist','dentist@qydentra.com','$2y$10$42WaES.Ih13xFS1L8kkJreAnMIQQ7aJgPOMStCSpdJP9SiRNgbEdq','dentist',NULL,NULL,NULL,'active',NULL,NULL,'2026-06-08 04:56:32');
+
+-- -----------------------------------------------------------
+-- patients (no FK dependencies)
+-- -----------------------------------------------------------
+
+DROP TABLE IF EXISTS `patients`;
+CREATE TABLE `patients` (
+  `patient_id` varchar(10) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(50) DEFAULT 'patient',
+  `profile_photo` text DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `phone_number` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `medical_history` text DEFAULT NULL,
+  `odontogram_data` text DEFAULT NULL,
+  PRIMARY KEY (`patient_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `patients` VALUES
+('PT001','Donna Mae Lat','donnamaelat@gmail.com','$2y$10$EOQmfooMdiJoXWQgIfHxEO6cR8zM9QIGpIxG6ptxteMEKMpWTC1ia','patient',NULL,'active',NULL,'2026-06-08 05:13:05','testing medical conditions ','{\"23\":\"Filled\"}'),
+('PT002','user1','user@gmail.com','$2y$10$LJtSekupQqQThEGXP1YaLO6wGsF3rJlFpx1sWGaYkv5wUceYOudTi','patient',NULL,'active',NULL,'2026-06-08 07:15:39','','{\"27\":\"Missing\"}');
+
+DROP TRIGGER IF EXISTS `trg_patients_bi`;
+DELIMITER ;;
+CREATE TRIGGER `trg_patients_bi`
+BEFORE INSERT ON `patients`
+FOR EACH ROW
+BEGIN
+    DECLARE next_id INT;
+    UPDATE _seq_patients SET last_id = last_id + 1;
+    SELECT last_id INTO next_id FROM _seq_patients LIMIT 1;
+    SET NEW.patient_id = CONCAT('PT', LPAD(next_id, 3, '0'));
+END;;
+DELIMITER ;
+
+-- -----------------------------------------------------------
+-- appointments (FK -> patients)
+-- -----------------------------------------------------------
 
 DROP TABLE IF EXISTS `appointments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `appointments` (
   `appointment_id` varchar(10) NOT NULL,
   `patient_id` varchar(10) DEFAULT NULL,
@@ -195,91 +207,31 @@ CREATE TABLE `appointments` (
   KEY `patient_id` (`patient_id`),
   CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `appointments`
---
+INSERT INTO `appointments` VALUES
+('AP001','PT001','Teeth Cleaning','Routine Dental Care','2026-06-08','15:20','Completed',1,'chuchuchu','2026-06-08 05:14:55',NULL,NULL,NULL,NULL),
+('AP002','PT001','Dental Filling','Tooth Restoration','2026-06-08','14:00','Completed',2,'this is a test for patient notes','2026-06-08 05:44:05','for filling','biogesic ','testing medical conditions ','{\"23\":\"Filled\"}'),
+('AP003','PT001','Teeth Cleaning','Routine Dental Care','2026-06-08','16:00','Completed',3,'3','2026-06-08 07:10:35','','','testing medical conditions ','{\"23\":\"Filled\"}'),
+('AP004','PT002','Teeth Cleaning','Routine Dental Care','2026-06-08','16:11','Completed',4,'','2026-06-08 07:16:20','','','','{\"27\":\"Missing\"}');
 
-LOCK TABLES `appointments` WRITE;
-/*!40000 ALTER TABLE `appointments` DISABLE KEYS */;
-INSERT INTO `appointments` VALUES ('AP001','PT001','Teeth Cleaning','Routine Dental Care','2026-06-08','15:20','Completed',1,'chuchuchu','2026-06-08 05:14:55',NULL,NULL,NULL,NULL),('AP002','PT001','Dental Filling','Tooth Restoration','2026-06-08','14:00','Completed',2,'this is a test for patient notes','2026-06-08 05:44:05','for filling','biogesic ','testing medical conditions ','{\"23\":\"Filled\"}'),('AP003','PT001','Teeth Cleaning','Routine Dental Care','2026-06-08','16:00','Completed',3,'3','2026-06-08 07:10:35','','','testing medical conditions ','{\"23\":\"Filled\"}'),('AP004','PT002','Teeth Cleaning','Routine Dental Care','2026-06-08','16:11','Completed',4,'','2026-06-08 07:16:20','','','','{\"27\":\"Missing\"}');
-/*!40000 ALTER TABLE `appointments` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DROP TRIGGER IF EXISTS `trg_appointments_bi`;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_appointments_bi
-
-BEFORE INSERT ON appointments
-
+CREATE TRIGGER `trg_appointments_bi`
+BEFORE INSERT ON `appointments`
 FOR EACH ROW
-
 BEGIN
-
     DECLARE next_id INT;
-
     UPDATE _seq_appointments SET last_id = last_id + 1;
-
     SELECT last_id INTO next_id FROM _seq_appointments LIMIT 1;
-
     SET NEW.appointment_id = CONCAT('AP', LPAD(next_id, 3, '0'));
-
-END */;;
+END;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
---
--- Table structure for table `dentists`
---
-
-DROP TABLE IF EXISTS `dentists`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `dentists` (
-  `dentist_id` varchar(10) NOT NULL,
-  `full_name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(50) DEFAULT 'dentist',
-  `specialization` varchar(100) DEFAULT NULL,
-  `contact_number` varchar(20) DEFAULT NULL,
-  `profile_photo` text DEFAULT NULL,
-  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
-  `resigned_at` datetime DEFAULT NULL,
-  `resignation_note` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`dentist_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dentists`
---
-
-LOCK TABLES `dentists` WRITE;
-/*!40000 ALTER TABLE `dentists` DISABLE KEYS */;
-INSERT INTO `dentists` VALUES ('DE001','Clinic Dentist','dentist@qydentra.com','$2y$10$42WaES.Ih13xFS1L8kkJreAnMIQQ7aJgPOMStCSpdJP9SiRNgbEdq','dentist',NULL,NULL,NULL,'active',NULL,NULL,'2026-06-08 04:56:32');
-/*!40000 ALTER TABLE `dentists` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `patient_notifications`
---
+-- -----------------------------------------------------------
+-- patient_notifications (FK -> patients, appointments)
+-- -----------------------------------------------------------
 
 DROP TABLE IF EXISTS `patient_notifications`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `patient_notifications` (
   `notification_id` varchar(10) NOT NULL,
   `patient_id` varchar(10) NOT NULL,
@@ -295,123 +247,45 @@ CREATE TABLE `patient_notifications` (
   CONSTRAINT `patient_notifications_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`patient_id`),
   CONSTRAINT `patient_notifications_ibfk_2` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `patient_notifications`
---
+INSERT INTO `patient_notifications` VALUES
+('PN001','PT001','Appointment Request Submitted','Appointment','Patient Donna Mae Lat submitted an appointment request successfully.','AP001',0,'2026-06-08 05:14:55'),
+('PN002','PT001','Appointment Approved','Appointment','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 3:20 PM.','AP001',0,'2026-06-08 05:16:52'),
+('PN003','PT001','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 05:17:55'),
+('PN004','PT001','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 05:30:49'),
+('PN005','PT001','Appointment Request Submitted','Appointment','Patient Donna Mae Lat submitted an appointment request successfully.','AP002',0,'2026-06-08 05:44:05'),
+('PN006','PT001','Appointment Approved','Appointment','Clinic Receptionist approved the Dental Filling appointment for Patient Donna Mae Lat on June 08, 2026 at 2:00 PM.','AP002',0,'2026-06-08 05:44:24'),
+('PN007','PT001','Queue Update','Queue','Your queue status has been updated to: Completed.',NULL,0,'2026-06-08 05:44:40'),
+('PN008','PT001','Queue Update','Queue','Your queue status has been updated to: Approved.',NULL,0,'2026-06-08 05:44:46'),
+('PN009','PT001','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 05:45:16'),
+('PN010','PT001','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 06:36:38'),
+('PN011','PT001','Appointment Request Submitted','Appointment','Patient Donna Mae Lat submitted an appointment request successfully.','AP003',0,'2026-06-08 07:10:35'),
+('PN012','PT001','Appointment Approved','Appointment','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 4:00 PM.','AP003',0,'2026-06-08 07:11:32'),
+('PN013','PT001','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 07:12:00'),
+('PN014','PT002','Appointment Request Submitted','Appointment','Patient user1 submitted an appointment request successfully.','AP004',0,'2026-06-08 07:16:20'),
+('PN015','PT002','Appointment Approved','Appointment','Clinic Receptionist approved the Teeth Cleaning appointment for Patient user1 on June 08, 2026 at 4:11 PM.','AP004',0,'2026-06-08 07:16:40'),
+('PN016','PT001','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 07:17:14'),
+('PN017','PT002','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 07:17:17'),
+('PN018','PT002','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 07:17:31');
 
-LOCK TABLES `patient_notifications` WRITE;
-/*!40000 ALTER TABLE `patient_notifications` DISABLE KEYS */;
-INSERT INTO `patient_notifications` VALUES ('PN001','PT001','Appointment Request Submitted','Appointment','Patient Donna Mae Lat submitted an appointment request successfully.','AP001',0,'2026-06-08 05:14:55'),('PN002','PT001','Appointment Approved','Appointment','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 3:20 PM.','AP001',0,'2026-06-08 05:16:52'),('PN003','PT001','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 05:17:55'),('PN004','PT001','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 05:30:49'),('PN005','PT001','Appointment Request Submitted','Appointment','Patient Donna Mae Lat submitted an appointment request successfully.','AP002',0,'2026-06-08 05:44:05'),('PN006','PT001','Appointment Approved','Appointment','Clinic Receptionist approved the Dental Filling appointment for Patient Donna Mae Lat on June 08, 2026 at 2:00 PM.','AP002',0,'2026-06-08 05:44:24'),('PN007','PT001','Queue Update','Queue','Your queue status has been updated to: Completed.',NULL,0,'2026-06-08 05:44:40'),('PN008','PT001','Queue Update','Queue','Your queue status has been updated to: Approved.',NULL,0,'2026-06-08 05:44:46'),('PN009','PT001','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 05:45:16'),('PN010','PT001','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 06:36:38'),('PN011','PT001','Appointment Request Submitted','Appointment','Patient Donna Mae Lat submitted an appointment request successfully.','AP003',0,'2026-06-08 07:10:35'),('PN012','PT001','Appointment Approved','Appointment','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 4:00 PM.','AP003',0,'2026-06-08 07:11:32'),('PN013','PT001','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 07:12:00'),('PN014','PT002','Appointment Request Submitted','Appointment','Patient user1 submitted an appointment request successfully.','AP004',0,'2026-06-08 07:16:20'),('PN015','PT002','Appointment Approved','Appointment','Clinic Receptionist approved the Teeth Cleaning appointment for Patient user1 on June 08, 2026 at 4:11 PM.','AP004',0,'2026-06-08 07:16:40'),('PN016','PT001','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 07:17:14'),('PN017','PT002','Dentist Calling','Queue','The Dentist is ready to see you now. Please proceed to the clinic room.',NULL,0,'2026-06-08 07:17:17'),('PN018','PT002','Consultation Finished','System','Your dental appointment has been completed. Thank you for visiting!',NULL,0,'2026-06-08 07:17:31');
-/*!40000 ALTER TABLE `patient_notifications` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DROP TRIGGER IF EXISTS `trg_pat_notif_bi`;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_pat_notif_bi
-
-BEFORE INSERT ON patient_notifications
-
+CREATE TRIGGER `trg_pat_notif_bi`
+BEFORE INSERT ON `patient_notifications`
 FOR EACH ROW
-
 BEGIN
-
     DECLARE next_id INT;
-
     UPDATE _seq_pat_notif SET last_id = last_id + 1;
-
     SELECT last_id INTO next_id FROM _seq_pat_notif LIMIT 1;
-
     SET NEW.notification_id = CONCAT('PN', LPAD(next_id, 3, '0'));
-
-END */;;
+END;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
---
--- Table structure for table `patients`
---
-
-DROP TABLE IF EXISTS `patients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `patients` (
-  `patient_id` varchar(10) NOT NULL,
-  `full_name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(50) DEFAULT 'patient',
-  `profile_photo` text DEFAULT NULL,
-  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
-  `resigned_at` datetime DEFAULT NULL,
-  `resignation_note` varchar(255) DEFAULT NULL,
-  `phone_number` varchar(20) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `medical_history` text DEFAULT NULL,
-  `odontogram_data` text DEFAULT NULL,
-  PRIMARY KEY (`patient_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `patients`
---
-
-LOCK TABLES `patients` WRITE;
-/*!40000 ALTER TABLE `patients` DISABLE KEYS */;
-INSERT INTO `patients` VALUES ('PT001','Donna Mae Lat','donnamaelat@gmail.com','$2y$10$EOQmfooMdiJoXWQgIfHxEO6cR8zM9QIGpIxG6ptxteMEKMpWTC1ia','patient',NULL,NULL,'2026-06-08 05:13:05','testing medical conditions ','{\"23\":\"Filled\"}'),('PT002','user1','user@gmail.com','$2y$10$LJtSekupQqQThEGXP1YaLO6wGsF3rJlFpx1sWGaYkv5wUceYOudTi','patient',NULL,NULL,'2026-06-08 07:15:39','','{\"27\":\"Missing\"}');
-/*!40000 ALTER TABLE `patients` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_patients_bi
-
-BEFORE INSERT ON patients
-
-FOR EACH ROW
-
-BEGIN
-
-    DECLARE next_id INT;
-
-    UPDATE _seq_patients SET last_id = last_id + 1;
-
-    SELECT last_id INTO next_id FROM _seq_patients LIMIT 1;
-
-    SET NEW.patient_id = CONCAT('PT', LPAD(next_id, 3, '0'));
-
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Table structure for table `receptionist_notifications`
---
+-- -----------------------------------------------------------
+-- receptionist_notifications (FK -> staffs, appointments)
+-- -----------------------------------------------------------
 
 DROP TABLE IF EXISTS `receptionist_notifications`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `receptionist_notifications` (
   `receptionist_notification_id` varchar(10) NOT NULL,
   `receptionist_id` varchar(10) NOT NULL,
@@ -427,150 +301,38 @@ CREATE TABLE `receptionist_notifications` (
   CONSTRAINT `receptionist_notifications_ibfk_1` FOREIGN KEY (`receptionist_id`) REFERENCES `staffs` (`staff_id`),
   CONSTRAINT `receptionist_notifications_ibfk_2` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `receptionist_notifications`
---
+INSERT INTO `receptionist_notifications` VALUES
+('RN001','RE001','New Appointment Booked','Patient Donna Mae Lat booked a Teeth Cleaning appointment on June 08, 2026 at 3:20 PM.','Appointment','Unread','AP001','2026-06-08 05:14:55'),
+('RN002','RE001','Appointment Approved','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 3:20 PM.','Appointment','Unread','AP001','2026-06-08 05:16:52'),
+('RN003','RE001','New Appointment Booked','Patient Donna Mae Lat booked a Dental Filling appointment on June 08, 2026 at 2:00 PM.','Appointment','Unread','AP002','2026-06-08 05:44:05'),
+('RN004','RE001','Appointment Approved','Clinic Receptionist approved the Dental Filling appointment for Patient Donna Mae Lat on June 08, 2026 at 2:00 PM.','Appointment','Unread','AP002','2026-06-08 05:44:24'),
+('RN005','RE001','New Appointment Booked','Patient Donna Mae Lat booked a Teeth Cleaning appointment on June 08, 2026 at 4:00 PM.','Appointment','Unread','AP003','2026-06-08 07:10:35'),
+('RN006','RE001','Appointment Approved','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 4:00 PM.','Appointment','Unread','AP003','2026-06-08 07:11:32'),
+('RN007','RE001','New Appointment Booked','Patient user1 booked a Teeth Cleaning appointment on June 08, 2026 at 4:11 PM.','Appointment','Unread','AP004','2026-06-08 07:16:20'),
+('RN008','RE001','Appointment Approved','Clinic Receptionist approved the Teeth Cleaning appointment for Patient user1 on June 08, 2026 at 4:11 PM.','Appointment','Unread','AP004','2026-06-08 07:16:40');
 
-LOCK TABLES `receptionist_notifications` WRITE;
-/*!40000 ALTER TABLE `receptionist_notifications` DISABLE KEYS */;
-INSERT INTO `receptionist_notifications` VALUES ('RN001','RE001','New Appointment Booked','Patient Donna Mae Lat booked a Teeth Cleaning appointment on June 08, 2026 at 3:20 PM.','Appointment','Unread','AP001','2026-06-08 05:14:55'),('RN002','RE001','Appointment Approved','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 3:20 PM.','Appointment','Unread','AP001','2026-06-08 05:16:52'),('RN003','RE001','New Appointment Booked','Patient Donna Mae Lat booked a Dental Filling appointment on June 08, 2026 at 2:00 PM.','Appointment','Unread','AP002','2026-06-08 05:44:05'),('RN004','RE001','Appointment Approved','Clinic Receptionist approved the Dental Filling appointment for Patient Donna Mae Lat on June 08, 2026 at 2:00 PM.','Appointment','Unread','AP002','2026-06-08 05:44:24'),('RN005','RE001','New Appointment Booked','Patient Donna Mae Lat booked a Teeth Cleaning appointment on June 08, 2026 at 4:00 PM.','Appointment','Unread','AP003','2026-06-08 07:10:35'),('RN006','RE001','Appointment Approved','Clinic Receptionist approved the Teeth Cleaning appointment for Patient Donna Mae Lat on June 08, 2026 at 4:00 PM.','Appointment','Unread','AP003','2026-06-08 07:11:32'),('RN007','RE001','New Appointment Booked','Patient user1 booked a Teeth Cleaning appointment on June 08, 2026 at 4:11 PM.','Appointment','Unread','AP004','2026-06-08 07:16:20'),('RN008','RE001','Appointment Approved','Clinic Receptionist approved the Teeth Cleaning appointment for Patient user1 on June 08, 2026 at 4:11 PM.','Appointment','Unread','AP004','2026-06-08 07:16:40');
-/*!40000 ALTER TABLE `receptionist_notifications` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
+DROP TRIGGER IF EXISTS `trg_rec_notif_bi`;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_rec_notif_bi
-
-BEFORE INSERT ON receptionist_notifications
-
+CREATE TRIGGER `trg_rec_notif_bi`
+BEFORE INSERT ON `receptionist_notifications`
 FOR EACH ROW
-
 BEGIN
-
     DECLARE next_id INT;
-
     UPDATE _seq_rec_notif SET last_id = last_id + 1;
-
     SELECT last_id INTO next_id FROM _seq_rec_notif LIMIT 1;
-
     SET NEW.receptionist_notification_id = CONCAT('RN', LPAD(next_id, 3, '0'));
-
-END */;;
+END;;
 DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
---
--- Table structure for table `staffs`
---
+-- -----------------------------------------------------------
+-- Re-enable FK checks
+-- -----------------------------------------------------------
 
-DROP TABLE IF EXISTS `staffs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `staffs` (
-  `staff_id` varchar(10) NOT NULL,
-  `full_name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` varchar(50) NOT NULL,
-  `profile_photo` text DEFAULT NULL,
-  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
-  `resigned_at` datetime DEFAULT NULL,
-  `resignation_note` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`staff_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+SET FOREIGN_KEY_CHECKS=1;
 
---
--- Dumping data for table `staffs`
---
-
-LOCK TABLES `staffs` WRITE;
-/*!40000 ALTER TABLE `staffs` DISABLE KEYS */;
-INSERT INTO `staffs` VALUES ('AD001','Clinic Admin','admin@qydentra.com','$2y$10$LeToVUwUqDZzNMn7HH3mme5z4oaZnid9dGR4JxbkABCu5eNLC0sym','admin',NULL,'2026-06-08 04:33:25'),('RE001','Clinic Receptionist','receptionist@qydentra.com','$2y$10$55aHBBqLFz35wzeS0JvaMexCGGWjEcG7laJTP4Igisizk0UT2wyiq','receptionist',NULL,'2026-06-08 04:33:25');
-/*!40000 ALTER TABLE `staffs` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_unicode_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_staffs_bi
-
-BEFORE INSERT ON staffs
-
-FOR EACH ROW
-
-BEGIN
-
-    DECLARE next_id INT;
-
-    DECLARE prefix  VARCHAR(2);
-
-
-
-    IF NEW.role = 'receptionist' THEN
-
-        UPDATE _seq_staff_re SET last_id = last_id + 1;
-
-        SELECT last_id INTO next_id FROM _seq_staff_re LIMIT 1;
-
-        SET prefix = 'RE';
-
-    ELSEIF NEW.role = 'dentist' THEN
-
-        UPDATE _seq_staff_de SET last_id = last_id + 1;
-
-        SELECT last_id INTO next_id FROM _seq_staff_de LIMIT 1;
-
-        SET prefix = 'DE';
-
-    ELSE
-
-        -- admin (and any future role falls here as AD)
-
-        UPDATE _seq_staff_ad SET last_id = last_id + 1;
-
-        SELECT last_id INTO next_id FROM _seq_staff_ad LIMIT 1;
-
-        SET prefix = 'AD';
-
-    END IF;
-
-
-
-    SET NEW.staff_id = CONCAT(prefix, LPAD(next_id, 3, '0'));
-
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2026-06-08 15:22:43
+-- ============================================================
+-- Import complete. Tables: staffs, dentists, patients,
+-- appointments, patient_notifications,
+-- receptionist_notifications + 7 sequence tables + 5 triggers
+-- ============================================================
