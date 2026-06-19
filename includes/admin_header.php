@@ -9,10 +9,10 @@
 
 <title>Qydentra — Admin</title>
 
-<link rel="stylesheet" href="../assets/css/dashboard.css">
+<link rel="stylesheet" href="../assets/css/dashboard.css?v=1.0.1">
 <link rel="stylesheet" href="../assets/css/style.css">
-<link rel="stylesheet" href="../assets/css/admin.css">
-<link rel="stylesheet" href="../assets/css/receptionist.css">
+<link rel="stylesheet" href="../assets/css/admin.css?v=1.0.1">
+<link rel="stylesheet" href="../assets/css/receptionist.css?v=1.0.1">
 
 <!-- GOOGLE FONT -->
 

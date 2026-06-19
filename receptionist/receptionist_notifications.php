@@ -38,39 +38,39 @@ if (isset($_POST['mark_all_read'])) {
     header("Location: receptionist_notifications.php?page=" . $redir_page);
     exit();
 }
-<?php
-$unread_check = mysqli_fetch_assoc(mysqli_query($conn,
-    "SELECT COUNT(*) AS cnt FROM receptionist_notifications
-     WHERE receptionist_id = '$uid_esc' AND LOWER(status) <> 'read'
-"));
-if ((int)$unread_check['cnt'] > 0):
 ?>
-<form method="POST">
-    <input type="hidden" name="page" value="<?php echo isset($page) ? (int)$page : 1; ?>">
-    <button type="submit" name="mark_all_read" class="table-btn">
-        <i class="fa-solid fa-check-double"></i> Mark All as Read
-    </button>
-</form>
-<?php endif; ?>
-        </button>
+
+<?php include("../includes/receptionist_header.php"); ?>
+
+<body>
+
+<?php include("../includes/receptionist_sidebar.php"); ?>
+
+<div class="main">
+
+<?php include("../includes/receptionist_topbar.php"); ?>
+
+<div class="table-container hover-glow">
+
+<div class="table-header">
+    <div>
+        <h2><i class="fa-solid fa-bell" style="color:#ffffff; margin-right:8px;"></i>Notifications</h2>
+        <p>Stay updated with appointment alerts and clinic activity.</p>
     </div>
-<p>Stay updated with appointment alerts and clinic activity.</p>
-</div>
-
-<?php
-$unread_check = mysqli_fetch_assoc(mysqli_query($conn,
-    "SELECT COUNT(*) AS cnt FROM receptionist_notifications
-     WHERE receptionist_id = '$uid_esc' AND LOWER(status) <> 'read'"
-));
-if ((int)$unread_check['cnt'] > 0):
-?>
-<form method="POST">
-<button type="submit" name="mark_all_read" class="table-btn">
-<i class="fa-solid fa-check-double"></i> Mark All as Read
-</button>
-</form>
-<?php endif; ?>
-
+    <?php
+    $unread_check = mysqli_fetch_assoc(mysqli_query($conn,
+        "SELECT COUNT(*) AS cnt FROM receptionist_notifications
+         WHERE receptionist_id = '$uid_esc' AND LOWER(status) <> 'read'"
+    ));
+    if ((int)$unread_check['cnt'] > 0):
+    ?>
+    <form method="POST">
+        <input type="hidden" name="page" value="<?php echo isset($page) ? (int)$page : 1; ?>">
+        <button type="submit" name="mark_all_read" class="table-btn">
+            <i class="fa-solid fa-check-double"></i> Mark All as Read
+        </button>
+    </form>
+    <?php endif; ?>
 </div>
 
 <div class="notification-wrapper">
