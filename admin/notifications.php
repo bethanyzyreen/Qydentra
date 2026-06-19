@@ -92,10 +92,7 @@ $notifications = mysqli_query($conn, "SELECT * FROM admin_notifications ORDER BY
 
 
 <?php if ($message !== ''): ?>
-<div class="alert-msg <?php echo $messageType; ?>">
-    <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'circle-check' : 'circle-exclamation'; ?>"></i>
-    <?php echo htmlspecialchars($message); ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($message); ?>" data-toast-type="<?php echo $messageType; ?>"></div>
 <?php endif; ?>
 
 <div class="grid-2" style="align-items:start;">
@@ -141,7 +138,7 @@ $notifications = mysqli_query($conn, "SELECT * FROM admin_notifications ORDER BY
         <h3><i class="fa-solid fa-bell" style="margin-right:6px;"></i> Total Sent</h3>
         <p><?php echo $totalNotifs; ?></p>
     </div>
-    <div style="padding:20px 24px; border-radius:18px; background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.12);">
+    <div style="padding:20px 24px; border-radius:18px; background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
         <h3 style="font-size:13px; font-weight:600; color:#94a3b8; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Audience Guide</h3>
         <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:#d1d5db; line-height:1.6;">
             <div><i class="fa-solid fa-users" style="color:#60a5fa; width:18px;"></i> <strong>All Users</strong> — patients + receptionists</div>

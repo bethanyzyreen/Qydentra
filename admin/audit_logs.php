@@ -1,7 +1,8 @@
 <?php
 $allowed_roles = ['admin'];
-include("../includes/auth_check.php");
-require_once("../includes/admin_helpers.php");
+include_once(__DIR__ . "/../includes/auth_check.php");
+require_once(__DIR__ . "/../config/database.php");
+require_once(__DIR__ . "/../includes/admin_helpers.php");
 ensure_admin_tables_exist($conn);
 
 $search     = safe_input($conn, $_GET['search']    ?? '');
@@ -24,12 +25,12 @@ $actionTypes = mysqli_query($conn, "SELECT DISTINCT action FROM admin_audit_logs
 
 $totalAllLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM admin_audit_logs"))['total'];
 ?>
-<?php include("../includes/admin_header.php"); ?>
+<?php include(__DIR__ . "/../includes/admin_header.php"); ?>
 <body>
-<?php include("../includes/admin_sidebar.php"); ?>
+<?php include(__DIR__ . "/../includes/admin_sidebar.php"); ?>
 
 <div class="main">
-<?php include("../includes/admin_topbar.php"); ?>
+<?php include(__DIR__ . "/../includes/admin_topbar.php"); ?>
 
 
 
@@ -37,7 +38,7 @@ $totalAllLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total
     <div class="stat-card hover-glow"><h3>Total Entries</h3><p><?php echo $totalAllLogs; ?></p></div>
     <div class="stat-card hover-glow"><h3>Showing</h3><p style="color:#fbbf24;"><?php echo $totalLogs; ?></p></div>
     <div class="stat-card hover-glow"><h3>Today's Logs</h3>
-        <p style="color:#ffffff;"><?php
+        <p style="color:#a78bfa;"><?php
             $todayLogs = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM admin_audit_logs WHERE DATE(created_at)=CURDATE()"))['total'];
             echo $todayLogs;
         ?></p>

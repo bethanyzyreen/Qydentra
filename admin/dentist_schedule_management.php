@@ -85,10 +85,7 @@ mysqli_data_seek($schedules, 0);
 
 
 <?php if ($message !== ''): ?>
-<div class="alert-msg <?php echo $messageType; ?>">
-    <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'circle-check' : 'circle-exclamation'; ?>"></i>
-    <?php echo htmlspecialchars($message); ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($message); ?>" data-toast-type="<?php echo $messageType; ?>"></div>
 <?php endif; ?>
 
 <!-- FORM -->

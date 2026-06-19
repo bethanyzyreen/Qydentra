@@ -561,3 +561,16 @@
         align-items: flex-start;
     }
 }
+
+/* Align all table columns and headers to the left for clean vertical alignment */
+.table-container table th,
+.table-container table td {
+    text-align: left !important;
+}
+.table-container table th:last-child,
+.table-container table td:last-child {
+    text-align: center !important;
+}
+.table-container .table-date {
+    justify-content: flex-start !important;
+}

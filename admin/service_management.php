@@ -71,10 +71,7 @@ mysqli_data_seek($services, 0);
 <?php include("../includes/admin_topbar.php"); ?>
 
 <?php if ($message !== ''): ?>
-<div class="alert-msg <?php echo $messageType; ?>">
-    <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'circle-check' : 'circle-exclamation'; ?>"></i>
-    <?php echo htmlspecialchars($message); ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($message); ?>" data-toast-type="<?php echo $messageType; ?>"></div>
 <?php endif; ?>
 
 <!-- FORM -->

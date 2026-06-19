@@ -22,12 +22,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($full_name === '' || $email === '' || $password === '') {
             $message = 'Please fill in all required fields.'; $messageType = 'error';
         } else {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            if (mysqli_query($conn, "INSERT INTO staffs (full_name,email,password,role) VALUES ('$full_name','$email','$hash','$role')")) {
-                log_admin_action($conn, $_SESSION['user_id'], 'Add staff', "Added staff $email ($role)");
-                $message = 'Staff account created successfully.';
+            // Check if email already exists in staffs
+            $checkEmail = mysqli_query($conn, "SELECT staff_id FROM staffs WHERE email='$email' LIMIT 1");
+            if (mysqli_num_rows($checkEmail) > 0) {
+                $message = 'Error: That email is already registered to a staff account.';
+                $messageType = 'error';
             } else {
-                $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                try {
+                    if (mysqli_query($conn, "INSERT INTO staffs (full_name,email,password,role) VALUES ('$full_name','$email','$hash','$role')")) {
+                        log_admin_action($conn, $_SESSION['user_id'], 'Add staff', "Added staff $email ($role)");
+                        $message = 'Staff account created successfully.';
+                    } else {
+                        $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+                    }
+                } catch (mysqli_sql_exception $e) {
+                    if ($e->getCode() == 1062) {
+                        $message = 'Error: That email is already registered.';
+                    } else {
+                        $message = 'Error: ' . $e->getMessage();
+                    }
+                    $messageType = 'error';
+                }
             }
         }
         $activeTab = 'staff';
@@ -40,13 +56,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $roleInput = safe_input($conn, $_POST['role'] ?? 'receptionist');
         $role      = in_array($roleInput, $allowedStaffRoles, true) ? $roleInput : 'receptionist';
         $password  = $_POST['password'] ?? '';
-        $updates   = ["full_name='$full_name'", "email='$email'", "role='$role'"];
-        if ($password !== '') $updates[] = "password='" . password_hash($password, PASSWORD_DEFAULT) . "'";
-        if (mysqli_query($conn, "UPDATE staffs SET " . implode(',', $updates) . " WHERE staff_id='$staff_id'")) {
-            log_admin_action($conn, $_SESSION['user_id'], 'Edit staff', "Updated staff $staff_id");
-            $message = 'Staff updated successfully.';
+        
+        // Check if email already exists in staffs for another staff member
+        $checkEmail = mysqli_query($conn, "SELECT staff_id FROM staffs WHERE email='$email' AND staff_id != '$staff_id' LIMIT 1");
+        if (mysqli_num_rows($checkEmail) > 0) {
+            $message = 'Error: That email is already registered to another staff account.';
+            $messageType = 'error';
         } else {
-            $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+            $updates   = ["full_name='$full_name'", "email='$email'", "role='$role'"];
+            if ($password !== '') $updates[] = "password='" . password_hash($password, PASSWORD_DEFAULT) . "'";
+            try {
+                if (mysqli_query($conn, "UPDATE staffs SET " . implode(',', $updates) . " WHERE staff_id='$staff_id'")) {
+                    log_admin_action($conn, $_SESSION['user_id'], 'Edit staff', "Updated staff $staff_id");
+                    $message = 'Staff updated successfully.';
+                } else {
+                    $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+                }
+            } catch (mysqli_sql_exception $e) {
+                if ($e->getCode() == 1062) {
+                    $message = 'Error: That email is already registered to another staff account.';
+                } else {
+                    $message = 'Error: ' . $e->getMessage();
+                }
+                $messageType = 'error';
+            }
         }
         $activeTab = 'staff';
     }
@@ -72,28 +105,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($full_name === '' || $email === '' || $password === '') {
             $message = 'Please fill in all required fields.'; $messageType = 'error';
         } else {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-            // dentist_id is left out — the trg_dentists_bi trigger assigns DE### automatically.
-            $sql  = "INSERT INTO dentists (dentist_id,full_name,email,password,role,status) VALUES ('','$full_name','$email','$hash','dentist','active')";
-            if (mysqli_query($conn, $sql)) {
-                // Fetch the newly created dentist_id (VARCHAR PK set by trigger).
-                $lastRow = mysqli_fetch_assoc(mysqli_query($conn, "SELECT dentist_id FROM dentists WHERE email='$email' ORDER BY created_at DESC LIMIT 1"));
-                $new_did = $lastRow['dentist_id'] ?? '';
-
-                // Transfer records from resigned dentist if specified.
-                if ($transfer_from !== '' && $new_did !== '') {
-                    $new_did_safe = mysqli_real_escape_string($conn, $new_did);
-                    mysqli_query($conn, "UPDATE dental_records SET dentist_id='$new_did_safe' WHERE dentist_id='$transfer_from'");
-                    mysqli_query($conn, "UPDATE appointments SET dentist_id='$new_did_safe' WHERE dentist_id='$transfer_from'");
-                    mysqli_query($conn, "UPDATE dentist_schedules SET dentist_id='$new_did_safe' WHERE dentist_id='$transfer_from'");
-                    log_admin_action($conn, $_SESSION['user_id'], 'Transfer records', "Transferred records from dentist $transfer_from to $new_did_safe");
-                    $message = 'Dentist account created and records transferred successfully.';
-                } else {
-                    $message = 'Dentist account created successfully.';
-                }
-                log_admin_action($conn, $_SESSION['user_id'], 'Add dentist', "Added dentist $email ($new_did)");
+            // Check if email already exists in dentists
+            $checkEmail = mysqli_query($conn, "SELECT dentist_id FROM dentists WHERE email='$email' LIMIT 1");
+            if (mysqli_num_rows($checkEmail) > 0) {
+                $message = 'Error: That email is already registered to a dentist account.';
+                $messageType = 'error';
             } else {
-                $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $sql  = "INSERT INTO dentists (dentist_id,full_name,email,password,role,status) VALUES ('','$full_name','$email','$hash','dentist','active')";
+                try {
+                    if (mysqli_query($conn, $sql)) {
+                        $lastRow = mysqli_fetch_assoc(mysqli_query($conn, "SELECT dentist_id FROM dentists WHERE email='$email' ORDER BY created_at DESC LIMIT 1"));
+                        $new_did = $lastRow['dentist_id'] ?? '';
+                        if ($transfer_from !== '' && $new_did !== '') {
+                            $new_did_safe = mysqli_real_escape_string($conn, $new_did);
+                            mysqli_query($conn, "UPDATE dental_records SET dentist_id='$new_did_safe' WHERE dentist_id='$transfer_from'");
+                            mysqli_query($conn, "UPDATE appointments SET dentist_id='$new_did_safe' WHERE dentist_id='$transfer_from'");
+                            mysqli_query($conn, "UPDATE dentist_schedules SET dentist_id='$new_did_safe' WHERE dentist_id='$transfer_from'");
+                            log_admin_action($conn, $_SESSION['user_id'], 'Transfer records', "Transferred records from dentist $transfer_from to $new_did_safe");
+                            $message = 'Dentist account created and records transferred successfully.';
+                        } else {
+                            $message = 'Dentist account created successfully.';
+                        }
+                        log_admin_action($conn, $_SESSION['user_id'], 'Add dentist', "Added dentist $email ($new_did)");
+                    } else {
+                        $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+                    }
+                } catch (mysqli_sql_exception $e) {
+                    if ($e->getCode() == 1062) {
+                        $message = 'Error: That email is already registered.';
+                    } else {
+                        $message = 'Error: ' . $e->getMessage();
+                    }
+                    $messageType = 'error';
+                }
             }
         }
         $activeTab = 'dentists';
@@ -104,13 +149,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $full_name  = safe_input($conn, $_POST['full_name'] ?? '');
         $email      = safe_input($conn, $_POST['email'] ?? '');
         $password   = $_POST['password'] ?? '';
-        $updates    = ["full_name='$full_name'", "email='$email'"];
-        if ($password !== '') $updates[] = "password='" . password_hash($password, PASSWORD_DEFAULT) . "'";
-        if (mysqli_query($conn, "UPDATE dentists SET " . implode(',', $updates) . " WHERE dentist_id='$dentist_id'")) {
-            log_admin_action($conn, $_SESSION['user_id'], 'Edit dentist', "Updated dentist $dentist_id");
-            $message = 'Dentist updated successfully.';
+        
+        // Check if email already exists in dentists for another dentist
+        $checkEmail = mysqli_query($conn, "SELECT dentist_id FROM dentists WHERE email='$email' AND dentist_id != '$dentist_id' LIMIT 1");
+        if (mysqli_num_rows($checkEmail) > 0) {
+            $message = 'Error: That email is already registered to another dentist account.';
+            $messageType = 'error';
         } else {
-            $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+            $updates    = ["full_name='$full_name'", "email='$email'"];
+            if ($password !== '') $updates[] = "password='" . password_hash($password, PASSWORD_DEFAULT) . "'";
+            try {
+                if (mysqli_query($conn, "UPDATE dentists SET " . implode(',', $updates) . " WHERE dentist_id='$dentist_id'")) {
+                    log_admin_action($conn, $_SESSION['user_id'], 'Edit dentist', "Updated dentist $dentist_id");
+                    $message = 'Dentist updated successfully.';
+                } else {
+                    $message = 'Error: ' . mysqli_error($conn); $messageType = 'error';
+                }
+            } catch (mysqli_sql_exception $e) {
+                if ($e->getCode() == 1062) {
+                    $message = 'Error: That email is already registered to another dentist account.';
+                } else {
+                    $message = 'Error: ' . $e->getMessage();
+                }
+                $messageType = 'error';
+            }
         }
         $activeTab = 'dentists';
     }
@@ -182,10 +244,7 @@ mysqli_data_seek($inactiveDents, 0);
 <?php include("../includes/admin_topbar.php"); ?>
 
 <?php if ($message !== ''): ?>
-<div class="alert-msg <?php echo $messageType; ?>">
-    <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'circle-check' : 'circle-exclamation'; ?>"></i>
-    <?php echo htmlspecialchars($message); ?>
-</div>
+<div data-toast="<?php echo htmlspecialchars($message); ?>" data-toast-type="<?php echo $messageType; ?>"></div>
 <?php endif; ?>
 
 <!-- TABS -->

@@ -1,7 +1,8 @@
 <?php
 $allowed_roles = ['admin'];
-include("../includes/auth_check.php");
-require_once("../includes/admin_helpers.php");
+include_once(__DIR__ . "/../includes/auth_check.php");
+require_once(__DIR__ . "/../config/database.php");
+require_once(__DIR__ . "/../includes/admin_helpers.php");
 ensure_admin_tables_exist($conn);
 
 $totalPatients       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM patients"))['total'];
@@ -15,12 +16,26 @@ $todayQueue          = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) A
 
 $recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM appointments a LEFT JOIN patients p ON a.patient_id=p.patient_id ORDER BY a.created_at DESC");
 ?>
-<?php include("../includes/admin_header.php"); ?>
+<?php include(__DIR__ . "/../includes/admin_header.php"); ?>
+<style>
+/* Inline override to bypass aggressive browser caching */
+.card:nth-child(3)::before {
+    background: #f97316 !important;
+}
+.card:nth-child(3) .card-icon {
+    background: rgba(249, 115, 22, 0.15) !important;
+    color: #fb923c !important;
+    border: 1px solid rgba(251, 146, 60, 0.3) !important;
+}
+.card:nth-child(3) h1 {
+    color: #fb923c !important;
+}
+</style>
 <body>
-<?php include("../includes/admin_sidebar.php"); ?>
+<?php include(__DIR__ . "/../includes/admin_sidebar.php"); ?>
 
 <div class="main">
-<?php include("../includes/admin_topbar.php"); ?>
+<?php include(__DIR__ . "/../includes/admin_topbar.php"); ?>
 
 <!-- STAT CARDS -->
 <div class="cards" style="margin-bottom:28px;">
