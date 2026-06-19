@@ -36,7 +36,7 @@ $notifQuery = mysqli_query($conn,"
 SELECT COUNT(*) AS total
 FROM patient_notifications
 WHERE patient_id='$user_id'
-AND is_read = 0
+AND is_read <> 1
 ");
 
 $notifCount = mysqli_fetch_assoc($notifQuery)['total'];
@@ -392,7 +392,6 @@ SELECT *
 FROM appointments
 WHERE patient_id='$user_id'
 ORDER BY appointment_date DESC, appointment_time DESC
-LIMIT 5
 ");
 
 if(mysqli_num_rows($historyQuery) > 0){
@@ -505,6 +504,8 @@ elseif(str_contains($service,"extraction")){
 <td>
 
 <div class="status-pill <?php echo strtolower(str_replace(" ", "-", $row["status"])); ?>">
+
+<i class="fa-solid fa-circle-check"></i>
 
 <?php echo ucfirst($row['status']); ?>
 

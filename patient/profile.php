@@ -75,6 +75,7 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
 
                             <img
                                 src="../uploads/profile/<?php echo htmlspecialchars($user['profile_photo']); ?>"
+                                id="profileAvatarImg"
                                 class="profile-avatar-img"
                                 onerror="this.style.display='none';document.getElementById('profile-initial-span').style.display='flex'">
                             <span id="profile-initial-span" class="profile-initial" style="display:none;">
@@ -256,12 +257,69 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
 
 <script>
 document.getElementById('profilePhoto')
-.addEventListener('change', function(){
+.addEventListener('change', async function(){
 
-    if(this.files.length > 0){
-        document.getElementById('photoForm').submit();
+    if(this.files.length === 0){
+        return;
     }
 
+    const form = document.getElementById('photoForm');
+    const data = new FormData(form);
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            showToast('Unable to update profile photo. Please try again.', 'error');
+            return;
+        }
+
+        const cacheBustUrl = result.url + '?v=' + Date.now();
+        const avatar = document.querySelector('.profile-avatar');
+        let profileImg = document.getElementById('profileAvatarImg');
+        const initial = document.getElementById('profile-initial-span');
+
+        if (!profileImg) {
+            profileImg = document.createElement('img');
+            profileImg.id = 'profileAvatarImg';
+            profileImg.className = 'profile-avatar-img';
+            avatar.prepend(profileImg);
+        }
+
+        profileImg.src = cacheBustUrl;
+        profileImg.style.display = 'block';
+        if (initial) initial.style.display = 'none';
+
+        let topbarImg = document.querySelector('.topbar-avatar img');
+        const topbarAvatar = document.querySelector('.topbar-avatar');
+        if (!topbarImg && topbarAvatar) {
+            topbarImg = document.createElement('img');
+            topbarImg.className = 'js-topbar-avatar-img';
+            topbarImg.alt = 'Profile';
+            topbarImg.onload = function(){ this.style.display = 'block'; };
+            topbarImg.onerror = function(){ this.style.display = 'none'; };
+            topbarAvatar.appendChild(topbarImg);
+        }
+
+        if (topbarImg) {
+            topbarImg.src = cacheBustUrl;
+            topbarImg.style.display = 'block';
+        }
+
+        showToast('Profile photo updated successfully.', 'success');
+        this.value = '';
+    } catch (error) {
+        showToast('Unable to update profile photo. Please try again.', 'error');
+    }
 });
 </script>
 

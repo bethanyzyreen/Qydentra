@@ -231,7 +231,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <p class="field-hint">
                         <i class="fa-solid fa-circle-info"></i>
-                        No time selection needed — your queue number and appointment time are assigned automatically. Clinic is open <strong>Monday–Saturday</strong> (closed Sundays).
+                        No time selection needed. Your queue number and appointment time are assigned automatically. Appointments are available Monday to Saturday.
                     </p>
 
                 </div>
@@ -411,7 +411,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     font-size: 13px;
     padding: 18px 16px;
 }
-.queue-card-icon { font-size: 20px; color: #6366f1; flex-shrink: 0; }
+.queue-card-icon { font-size: 20px; color: #2563EB; flex-shrink: 0; }
 
 .queue-card-message {
     display: flex;
@@ -446,7 +446,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 .availability-limited   { background: rgba(234,179,8,0.15); color: #fbbf24; border: 1px solid rgba(234,179,8,0.35); }
 .availability-full      { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.35); }
 
-.queue-card-success { border-color: rgba(99,102,241,0.3); background: rgba(99,102,241,0.06); }
+.queue-card-success { border-color: rgba(37,99,235,0.3); background: rgba(37,99,235,0.06); }
 
 /* Stat grid */
 .queue-grid {
@@ -476,18 +476,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     color: #f1f5f9;
 }
 .queue-stat-highlight {
-    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.18));
-    border-color: rgba(99,102,241,0.5);
+    background: linear-gradient(135deg, rgba(96,165,250,0.25), rgba(37,99,235,0.18));
+    border-color: rgba(37,99,235,0.5);
 }
 .queue-number-badge {
     font-size: 24px;
     font-weight: 800;
-    color: #c7d2fe;
+    color: #bfdbfe;
     letter-spacing: 0.02em;
 }
 .queue-stat-sub {
     font-size: 11px;
-    color: #a5b4fc;
+    color: #93c5fd;
     margin-top: 2px;
     font-weight: 500;
 }
@@ -504,7 +504,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     gap: 8px;
     align-items: flex-start;
 }
-.queue-explainer i { margin-top: 2px; color: #818cf8; }
+.queue-explainer i { margin-top: 2px; color: #60A5FA; }
 
 /* Remaining slots meter */
 .slots-meter {

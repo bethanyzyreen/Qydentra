@@ -187,7 +187,8 @@ Register Walk-in
 </div>
 
 <div class="status-pill <?php echo strtolower($row['status']); ?>">
-<?php echo ucfirst($row['status']); ?>
+    <i class="fa-solid fa-circle-check"></i>
+    <?php echo ucfirst($row['status']); ?>
 </div>
 
 </div>

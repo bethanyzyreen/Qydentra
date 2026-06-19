@@ -2,16 +2,82 @@
 $allowed_roles = ['receptionist'];
 include("../includes/auth_check.php");
 
+$queue_schedule = [
+    1  => ['08:00', '8:00 AM'],
+    2  => ['09:00', '9:00 AM'],
+    3  => ['10:00', '10:00 AM'],
+    4  => ['11:00', '11:00 AM'],
+    5  => ['12:00', '12:00 PM'],
+    6  => ['13:00', '1:00 PM'],
+    7  => ['14:00', '2:00 PM'],
+    8  => ['15:00', '3:00 PM'],
+    9  => ['16:00', '4:00 PM'],
+    10 => ['17:00', '5:00 PM'],
+];
+
+function get_queue_from_time($time) {
+    $slot_map = ['08:00'=>1,'09:00'=>2,'10:00'=>3,'11:00'=>4,'12:00'=>5,
+                 '13:00'=>6,'14:00'=>7,'15:00'=>8,'16:00'=>9,'17:00'=>10];
+    $normalized = date('H:00', strtotime($time));
+    return $slot_map[$normalized] ?? null;
+}
+
+function find_next_open_queue_slot($conn, $date, $exclude_id, $queue_schedule) {
+    $date_esc = mysqli_real_escape_string($conn, $date);
+    $exclude_esc = mysqli_real_escape_string($conn, $exclude_id);
+    $result = mysqli_query($conn,
+        "SELECT queue_number FROM appointments
+         WHERE appointment_date='$date_esc'
+           AND appointment_id <> '$exclude_esc'
+           AND status NOT IN ('Cancelled')"
+    );
+
+    $booked = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $booked[(int)$row['queue_number']] = true;
+    }
+
+    $now = new DateTime('now');
+    foreach ($queue_schedule as $queue => $info) {
+        [$time, $label] = $info;
+        $slot_dt = new DateTime($date . ' ' . $time);
+        if (!isset($booked[$queue]) && $slot_dt > $now) {
+            return ['queue' => $queue, 'time' => $time, 'label' => $label];
+        }
+    }
+
+    return null;
+}
+
 /* ================= APPROVE ACTION ================= */
 if (isset($_POST['action']) && $_POST['action'] == 'approve') {
     $id    = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
     $date  = mysqli_real_escape_string($conn, $_POST['appointment_date']);
     $time  = mysqli_real_escape_string($conn, $_POST['appointment_time']);
 
-    // Queue number is always determined by the time slot (08:00=1 ... 17:00=10)
-    $slot_map = ['08:00'=>1,'09:00'=>2,'10:00'=>3,'11:00'=>4,'12:00'=>5,
-                 '13:00'=>6,'14:00'=>7,'15:00'=>8,'16:00'=>9,'17:00'=>10];
-    $queue = $slot_map[$time] ?? (int)($_POST['queue_number'] ?? 0);
+    $queue = get_queue_from_time($time);
+
+    $conflict = null;
+    if ($queue !== null) {
+        $conflict = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT appointment_id FROM appointments
+             WHERE appointment_date='$date'
+               AND queue_number='$queue'
+               AND appointment_id <> '$id'
+               AND status NOT IN ('Cancelled')
+             LIMIT 1"
+        ));
+    }
+
+    if ($queue === null || $conflict) {
+        $slot = find_next_open_queue_slot($conn, $date, $id, $queue_schedule);
+        if (!$slot) {
+            header("Location: pending_appointments.php?error=fully_booked");
+            exit();
+        }
+        $queue = $slot['queue'];
+        $time = $slot['time'];
+    }
 
     mysqli_query($conn,
         "UPDATE appointments
@@ -51,11 +117,19 @@ if (isset($_POST['action']) && $_POST['action'] == 'approve') {
 if (isset($_POST['action']) && $_POST['action'] == 'reschedule') {
     $id   = mysqli_real_escape_string($conn, $_POST['appointment_id']); // VARCHAR
     $date = mysqli_real_escape_string($conn, $_POST['new_date']);
-    $time = mysqli_real_escape_string($conn, $_POST['new_time']);
+    $slot = find_next_open_queue_slot($conn, $date, $id, $queue_schedule);
+
+    if (!$slot) {
+        header("Location: pending_appointments.php?error=fully_booked");
+        exit();
+    }
+
+    $time = mysqli_real_escape_string($conn, $slot['time']);
+    $queue = (int)$slot['queue'];
 
     mysqli_query($conn,
         "UPDATE appointments
-         SET appointment_date='$date', appointment_time='$time', status='Pending'
+         SET appointment_date='$date', appointment_time='$time', queue_number='$queue', status='Pending'
          WHERE appointment_id='$id'"
     );
 
@@ -112,6 +186,10 @@ $nextQueue = mysqli_fetch_assoc(mysqli_query($conn,
 
 <?php if (isset($_GET['success'])): ?>
 <div data-toast="<?php echo $_GET['success'] == 'approved' ? 'Appointment approved successfully.' : 'Appointment rescheduled successfully.'; ?>" data-toast-type="success"></div>
+<?php endif; ?>
+
+<?php if (isset($_GET['error']) && $_GET['error'] === 'fully_booked'): ?>
+<div data-toast="That date has no open queue slots. Please choose another date." data-toast-type="error"></div>
 <?php endif; ?>
 
 <?php if (isset($_GET['error']) && $_GET['error'] === 'queue_taken'): ?>
@@ -293,16 +371,11 @@ onclick="openRescheduleModal(
 <input type="hidden" name="action" value="reschedule">
 <input type="hidden" name="appointment_id" id="rescheduleAppointmentId">
 
-<div class="form-row">
 <div class="form-group">
 <label><i class="fa-solid fa-calendar-days"></i> New Date</label>
 <input type="date" name="new_date" min="<?php echo date('Y-m-d'); ?>" required>
 </div>
-<div class="form-group">
-<label><i class="fa-solid fa-clock"></i> New Time</label>
-<input type="time" name="new_time" min="08:00" max="17:00" required>
-</div>
-</div>
+<p class="modal-note"><i class="fa-solid fa-circle-info"></i> The next open queue slot and appointment time will be assigned automatically.</p>
 
 <button type="submit" class="primary-btn hover-glow" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
 <i class="fa-solid fa-calendar-pen"></i> Confirm Reschedule

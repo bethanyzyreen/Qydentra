@@ -2,8 +2,8 @@
 date_default_timezone_set('Asia/Manila');
 
 // Unread notification count for topbar badge
-$topbar_uid = $_SESSION['user_id'] ?? 0;
-$topbar_unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM receptionist_notifications WHERE receptionist_id='$topbar_uid' AND status='Unread'");
+$topbar_uid = mysqli_real_escape_string($conn, $_SESSION['user_id'] ?? '');
+$topbar_unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM receptionist_notifications WHERE receptionist_id='$topbar_uid' AND LOWER(status) <> 'read'");
 $topbar_unread = (int)mysqli_fetch_assoc($topbar_unread_res)['cnt'];
 
 $hour = date("H");

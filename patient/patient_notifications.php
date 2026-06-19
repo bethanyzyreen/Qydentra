@@ -18,7 +18,8 @@ if (isset($_POST['mark_read']) && !empty($_POST['notif_id'])) {
     if (!$ok) {
         error_log('[Qydentra] mark_read failed: ' . mysqli_error($conn));
     }
-    header("Location: patient_notifications.php");
+    $redir_page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+    header("Location: patient_notifications.php?page=" . $redir_page);
     exit();
 }
 
@@ -28,12 +29,13 @@ if (isset($_POST['mark_all_read'])) {
         UPDATE patient_notifications
         SET is_read = 1
         WHERE patient_id = '$uid_esc'
-          AND is_read = 0
+          AND is_read <> 1
     ");
     if (!$ok) {
         error_log('[Qydentra] mark_all_read failed: ' . mysqli_error($conn));
     }
-    header("Location: patient_notifications.php");
+    $redir_page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+    header("Location: patient_notifications.php?page=" . $redir_page);
     exit();
 }
 ?>
@@ -58,11 +60,12 @@ if (isset($_POST['mark_all_read'])) {
         <?php
         $unread_check = mysqli_fetch_assoc(mysqli_query($conn,
             "SELECT COUNT(*) AS cnt FROM patient_notifications
-             WHERE patient_id = '$uid_esc' AND is_read = 0"
+             WHERE patient_id = '$uid_esc' AND is_read <> 1"
         ));
         if ((int)$unread_check['cnt'] > 0):
         ?>
         <form method="POST">
+            <input type="hidden" name="page" value="<?php echo isset($page) ? (int)$page : 1; ?>">
             <button type="submit" name="mark_all_read" class="table-btn">
                 <i class="fa-solid fa-check-double"></i> Mark All as Read
             </button>
@@ -73,10 +76,21 @@ if (isset($_POST['mark_all_read'])) {
     <div class="notification-wrapper">
 
         <?php
+        $perPage = 5;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($page - 1) * $perPage;
+
+        $countRes = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT COUNT(*) AS cnt FROM patient_notifications WHERE patient_id = '$uid_esc'"
+        ));
+        $totalNotifs = (int)$countRes['cnt'];
+        $totalPages = max(1, (int)ceil($totalNotifs / $perPage));
+
         $result = mysqli_query($conn,
             "SELECT * FROM patient_notifications
              WHERE patient_id = '$uid_esc'
-             ORDER BY created_at DESC"
+             ORDER BY created_at DESC
+             LIMIT $perPage OFFSET $offset"
         );
 
         if (mysqli_num_rows($result) > 0):
@@ -118,6 +132,7 @@ if (isset($_POST['mark_all_read'])) {
                     <div class="notification-dot"></div>
                     <form method="POST" style="margin:0;">
                         <input type="hidden" name="notif_id" value="<?php echo htmlspecialchars($notif_id); ?>">
+                        <input type="hidden" name="page" value="<?php echo isset($page) ? (int)$page : 1; ?>">
                         <button type="submit" name="mark_read" class="mark-read-btn">
                             <i class="fa-solid fa-check"></i> Mark as Read
                         </button>
@@ -143,6 +158,18 @@ if (isset($_POST['mark_all_read'])) {
         </div>
 
         <?php endif; ?>
+
+<?php if (!empty($totalNotifs) && $totalNotifs > 0): ?>
+        <div class="qyd-table-pagination" style="margin-top:12px;">
+            <button type="button" class="qyd-page-btn" <?php echo $page<=1 ? 'disabled' : ''; ?> onclick="if(!this.disabled) location.href='?page=<?php echo $page-1; ?>'">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <span class="qyd-page-label"><?php echo $page; ?> of <?php echo $totalPages; ?></span>
+            <button type="button" class="qyd-page-btn" <?php echo $page>=$totalPages ? 'disabled' : ''; ?> onclick="if(!this.disabled) location.href='?page=<?php echo $page+1; ?>'">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+<?php endif; ?>
 
     </div>
 

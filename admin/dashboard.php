@@ -13,7 +13,7 @@ $approvedAppts       = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) A
 $completedToday      = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date=CURDATE() AND status='Completed'"))['total'];
 $todayQueue          = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date=CURDATE() AND status IN ('Approved','In Progress')"))['total'];
 
-$recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM appointments a LEFT JOIN patients p ON a.patient_id=p.patient_id ORDER BY a.created_at DESC LIMIT 8");
+$recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM appointments a LEFT JOIN patients p ON a.patient_id=p.patient_id ORDER BY a.created_at DESC");
 ?>
 <?php include("../includes/admin_header.php"); ?>
 <body>
@@ -143,6 +143,7 @@ $recentAppts = mysqli_query($conn, "SELECT a.*, p.full_name AS patient_name FROM
                     </td>
                     <td>
                         <div class="status-pill <?php echo strtolower(str_replace(' ','-',$row['status'])); ?>">
+                            <i class="fa-solid fa-circle-check"></i>
                             <?php echo htmlspecialchars($row['status']); ?>
                         </div>
                     </td>

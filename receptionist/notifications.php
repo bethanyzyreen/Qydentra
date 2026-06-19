@@ -18,7 +18,8 @@ if (isset($_POST['mark_read']) && !empty($_POST['notif_id'])) {
     if (!$ok) {
         error_log('[Qydentra] recep mark_read failed: ' . mysqli_error($conn));
     }
-    header("Location: notifications.php");
+    $redir_page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+    header("Location: notifications.php?page=" . $redir_page);
     exit();
 }
 
@@ -28,38 +29,38 @@ if (isset($_POST['mark_all_read'])) {
         UPDATE receptionist_notifications
         SET status = 'Read'
         WHERE receptionist_id = '$uid_esc'
-          AND status = 'Unread'
+          AND LOWER(status) <> 'read'
     ");
     if (!$ok) {
         error_log('[Qydentra] recep mark_all_read failed: ' . mysqli_error($conn));
     }
-    header("Location: notifications.php");
+    $redir_page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+    header("Location: notifications.php?page=" . $redir_page);
     exit();
 }
+<?php
+$unread_check = mysqli_fetch_assoc(mysqli_query($conn,
+    "SELECT COUNT(*) AS cnt FROM receptionist_notifications
+     WHERE receptionist_id = '$uid_esc' AND LOWER(status) <> 'read'
+"));
+if ((int)$unread_check['cnt'] > 0):
 ?>
-
-<?php include("../includes/receptionist_header.php"); ?>
-
-<body>
-
-<?php include("../includes/receptionist_sidebar.php"); ?>
-
-<div class="main">
-
-<?php include("../includes/receptionist_topbar.php"); ?>
-
-<div class="table-container hover-glow">
-
-<div class="table-header">
-<div>
-<h2><i class="fa-solid fa-bell" style="color:#ffffff; margin-right:8px;"></i>Notifications</h2>
+<form method="POST">
+    <input type="hidden" name="page" value="<?php echo isset($page) ? (int)$page : 1; ?>">
+    <button type="submit" name="mark_all_read" class="table-btn">
+        <i class="fa-solid fa-check-double"></i> Mark All as Read
+    </button>
+</form>
+<?php endif; ?>
+        </button>
+    </div>
 <p>Stay updated with appointment alerts and clinic activity.</p>
 </div>
 
 <?php
 $unread_check = mysqli_fetch_assoc(mysqli_query($conn,
     "SELECT COUNT(*) AS cnt FROM receptionist_notifications
-     WHERE receptionist_id = '$uid_esc' AND status = 'Unread'"
+     WHERE receptionist_id = '$uid_esc' AND LOWER(status) <> 'read'"
 ));
 if ((int)$unread_check['cnt'] > 0):
 ?>
@@ -75,17 +76,28 @@ if ((int)$unread_check['cnt'] > 0):
 <div class="notification-wrapper">
 
 <?php
-$result = mysqli_query($conn,
-    "SELECT * FROM receptionist_notifications
-     WHERE receptionist_id = '$uid_esc'
-     ORDER BY created_at DESC"
-);
+        $perPage = 5;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($page - 1) * $perPage;
 
-if (mysqli_num_rows($result) > 0) {
+        $countRes = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT COUNT(*) AS cnt FROM receptionist_notifications WHERE receptionist_id = '$uid_esc'"
+        ));
+        $totalNotifs = (int)$countRes['cnt'];
+        $totalPages = max(1, (int)ceil($totalNotifs / $perPage));
 
-    while ($row = mysqli_fetch_assoc($result)) {
+        $result = mysqli_query($conn,
+            "SELECT * FROM receptionist_notifications
+             WHERE receptionist_id = '$uid_esc'
+             ORDER BY created_at DESC
+             LIMIT $perPage OFFSET $offset"
+        );
 
-        $isUnread = ($row['status'] === 'Unread');
+        if (mysqli_num_rows($result) > 0) {
+
+            while ($row = mysqli_fetch_assoc($result)) {
+
+        $isUnread = (strtolower($row['status'] ?? 'Unread') !== 'read');
         $notif_id = $row['receptionist_notification_id'];  // VARCHAR e.g. RN001
         $type     = $row['type'] ?? 'Appointment';
         $typeIcon = match($type) {
@@ -120,12 +132,13 @@ if (mysqli_num_rows($result) > 0) {
 <div class="notification-actions">
 <?php if ($isUnread): ?>
 <div class="notification-dot"></div>
-<form method="POST" style="margin:0;">
-<input type="hidden" name="notif_id" value="<?php echo htmlspecialchars($notif_id); ?>">
-<button type="submit" name="mark_read" class="mark-read-btn">
-<i class="fa-solid fa-check"></i> Mark as Read
-</button>
-</form>
+                    <form method="POST" style="margin:0;">
+                        <input type="hidden" name="notif_id" value="<?php echo htmlspecialchars($notif_id); ?>">
+                        <input type="hidden" name="page" value="<?php echo isset($page) ? (int)$page : 1; ?>">
+                        <button type="submit" name="mark_read" class="mark-read-btn">
+                            <i class="fa-solid fa-check"></i> Mark as Read
+                        </button>
+                    </form>
 <?php else: ?>
 <span class="read-label">
 <i class="fa-solid fa-circle-check"></i> Read
@@ -136,6 +149,7 @@ if (mysqli_num_rows($result) > 0) {
 </div>
 
 <?php
+
     }
 
 } else {
@@ -148,6 +162,20 @@ if (mysqli_num_rows($result) > 0) {
 </div>
 
 <?php } ?>
+
+<?php if (!empty($totalNotifs) && $totalNotifs > 0): ?>
+    <div style="display:flex; justify-content:center; margin-top:12px;">
+            <div>
+                <button type="button" class="qyd-page-btn" <?php echo $page<=1 ? 'disabled' : ''; ?> onclick="if(!this.disabled) location.href='?page=<?php echo $page-1; ?>'">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <span class="qyd-page-label"><?php echo $page; ?> of <?php echo $totalPages; ?></span>
+                <button type="button" class="qyd-page-btn" <?php echo $page>=$totalPages ? 'disabled' : ''; ?> onclick="if(!this.disabled) location.href='?page=<?php echo $page+1; ?>'">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+<?php endif; ?>
 
 </div>
 

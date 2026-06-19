@@ -37,7 +37,6 @@ SELECT a.*, u.full_name AS patient_name
 FROM appointments a
 JOIN patients u ON a.patient_id = u.patient_id
 ORDER BY a.created_at DESC
-LIMIT 7
 ");
 ?>
 
@@ -190,7 +189,8 @@ Review Pending
 
 <td>
 <div class="status-pill <?php echo strtolower($row['status']); ?>">
-<?php echo ucfirst($row['status']); ?>
+    <i class="fa-solid fa-circle-check"></i>
+    <?php echo ucfirst($row['status']); ?>
 </div>
 </td>
 

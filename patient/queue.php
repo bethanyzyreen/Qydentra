@@ -50,7 +50,8 @@ include("../includes/auth_check.php");
 
     <div class="queue-details">
 
-        <div class="queue-info">
+        <?php $service_type = strtolower($row['service_type'] ?? ''); ?>
+        <div class="queue-info<?php echo ($service_type === 'consultation') ? ' consultation' : ''; ?>">
             <i class="fa-solid fa-tooth"></i>
             <span><?php echo htmlspecialchars($row['service_type'] ?? '—'); ?></span>
         </div>
@@ -67,9 +68,7 @@ include("../includes/auth_check.php");
 
     </div>
 
-    <div class="status-pill approved">
-        Approved
-    </div>
+    <!-- Removed Approved pill per UX request -->
 
     <div class="waiting-box">
         <i class="fa-solid fa-hourglass-half"></i>

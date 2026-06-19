@@ -5,61 +5,141 @@ $allowed_roles = ['dentist'];
 include("../includes/auth_check.php");
 
 $user_id = $_SESSION['user_id'];
+$uid_esc = mysqli_real_escape_string($conn, $user_id);
 $success = $_GET['success'] ?? '';
 $error   = $_GET['error'] ?? '';
 
-// Handle photo upload
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
-    $file = $_FILES['profile_photo'];
+function redirect_profile($params = []) {
+    $query = http_build_query($params);
+    header("Location: profile.php" . ($query ? "?$query" : ""));
+    exit();
+}
 
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        header("Location: profile.php?error=upload_failed");
-        exit();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+
+    if ($action === 'update_profile') {
+        $full_name = trim($_POST['full_name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $specialization = trim($_POST['specialization'] ?? '');
+        $contact_number = trim($_POST['contact_number'] ?? '');
+
+        if ($full_name === '' || $email === '') {
+            redirect_profile(['error' => 'missing_required']);
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            redirect_profile(['error' => 'invalid_email']);
+        }
+
+        $full_name_esc = mysqli_real_escape_string($conn, $full_name);
+        $email_esc = mysqli_real_escape_string($conn, $email);
+        $specialization_esc = mysqli_real_escape_string($conn, $specialization);
+        $contact_number_esc = mysqli_real_escape_string($conn, $contact_number);
+
+        $email_check = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT dentist_id FROM dentists
+             WHERE email='$email_esc' AND dentist_id <> '$uid_esc'
+             LIMIT 1"
+        ));
+
+        if ($email_check) {
+            redirect_profile(['error' => 'email_taken']);
+        }
+
+        mysqli_query($conn,
+            "UPDATE dentists
+             SET full_name='$full_name_esc',
+                 email='$email_esc',
+                 specialization='$specialization_esc',
+                 contact_number='$contact_number_esc'
+             WHERE dentist_id='$uid_esc'"
+        );
+
+        $_SESSION['name'] = $full_name;
+        $_SESSION['full_name'] = $full_name;
+        redirect_profile(['success' => 'profile']);
     }
 
-    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    $allowed = ['jpg','jpeg','png','webp'];
+    if ($action === 'upload_photo') {
+        if (!isset($_FILES['profile_photo']) || $_FILES['profile_photo']['error'] !== UPLOAD_ERR_OK) {
+            redirect_profile(['error' => 'upload_failed']);
+        }
 
-    if (!in_array($ext, $allowed)) {
-        header("Location: profile.php?error=invalid_type");
-        exit();
-    }
+        $file = $_FILES['profile_photo'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowed = ['jpg','jpeg','png','webp'];
 
-    if ($file['size'] > 5 * 1024 * 1024) {
-        header("Location: profile.php?error=too_large");
-        exit();
-    }
+        if (!in_array($ext, $allowed, true)) {
+            redirect_profile(['error' => 'invalid_type']);
+        }
 
-    $folder = realpath(__DIR__ . '/../uploads/profile') . DIRECTORY_SEPARATOR;
-    if (!is_dir($folder)) {
-        mkdir(__DIR__ . '/../uploads/profile/', 0775, true);
-        $folder = realpath(__DIR__ . '/../uploads/profile') . DIRECTORY_SEPARATOR;
-    }
+        if ($file['size'] > 5 * 1024 * 1024) {
+            redirect_profile(['error' => 'too_large']);
+        }
 
-    // Delete old photo
-    $oldRow = mysqli_fetch_assoc(mysqli_query($conn, "SELECT profile_photo FROM dentists WHERE dentist_id='$user_id'"));
-    if (!empty($oldRow['profile_photo'])) {
-        $oldPath = $folder . basename($oldRow['profile_photo']);
-        if (file_exists($oldPath)) unlink($oldPath);
-    }
+        $upload_dir = __DIR__ . '/../uploads/profile/';
+        if (!is_dir($upload_dir) && !mkdir($upload_dir, 0775, true)) {
+            redirect_profile(['error' => 'upload_failed']);
+        }
 
-    $filename = time() . '_' . $user_id . '.' . $ext;
-    $dest = $folder . $filename;
+        $folder = realpath($upload_dir);
+        if (!$folder || !is_writable($folder)) {
+            redirect_profile(['error' => 'upload_failed']);
+        }
 
-    if (move_uploaded_file($file['tmp_name'], $dest)) {
+        $folder .= DIRECTORY_SEPARATOR;
+
+        $oldRow = mysqli_fetch_assoc(mysqli_query($conn,
+            "SELECT profile_photo FROM dentists WHERE dentist_id='$uid_esc'"
+        ));
+
+        $filename = time() . '_' . $user_id . '.' . $ext;
+        $dest = $folder . $filename;
+
+        if (!move_uploaded_file($file['tmp_name'], $dest)) {
+            redirect_profile(['error' => 'upload_failed']);
+        }
+
         $fn_safe = mysqli_real_escape_string($conn, $filename);
-        mysqli_query($conn, "UPDATE dentists SET profile_photo='$fn_safe' WHERE dentist_id='$user_id'");
+        mysqli_query($conn,
+            "UPDATE dentists SET profile_photo='$fn_safe' WHERE dentist_id='$uid_esc'"
+        );
+
+        if (!empty($oldRow['profile_photo'])) {
+            $oldPath = $folder . basename($oldRow['profile_photo']);
+            if (is_file($oldPath) && basename($oldPath) !== $filename) {
+                unlink($oldPath);
+            }
+        }
+
         $_SESSION['profile_photo'] = $filename;
-        header("Location: profile.php?success=photo");
-        exit();
-    } else {
-        header("Location: profile.php?error=upload_failed");
-        exit();
+        redirect_profile(['success' => 'photo']);
     }
 }
 
-// Load current dentist data
-$dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE dentist_id='$user_id' LIMIT 1"));
+$dentist = mysqli_fetch_assoc(mysqli_query($conn,
+    "SELECT * FROM dentists WHERE dentist_id='$uid_esc' LIMIT 1"
+));
+
+if (!$dentist) {
+    redirect_profile(['error' => 'not_found']);
+}
+
+$success_msgs = [
+    'photo' => 'Profile photo updated successfully.',
+    'profile' => 'Profile information updated successfully.',
+];
+
+$error_msgs = [
+    'upload_failed' => 'Upload failed. Please check the image and try again.',
+    'invalid_type' => 'Invalid file type. Please use JPG, PNG, or WebP.',
+    'too_large' => 'File too large. Maximum size is 5MB.',
+    'missing_required' => 'Name and email are required.',
+    'invalid_email' => 'Please enter a valid email address.',
+    'email_taken' => 'That email is already used by another dentist.',
+    'not_found' => 'Unable to load dentist profile.',
+];
 ?>
 <?php include("../includes/dentist_header.php"); ?>
 <body>
@@ -67,72 +147,104 @@ $dentist = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM dentists WHERE 
 <div class="main">
 <?php include("../includes/dentist_topbar.php"); ?>
 
-<?php if ($success === 'photo'): ?>
-<div class="alert-msg success" style="margin-bottom:20px;">
-    <i class="fa-solid fa-circle-check"></i> Profile photo updated successfully.
+<?php if ($success !== ''): ?>
+<div class="alert-msg success">
+    <i class="fa-solid fa-circle-check"></i>
+    <?php echo htmlspecialchars($success_msgs[$success] ?? 'Profile updated.'); ?>
 </div>
 <?php endif; ?>
+
 <?php if ($error !== ''): ?>
-<div class="alert-msg error" style="margin-bottom:20px;">
+<div class="alert-msg error">
     <i class="fa-solid fa-circle-exclamation"></i>
-    <?php
-    $msgs = [
-        'upload_failed' => 'Upload failed. Check folder permissions.',
-        'invalid_type'  => 'Invalid file type. Please use JPG, PNG, or WebP.',
-        'too_large'     => 'File too large. Maximum size is 5MB.',
-    ];
-    echo htmlspecialchars($msgs[$error] ?? 'An error occurred.');
-    ?>
+    <?php echo htmlspecialchars($error_msgs[$error] ?? 'An error occurred.'); ?>
 </div>
 <?php endif; ?>
 
-<div class="form-card hover-glow" style="max-width:520px;">
-    <h2 style="margin-bottom:4px;">
-        <i class="fa-solid fa-user-doctor" style="color:#ffffff; margin-right:8px;"></i>My Profile
-    </h2>
-    <p style="color:#d1d5db; font-size:13px; margin-bottom:24px;">Update your profile photo.</p>
+<div class="profile-actions-grid dentist-profile-grid">
 
-    <!-- Current photo display -->
-    <div style="display:flex; align-items:center; gap:20px; margin-bottom:28px;">
-        <div style="position:relative; width:80px; height:80px; flex-shrink:0;">
-            <?php if (!empty($dentist['profile_photo'])): ?>
-                <img src="../uploads/profile/<?php echo htmlspecialchars($dentist['profile_photo']); ?>"
-                     alt="Profile"
-                     style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid rgba(59,130,246,0.30);">
-            <?php else: ?>
-                <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#3B82F6,#2563EB); display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:700; color:#fff; border:2px solid rgba(59,130,246,0.30);">
-                    <?php echo strtoupper(substr($dentist['full_name'] ?? 'D', 0, 1)); ?>
+    <div class="profile-card dentist-profile-summary">
+        <div class="profile-hero-card dentist-profile-hero">
+            <div class="profile-avatar-shell">
+                <div class="profile-avatar">
+                    <?php if (!empty($dentist['profile_photo'])): ?>
+                        <img
+                            src="../uploads/profile/<?php echo htmlspecialchars($dentist['profile_photo']); ?>"
+                            alt="Profile"
+                            class="profile-avatar-img">
+                    <?php else: ?>
+                        <span class="profile-initial">
+                            <?php echo strtoupper(substr($dentist['full_name'] ?? 'D', 0, 1)); ?>
+                        </span>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
+            </div>
+
+            <div class="profile-hero-content">
+                <h2 class="profile-name">Dr. <?php echo htmlspecialchars($dentist['full_name'] ?? ''); ?></h2>
+                <p class="profile-email"><?php echo htmlspecialchars($dentist['email'] ?? ''); ?></p>
+                <span class="role-badge">Dentist</span>
+            </div>
         </div>
-        <div>
-            <h3 style="margin:0 0 4px; color:#f1f5f9; font-size:18px;">Dr. <?php echo htmlspecialchars($dentist['full_name'] ?? ''); ?></h3>
-            <p style="margin:0; color:#d1d5db; font-size:13px;"><?php echo htmlspecialchars($dentist['email'] ?? ''); ?></p>
-            <p style="margin:4px 0 0; color:#ffffff; font-size:12px; font-weight:600;">Dentist — <?php echo htmlspecialchars($user_id); ?></p>
-        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            <input type="hidden" name="action" value="upload_photo">
+            <label><i class="fa-solid fa-camera"></i> Profile Photo</label>
+            <input type="file" name="profile_photo" accept=".jpg,.jpeg,.png,.webp" required>
+            <small class="field-help">JPG, PNG, or WebP. Maximum size is 5MB.</small>
+            <button type="submit" class="profile-btn">
+                <i class="fa-solid fa-upload"></i>
+                Save Photo
+            </button>
+        </form>
     </div>
 
-    <!-- Upload form -->
-    <form method="POST" enctype="multipart/form-data">
-        <div class="form-group" style="margin-bottom:20px;">
-            <label style="font-size:13px; color:#94a3b8; margin-bottom:8px; display:block;">
-                <i class="fa-solid fa-camera" style="margin-right:5px; color:#ffffff;"></i>Upload New Photo
-            </label>
-            <input type="file" name="profile_photo" accept=".jpg,.jpeg,.png,.webp"
-                   style="width:100%; background:#0f172a; border:1px solid rgba(59,130,246,0.20); border-radius:10px; padding:10px 12px; color:#f1f5f9; font-size:13px; cursor:pointer; box-sizing:border-box;">
-            <small style="display:block; margin-top:6px; color:#475569; font-size:12px;">
-                JPG, PNG or WebP · Max 5MB
-            </small>
-        </div>
-        <div class="form-actions">
-            <button type="submit" class="btn-primary" style="background:linear-gradient(135deg,#3B82F6,#2563EB);">
-                <i class="fa-solid fa-upload"></i> Save Photo
+    <div class="profile-card">
+        <h3 class="profile-section-title">
+            <i class="fa-solid fa-user-pen"></i>
+            Profile Details
+        </h3>
+
+        <form method="POST" class="profile-form">
+            <input type="hidden" name="action" value="update_profile">
+
+            <label>Full Name</label>
+            <input
+                type="text"
+                name="full_name"
+                value="<?php echo htmlspecialchars($dentist['full_name'] ?? ''); ?>"
+                required>
+
+            <label>Email</label>
+            <input
+                type="email"
+                name="email"
+                value="<?php echo htmlspecialchars($dentist['email'] ?? ''); ?>"
+                required>
+
+            <label>Specialization</label>
+            <input
+                type="text"
+                name="specialization"
+                value="<?php echo htmlspecialchars($dentist['specialization'] ?? ''); ?>"
+                placeholder="e.g. General Dentistry">
+
+            <label>Contact Number</label>
+            <input
+                type="text"
+                name="contact_number"
+                value="<?php echo htmlspecialchars($dentist['contact_number'] ?? ''); ?>"
+                placeholder="09XXXXXXXXX">
+
+            <button type="submit" class="profile-btn">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Changes
             </button>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
 </div>
+
 </div>
 </body>
 </html>

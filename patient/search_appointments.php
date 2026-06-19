@@ -89,6 +89,12 @@ while ($row = mysqli_fetch_assoc($result)) {
         $serviceDesc = "Tooth Removal";
     }
 
+    $appointmentId = htmlspecialchars($row['appointment_id'], ENT_QUOTES);
+    $appointmentIdJs = htmlspecialchars(json_encode($row['appointment_id']), ENT_QUOTES);
+    $serviceTypeJs = htmlspecialchars(json_encode($row['service_type'] ?? ''), ENT_QUOTES);
+    $appointmentDateJs = htmlspecialchars(json_encode($row['appointment_date'] ?? ''), ENT_QUOTES);
+    $serviceTypeHtml = htmlspecialchars($row['service_type'] ?? '');
+
     echo "
     <tr>
 
@@ -98,7 +104,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <i class='fa-solid $icon'></i>
                 </div>
                 <div>
-                    <h4>{$row['service_type']}</h4>
+                    <h4>{$serviceTypeHtml}</h4>
                     <p>$serviceDesc</p>
                 </div>
             </div>
@@ -146,13 +152,23 @@ while ($row = mysqli_fetch_assoc($result)) {
         ){
 
             echo "
+            <div class='appointment-actions'>
+            <button
+                type='button'
+                class='reschedule-action-btn'
+                onclick='openPatientRescheduleModal({$appointmentIdJs}, {$serviceTypeJs}, {$appointmentDateJs})'
+            >
+                <i class='fa-solid fa-check' aria-hidden=\"true\"></i>&nbsp;Reschedule
+            </button>
             <a
-                href='cancel_appointment.php?id={$row['appointment_id']}'
+                href='cancel_appointment.php?id={$appointmentId}'
                 class='cancel-btn'
                 onclick='return confirm(\"Cancel this appointment?\")'
             >
+                <i class='fa-solid fa-xmark'></i>
                 Cancel
             </a>
+            </div>
             ";
 
         }else{

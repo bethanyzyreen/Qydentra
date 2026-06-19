@@ -674,6 +674,22 @@ form[style*="display:inline"] {
     line-height: 1.4 !important;
 }
 
+/* Add Font Awesome check icon to key status pills to match patient view */
+.status-pill.completed:not(:has(i))::before,
+.status-pill.pending:not(:has(i))::before,
+.status-pill.approved:not(:has(i))::before,
+.status-pill.cancelled:not(:has(i))::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f00c";
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 12px;
+    vertical-align: middle;
+    color: currentColor;
+}
+
+
 /* ================= QUEUE NUMBER BADGE FIX ================= */
 
 /* Ensure queue number badge stays circular */
@@ -1382,6 +1398,12 @@ table td:last-child {
     background: rgba(99,102,241,0.35);
     color: #fff;
 }
+
+.mark-read-btn i {
+    margin-right: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
 .read-label {
     font-size: 0.75rem;
     color: #ffffff;
@@ -1474,4 +1496,209 @@ table th {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(96, 165, 250, 0.5);
+}
+
+/* ===============================================================
+   RECEPTIONIST APPOINTMENT UI REFINEMENTS
+   =============================================================== */
+
+ :root {
+     --qyd-blue: #60A5FA;
+     --qyd-blue-strong: #2563EB;
+     --qyd-blue-soft: rgba(96,165,250,0.14);
+     --qyd-blue-border: rgba(96,165,250,0.28);
+ }
+
+.appt-toolbar-wrap {
+    gap: 14px;
+    padding: 18px;
+    border-color: rgba(96,165,250,0.12);
+    background: rgba(255,255,255,0.03);
+}
+
+.appt-search-form {
+    gap: 12px;
+    width: 100%;
+}
+
+.appt-search-form .search-box {
+    flex: 1 1 280px;
+    min-width: 220px;
+    height: 44px;
+}
+
+.service-icon,
+.guide-icon,
+.queue-card-item i,
+.table-date i,
+.modal-header h3 i,
+.form-group label i,
+.table-header h2 i {
+    color: var(--qyd-blue) !important;
+}
+
+.service-icon,
+.guide-icon {
+    background: var(--qyd-blue-soft) !important;
+    border-color: var(--qyd-blue-border) !important;
+}
+
+.action-group {
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.approve-btn,
+.reschedule-btn,
+.action-btn-sm,
+.table-btn,
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.approve-btn i,
+.reschedule-btn i,
+.action-btn-sm i,
+.table-btn i,
+.primary-btn i {
+    line-height: 1;
+    transform: translateY(0.5px);
+}
+
+.approve-btn {
+    background: rgba(96,165,250,0.14);
+    border-color: var(--qyd-blue-border);
+    color: #bfdbfe;
+}
+
+.approve-btn:hover {
+    background: rgba(96,165,250,0.22);
+    color: #fff;
+}
+
+.modal-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: -4px 0 18px;
+    color: #cbd5e1;
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.modal-note i {
+    color: var(--qyd-blue);
+    margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+    .appt-search-form {
+        align-items: stretch;
+    }
+
+    .appt-search-form .search-box,
+    .appt-search-form .table-btn {
+        width: 100% !important;
+        min-width: 0;
+    }
+}
+
+/* Keep service categories visually distinct; blue refinements apply to neutral UI icons only. */
+.service-icon.cleaning {
+    background: rgba(6,182,212,0.15) !important;
+    border: 1px solid rgba(34,211,238,0.25) !important;
+    color: #22d3ee !important;
+}
+
+.service-icon.checkup {
+    background: rgba(59,130,246,0.15) !important;
+    border: 1px solid rgba(96,165,250,0.25) !important;
+    color: #60A5FA !important;
+}
+
+.service-icon.filling {
+    background: rgba(249,115,22,0.15) !important;
+    border: 1px solid rgba(251,146,60,0.25) !important;
+    color: #fb923c !important;
+}
+
+.service-icon.consultation {
+    background: rgba(167,139,250,0.15) !important;
+    border: 1px solid rgba(167,139,250,0.25) !important;
+    color: #a78bfa !important;
+}
+
+.service-icon.braces {
+    background: rgba(139,92,246,0.15) !important;
+    border: 1px solid rgba(167,139,250,0.25) !important;
+    color: #a78bfa !important;
+}
+
+.service-icon.extraction {
+    background: rgba(239,68,68,0.15) !important;
+    border: 1px solid rgba(248,113,113,0.25) !important;
+    color: #f87171 !important;
+}
+
+.service-icon.whitening {
+    background: rgba(16,185,129,0.15) !important;
+    border: 1px solid rgba(52,211,153,0.25) !important;
+    color: #34d399 !important;
+}
+
+/* Shared UI consistency overrides loaded after dashboard.css */
+.table-container {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.appt-toolbar-wrap,
+.queue-toolbar,
+.queue-filter-form {
+    background:
+    linear-gradient(
+    145deg,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.025)
+    ) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.appt-search-form .search-box,
+.queue-filter-left .search-box,
+.queue-date-input {
+    background: rgba(255,255,255,0.055) !important;
+    border-color: rgba(255,255,255,0.10) !important;
+}
+
+.table-header {
+    gap: 18px;
+}
+
+.notification-card {
+    align-items: center;
+}
+
+.notification-content small,
+.notif-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.table-btn i,
+.primary-btn i,
+.approve-btn i,
+.reschedule-btn i,
+.action-btn-sm i,
+.mark-read-btn i {
+    line-height: 1;
+    transform: translateY(0.5px);
 }

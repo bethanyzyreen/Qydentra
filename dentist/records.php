@@ -133,6 +133,7 @@ if(!empty($patient_id)) {
                 </td>
                 <td style="vertical-align:top;">
                     <div class="status-pill <?php echo strtolower($appt['status']); ?>">
+                        <i class="fa-solid fa-circle-check"></i>
                         <?php echo ucfirst($appt['status']); ?>
                     </div>
                 </td>
@@ -373,21 +374,21 @@ ORDER BY u.full_name ASC
 </div>
 
 <!-- SEARCH BAR -->
-<div class="appointments-toolbar" style="margin-bottom:0;padding:0 0 20px 0;">
-<form method="GET" action="records.php" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-<input type="text" name="search"
-value="<?php echo htmlspecialchars($search); ?>"
-placeholder="Search patient name or email..."
-class="search-box" style="width:320px;">
-<button type="submit" class="table-btn">
-<i class="fa-solid fa-magnifying-glass"></i> Search
-</button>
-<?php if(!empty($search)): ?>
-<a href="records.php" class="table-btn" style="background:rgba(255,255,255,0.05);">
-<i class="fa-solid fa-xmark"></i> Clear
-</a>
-<?php endif; ?>
-</form>
+<div class="appointments-toolbar plain-toolbar" style="margin-bottom:0;padding:0 0 20px 0;">
+    <form method="GET" action="records.php" class="filter-bar">
+        <input type="text" name="search"
+            value="<?php echo htmlspecialchars($search); ?>"
+            placeholder="Search patient name or email..."
+            class="search-box">
+        <button type="submit" class="table-btn">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+        </button>
+        <?php if(!empty($search)): ?>
+        <a href="records.php" class="table-btn" style="background:rgba(255,255,255,0.05);">
+            <i class="fa-solid fa-xmark"></i> Clear
+        </a>
+        <?php endif; ?>
+    </form>
 </div>
 
 <table>

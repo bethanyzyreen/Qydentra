@@ -44,8 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
                 $stmt->close();
                 
-                // Set the raw token in the reset URL for development mode testing
-                $reset_link = "http://localhost/Qydentra/auth/reset_password.php?email=" . urlencode($email) . "&token=" . $raw_token;
+                // Build the reset URL dynamically (avoids hard-coded project folder)
+                $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                $host = $_SERVER['HTTP_HOST'];
+                $base = rtrim(dirname($_SERVER['REQUEST_URI']), '/\\');
+                $reset_link = $protocol . '://' . $host . $base . '/reset_password.php?email=' . urlencode($email) . '&token=' . urlencode($raw_token);
                 $_SESSION['dev_reset_link'] = $reset_link;
                 
                 // TODO: When SMTP is configured, send the $reset_link via email here.

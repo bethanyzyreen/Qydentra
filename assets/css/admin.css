@@ -345,6 +345,21 @@
 .status-pill.active     { background: rgba(34,197,94,0.12);   border: 1px solid rgba(34,197,94,0.25);   color: #4ade80; }
 .status-pill.inactive   { background: rgba(107,114,128,0.12); border: 1px solid rgba(107,114,128,0.25); color: #ffffff; }
 
+/* Add check icon to common status pills */
+.status-pill.completed:not(:has(i))::before,
+.status-pill.pending:not(:has(i))::before,
+.status-pill.approved:not(:has(i))::before,
+.status-pill.cancelled:not(:has(i))::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f00c";
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 12px;
+    vertical-align: middle;
+    color: currentColor;
+}
+
 /* ── ROLE BADGE ── */
 .role-badge {
     display: inline-flex;
@@ -489,4 +504,60 @@
 
 @media (max-width: 640px) {
     .grid-4, .grid-6, .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* Shared UI consistency overrides loaded after dashboard.css */
+.table-container {
+    overflow-x: auto;
+    overflow-y: visible;
+}
+
+.filter-card {
+    background:
+    linear-gradient(
+    145deg,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.025)
+    ) !important;
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.filter-card input,
+.filter-card select {
+    background: rgba(255,255,255,0.055) !important;
+    border-color: rgba(255,255,255,0.10) !important;
+}
+
+.table-header {
+    gap: 18px;
+}
+
+.table-btn,
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-success,
+.export-btn,
+.action-btn-sm {
+    align-items: center;
+    justify-content: center;
+}
+
+.table-btn i,
+.btn-primary i,
+.btn-secondary i,
+.btn-danger i,
+.btn-success i,
+.export-btn i,
+.action-btn-sm i {
+    line-height: 1;
+    transform: translateY(0.5px);
+}
+
+@media (max-width: 900px) {
+    .table-header {
+        align-items: flex-start;
+    }
 }

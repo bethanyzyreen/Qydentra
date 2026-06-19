@@ -41,7 +41,7 @@ AND status = 'In Progress'
 ");
 $inProgressCount = mysqli_fetch_assoc($inProgressQuery)['total'];
 
-// Recent Today's Queue (Up to 7)
+// Today's Queue Overview
 $recentQuery = mysqli_query($conn,"
 SELECT a.*, p.full_name AS patient_name
 FROM appointments a
@@ -53,7 +53,6 @@ ORDER BY
        WHEN a.status = 'Approved' THEN 2
        ELSE 3 END,
   a.queue_number ASC
-LIMIT 7
 ");
 ?>
 
@@ -100,7 +99,7 @@ LIMIT 7
 <!-- IN PROGRESS -->
 <div class="card hover-glow" onclick="window.location.href='queue.php'">
 <div class="card-top">
-<div class="card-icon" style="background: rgba(96, 165, 250, 0.1); color: #60a5fa;">
+<div class="card-icon" style="background: rgba(167,139,250,0.15); color: #a78bfa;">
 <i class="fa-solid fa-user-doctor"></i>
 </div>
 <div class="card-badge">Current</div>
@@ -143,7 +142,7 @@ Manage Queue
 <table>
 <thead>
 <tr>
-    <th>Queue #</th>
+    <th>Queue</th>
     <th>Patient</th>
     <th>Service</th>
     <th>Time</th>
@@ -159,7 +158,7 @@ Manage Queue
 <tr>
 
 <td>
-<div class="queue-pill" style="<?php echo ($row['status'] == 'In Progress') ? 'background:rgba(96,165,250,0.15);color:#60a5fa;border-color:rgba(96,165,250,0.3);' : ''; ?>">
+<div class="queue-pill" style="<?php echo ($row['status'] == 'In Progress') ? 'background:rgba(167,139,250,0.15);color:#a78bfa;border-color:rgba(167,139,250,0.3);' : ''; ?>">
 <?php echo !empty($row['queue_number']) ? '#'.$row['queue_number'] : '—'; ?>
 </div>
 </td>
@@ -187,7 +186,8 @@ Manage Queue
 
 <td>
 <div class="status-pill <?php echo strtolower($row['status']); ?>">
-<?php echo ucfirst($row['status']); ?>
+  <i class="fa-solid fa-circle-check"></i>
+  <?php echo ucfirst($row['status']); ?>
 </div>
 </td>
 

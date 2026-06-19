@@ -156,6 +156,7 @@ $exportParamsPdf = http_build_query(['report_date'=>$report_date,'status'=>$stat
                     <td><div class="table-date"><i class="fa-solid fa-clock"></i><?php echo date('g:i A', strtotime($row['appointment_time'])); ?></div></td>
                     <td>
                         <div class="status-pill <?php echo strtolower(str_replace(' ','-',$row['status'])); ?>">
+                            <i class="fa-solid fa-circle-check"></i>
                             <?php echo htmlspecialchars($row['status']); ?>
                         </div>
                     </td>

@@ -73,9 +73,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$notifications = mysqli_query($conn, "SELECT * FROM admin_notifications ORDER BY created_at DESC");
-$totalNotifs = mysqli_num_rows($notifications);
-mysqli_data_seek($notifications, 0);
+$perPage = 5;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $perPage;
+
+$totalCountRes = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM admin_notifications"));
+$totalNotifs = (int)$totalCountRes['cnt'];
+$totalPages = max(1, (int)ceil($totalNotifs / $perPage));
+
+$notifications = mysqli_query($conn, "SELECT * FROM admin_notifications ORDER BY created_at DESC LIMIT $perPage OFFSET $offset");
 ?>
 <?php include("../includes/admin_header.php"); ?>
 <body>
@@ -176,6 +182,7 @@ mysqli_data_seek($notifications, 0);
                     <td style="max-width:240px; font-size:13px; color:#94a3b8;"><?php echo htmlspecialchars($n['message']); ?></td>
                     <td>
                         <span class="status-pill <?php echo $n['target_type'] === 'all' ? 'approved' : ($n['target_type'] === 'patients' ? 'completed' : 'pending'); ?>">
+                            <i class="fa-solid fa-circle-check"></i>
                             <?php echo ucfirst($n['target_type']); ?>
                             <?php echo $n['target_id'] ? ' / ' . htmlspecialchars($n['target_id']) : ''; ?>
                         </span>
@@ -195,6 +202,17 @@ mysqli_data_seek($notifications, 0);
             <?php endif; ?>
         </tbody>
     </table>
+<?php if (!empty($totalNotifs) && $totalNotifs > 0): ?>
+    <div class="qyd-table-pagination" style="margin-top:12px;">
+        <button type="button" class="qyd-page-btn" <?php echo $page<=1 ? 'disabled' : ''; ?> onclick="if(!this.disabled) location.href='?page=<?php echo $page-1; ?>'">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <span class="qyd-page-label"><?php echo $page; ?> of <?php echo $totalPages; ?></span>
+        <button type="button" class="qyd-page-btn" <?php echo $page>=$totalPages ? 'disabled' : ''; ?> onclick="if(!this.disabled) location.href='?page=<?php echo $page+1; ?>'">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+<?php endif; ?>
 </div>
 
 </div>

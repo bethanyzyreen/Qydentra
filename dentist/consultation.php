@@ -144,6 +144,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'save_consultation') {
             <h2><i class="fa-solid fa-stethoscope" style="color:#ffffff; margin-right:8px;"></i> Treatment & Consultation Notes</h2>
         </div>
         <div class="status-pill <?php echo strtolower($appt['status']); ?>">
+            <i class="fa-solid fa-circle-check"></i>
             <?php echo ucfirst($appt['status']); ?>
         </div>
     </div>

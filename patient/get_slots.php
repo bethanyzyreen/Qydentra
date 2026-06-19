@@ -5,6 +5,7 @@ include(__DIR__ . '/../includes/auth_check.php');
 
 $date = mysqli_real_escape_string($conn, $_GET['date'] ?? '');
 $patient_id = $_SESSION['user_id'] ?? '';
+$exclude_id = mysqli_real_escape_string($conn, $_GET['exclude_id'] ?? '');
 
 if (empty($date)) {
     echo json_encode(['error' => 'No date provided']);
@@ -48,6 +49,7 @@ $booked_result = mysqli_query($conn,
     "SELECT queue_number FROM appointments
      WHERE appointment_date = '$date'
      AND status NOT IN ('Cancelled')"
+     . ($exclude_id !== '' ? " AND appointment_id <> '$exclude_id'" : "")
 );
 $booked_queues = [];
 while ($r = mysqli_fetch_assoc($booked_result)) {
@@ -100,6 +102,7 @@ if (!empty($patient_id)) {
          WHERE appointment_date = '$date'
          AND patient_id = '$pid_esc'
          AND status NOT IN ('Cancelled')"
+         . ($exclude_id !== '' ? " AND appointment_id <> '$exclude_id'" : "")
     );
     $dup_row = mysqli_fetch_assoc($dup_check);
     $already_booked = $dup_row && $dup_row['cnt'] > 0;

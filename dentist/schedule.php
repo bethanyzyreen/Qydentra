@@ -59,7 +59,7 @@ ORDER BY
 <tr>
 
 <td>
-<div class="queue-pill" style="<?php echo ($row['status'] == 'In Progress') ? 'background:rgba(96,165,250,0.15);color:#60a5fa;border-color:rgba(96,165,250,0.3);' : ''; ?>">
+<div class="queue-pill" style="<?php echo ($row['status'] == 'In Progress') ? 'background:rgba(167,139,250,0.15);color:#a78bfa;border-color:rgba(167,139,250,0.3);' : ''; ?>">
 <?php echo !empty($row['queue_number']) ? '#'.$row['queue_number'] : '—'; ?>
 </div>
 </td>
@@ -89,7 +89,8 @@ ORDER BY
 
 <td>
 <div class="status-pill <?php echo strtolower($row['status']); ?>">
-<?php echo ucfirst($row['status']); ?>
+  <i class="fa-solid fa-circle-check"></i>
+  <?php echo ucfirst($row['status']); ?>
 </div>
 </td>
 

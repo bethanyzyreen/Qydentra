@@ -3,7 +3,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 // Count unread receptionist notifications for badge
 $sidebar_user_id = $_SESSION['user_id'] ?? 0;
-$unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM receptionist_notifications WHERE receptionist_id = '$sidebar_user_id' AND status = 'Unread'");
+$sidebar_user_id_safe = mysqli_real_escape_string($conn, $sidebar_user_id);
+$unread_res = mysqli_query($conn, "SELECT COUNT(*) AS cnt FROM receptionist_notifications WHERE receptionist_id = '$sidebar_user_id_safe' AND LOWER(status) <> 'read'");
 $unread_row = mysqli_fetch_assoc($unread_res);
 $unread_count = (int)$unread_row['cnt'];
 ?>

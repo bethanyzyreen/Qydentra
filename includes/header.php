@@ -22,4 +22,5 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <link rel="stylesheet" href="../assets/css/toast.css">
 <script src="../assets/js/toast.js" defer></script>
+<script src="../assets/js/app.js" defer></script>
 </head>

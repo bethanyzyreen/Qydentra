@@ -70,9 +70,9 @@ $inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
 <p>Patients waiting to be called.</p>
 </div>
 
-<div class="card hover-glow" style="cursor:default;">
+<div class="card hover-glow card-consultation" style="cursor:default;">
 <div class="card-top">
-<div class="card-icon" style="background: rgba(96, 165, 250, 0.1); color: #60a5fa;"><i class="fa-solid fa-user-doctor"></i></div>
+<div class="card-icon" style="background: rgba(167,139,250,0.15); color: #a78bfa;"><i class="fa-solid fa-user-doctor"></i></div>
 <div class="card-badge">Current</div>
 </div>
 <h3>In Consultation</h3>
@@ -112,14 +112,14 @@ $inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
 <tr>
 
 <td>
-<div class="queue-number-badge" style="<?php echo ($row['status'] == 'In Progress') ? 'background:rgba(96,165,250,0.15);color:#60a5fa;border-color:rgba(96,165,250,0.3);' : ''; ?>">
+<div class="queue-number-badge" style="<?php echo ($row['status'] == 'In Progress') ? 'background:rgba(167,139,250,0.15);color:#a78bfa;border-color:rgba(167,139,250,0.3);' : ''; ?>">
 <?php echo !empty($row['queue_number']) ? '#' . $row['queue_number'] : '—'; ?>
 </div>
 </td>
 
 <td>
 <div class="service-info">
-<div class="service-icon consultation">
+<div class="service-icon consultation" style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.25);color:#a78bfa;">
 <i class="fa-solid fa-user"></i>
 </div>
 <div>
@@ -140,7 +140,8 @@ $inProgressCount= mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c F
 
 <td>
 <div class="status-pill <?php echo strtolower($row['status']); ?>">
-<?php echo ucfirst($row['status']); ?>
+    <i class="fa-solid fa-circle-check"></i>
+    <?php echo ucfirst($row['status']); ?>
 </div>
 </td>
 

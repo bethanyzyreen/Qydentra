@@ -193,9 +193,11 @@ Review Pending
 
 <td>
 <div class="status-pill <?php echo strtolower(str_replace(' ', '-', $row['status'])); ?>">
-<?php echo ucfirst($row['status']); ?>
+    <i class="fa-solid fa-circle-check"></i>
+    <?php echo ucfirst($row['status']); ?>
 </div>
 </td>
+
 
 <td>
 <div class="queue-pill">
