@@ -400,7 +400,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     background: rgba(255,255,255,0.04);
     color: #e2e8f0;
     font-family: 'Poppins', sans-serif;
-    transition: all 0.2s ease;
 }
 .queue-card-empty,
 .queue-card-loading {
@@ -521,7 +520,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 .slots-meter-fill {
     height: 100%;
     border-radius: 999px;
-    transition: width 0.3s ease;
 }
 .slots-meter-fill.fill-available { background: linear-gradient(90deg,#22c55e,#4ade80); }
 .slots-meter-fill.fill-limited   { background: linear-gradient(90deg,#f59e0b,#fbbf24); }

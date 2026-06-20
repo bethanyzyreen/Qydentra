@@ -32,6 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect_profile(['error' => 'invalid_email']);
         }
 
+        if ($contact_number !== '' && !preg_match('/^\d{11}$/', $contact_number)) {
+            redirect_profile(['error' => 'invalid_phone']);
+        }
+
         $full_name_esc = mysqli_real_escape_string($conn, $full_name);
         $email_esc = mysqli_real_escape_string($conn, $email);
         $specialization_esc = mysqli_real_escape_string($conn, $specialization);
@@ -137,6 +141,7 @@ $error_msgs = [
     'too_large' => 'File too large. Maximum size is 5MB.',
     'missing_required' => 'Name and email are required.',
     'invalid_email' => 'Please enter a valid email address.',
+    'invalid_phone' => 'Contact number must be exactly 11 digits (e.g. 09XXXXXXXXX).',
     'email_taken' => 'That email is already used by another dentist.',
     'not_found' => 'Unable to load dentist profile.',
 ];
@@ -234,7 +239,11 @@ $error_msgs = [
                 type="text"
                 name="contact_number"
                 value="<?php echo htmlspecialchars($dentist['contact_number'] ?? ''); ?>"
-                placeholder="09XXXXXXXXX">
+                placeholder="09XXXXXXXXX"
+                maxlength="11"
+                pattern="\d{11}"
+                title="Contact number must be exactly 11 digits"
+                inputmode="numeric">
 
             <button type="submit" class="profile-btn">
                 <i class="fa-solid fa-floppy-disk"></i>

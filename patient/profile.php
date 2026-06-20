@@ -32,8 +32,12 @@ $error_msgs = [
     'too_large'        => 'File is too large. Maximum size is 5MB.',
     'upload_failed'    => 'Upload failed. Please check folder permissions or try again.',
     'no_file'          => 'No file was selected. Please choose an image.',
+    'invalid_name'     => 'Full name is required.',
+    'invalid_email'    => 'Please enter a valid email address.',
+    'invalid_phone'    => 'Phone number must be exactly 11 digits (e.g. 09XXXXXXXXX).',
     'wrong_password'   => 'Current password is incorrect.',
     'password_mismatch'=> 'New passwords do not match.',
+    'weak_password'    => 'New password must be at least 8 characters long.',
     '1'                => 'Something went wrong. Please try again.',
 ];
 if(isset($_GET['success'])): $sk = $_GET['success']; ?>
@@ -184,6 +188,10 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
                 name="phone_number"
                 value="<?php echo $user['phone_number'] ?? ''; ?>"
                 placeholder="09XXXXXXXXX"
+                maxlength="11"
+                pattern="\d{11}"
+                title="Phone number must be exactly 11 digits"
+                inputmode="numeric"
                 >
 
                 <button
@@ -225,6 +233,7 @@ if(isset($_GET['success'])): $sk = $_GET['success']; ?>
                 <input
                     type="password"
                     name="new_password"
+                    minlength="8"
                     required
                 >
 
